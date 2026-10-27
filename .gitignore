@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# 渲染产物：draw/<章>/build.sh 分钟级重建（实测单章约 3 分钟）
+draw/**/*.png
+draw/**/*.svg
+draw/**/*.pdf
+draw/**/*.html
+draw/**/*.log
+
+# 单章 PDF：book_prepare.py --split-only 秒级重建
+books/**/_split/
+
+# 微信推送去重标记（本地状态）
+books/handbook/.wechat-notified-*

@@ -1,0 +1,36 @@
+# 数据许可：CC BY-NC 4.0
+
+本仓库的**数据与整理成果**按 [Creative Commons Attribution-NonCommercial 4.0
+International](https://creativecommons.org/licenses/by-nc/4.0/)（CC BY-NC 4.0）授权。
+
+适用范围：
+
+- `lib/handbook/` 里以字典形式组织的表值（表号 / 行 / 列 / 单元格 / 合并 / 注）
+- `lib/handbook/_data/` 的索引快照与表清单
+- `skills/**/references/**/chNN.md` 章知识、`books/**` 的报告与验收记录
+- `lib/drawing/tables/*.json` 的图号→表映射与核读记录
+
+## 你可以
+
+- **共享** —— 以任何媒介复制、发行本作品
+- **演绎** —— 修改、转换、基于本作品创作
+
+## 你必须遵守
+
+- **署名** —— 保留作者署名、许可声明与来源链接，并说明是否作过修改
+- **非商业** —— 不得将本作品用于商业目的（含付费课程、商业软件内置、商业咨询交付物）
+
+## 没有额外限制
+
+你不需要因为使用本作品而接受额外条款；技术措施（DRM）不得用来限制他人依本许可享有的权利。
+
+## 一句话边界
+
+**数值本身是事实，不受著作权保护**；本许可只覆盖本项目在"整理、校核、函数化、注释、
+索引"上的原创劳动。原始教材、手册与 GB/T 标准文本的权利归原出版者与标准发布机构，
+本项目不代其授权，见 [NOTICE](NOTICE)。
+
+---
+
+完整法律文本以官方英文版为准：<https://creativecommons.org/licenses/by-nc/4.0/legalcode>
+中文参考译本：<https://creativecommons.org/licenses/by-nc/4.0/legalcode.zh-Hans>

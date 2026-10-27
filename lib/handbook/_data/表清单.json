@@ -1,0 +1,1931 @@
+{
+ "ch01": {
+  "ch": 1,
+  "name": "常用数据和一般标准",
+  "printed": "3-23",
+  "pages": 21,
+  "table_count": 40,
+  "tables": {
+   "表1-1": {
+    "pages": [
+     3
+    ],
+    "continuous": []
+   },
+   "表1-2": {
+    "pages": [
+     3
+    ],
+    "continuous": []
+   },
+   "表1-3": {
+    "pages": [
+     3
+    ],
+    "continuous": []
+   },
+   "表1-4": {
+    "pages": [
+     4
+    ],
+    "continuous": []
+   },
+   "表1-5": {
+    "pages": [
+     4
+    ],
+    "continuous": []
+   },
+   "表1-6": {
+    "pages": [
+     5
+    ],
+    "continuous": []
+   },
+   "表1-7": {
+    "pages": [
+     5
+    ],
+    "continuous": []
+   },
+   "表1-8": {
+    "pages": [
+     5
+    ],
+    "continuous": []
+   },
+   "表1-9": {
+    "pages": [
+     6
+    ],
+    "continuous": []
+   },
+   "表1-10": {
+    "pages": [
+     6
+    ],
+    "continuous": []
+   },
+   "表1-11": {
+    "pages": [
+     7
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表1-12": {
+    "pages": [
+     8
+    ],
+    "continuous": []
+   },
+   "表1-13": {
+    "pages": [
+     9
+    ],
+    "continuous": []
+   },
+   "表1-14": {
+    "pages": [
+     11
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表1-15": {
+    "pages": [
+     11
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表1-16": {
+    "pages": [
+     12
+    ],
+    "continuous": []
+   },
+   "表1-17": {
+    "pages": [
+     13
+    ],
+    "continuous": []
+   },
+   "表1-18": {
+    "pages": [
+     13
+    ],
+    "continuous": []
+   },
+   "表1-19": {
+    "pages": [
+     13
+    ],
+    "continuous": []
+   },
+   "表1-20": {
+    "pages": [
+     14
+    ],
+    "continuous": []
+   },
+   "表1-21": {
+    "pages": [
+     14
+    ],
+    "continuous": []
+   },
+   "表1-22": {
+    "pages": [
+     14
+    ],
+    "continuous": []
+   },
+   "表1-23": {
+    "pages": [
+     15
+    ],
+    "continuous": []
+   },
+   "表1-24": {
+    "pages": [
+     15
+    ],
+    "continuous": []
+   },
+   "表1-25": {
+    "pages": [
+     16,
+     17
+    ],
+    "continuous": []
+   },
+   "表1-26": {
+    "pages": [
+     16
+    ],
+    "continuous": []
+   },
+   "表1-27": {
+    "pages": [
+     17
+    ],
+    "continuous": []
+   },
+   "表1-28": {
+    "pages": [
+     17
+    ],
+    "continuous": []
+   },
+   "表1-29": {
+    "pages": [
+     17
+    ],
+    "continuous": []
+   },
+   "表1-30": {
+    "pages": [
+     18
+    ],
+    "continuous": []
+   },
+   "表1-31": {
+    "pages": [
+     18
+    ],
+    "continuous": []
+   },
+   "表1-32": {
+    "pages": [
+     19
+    ],
+    "continuous": []
+   },
+   "表1-33": {
+    "pages": [
+     19
+    ],
+    "continuous": []
+   },
+   "表1-34": {
+    "pages": [
+     20
+    ],
+    "continuous": []
+   },
+   "表1-35": {
+    "pages": [
+     20
+    ],
+    "continuous": []
+   },
+   "表1-36": {
+    "pages": [
+     20
+    ],
+    "continuous": []
+   },
+   "表1-37": {
+    "pages": [
+     20
+    ],
+    "continuous": []
+   },
+   "表1-38": {
+    "pages": [
+     20
+    ],
+    "continuous": []
+   },
+   "表1-39": {
+    "pages": [
+     21
+    ],
+    "continuous": []
+   },
+   "表1-40": {
+    "pages": [
+     22,
+     23
+    ],
+    "continuous": [
+     22
+    ]
+   }
+  }
+ },
+ "ch02": {
+  "ch": 2,
+  "name": "材料",
+  "printed": "24-37",
+  "pages": 14,
+  "table_count": 23,
+  "tables": {
+   "表2-1": {
+    "pages": [
+     24
+    ],
+    "continuous": []
+   },
+   "表2-2": {
+    "pages": [
+     24
+    ],
+    "continuous": []
+   },
+   "表2-3": {
+    "pages": [
+     25
+    ],
+    "continuous": []
+   },
+   "表2-4": {
+    "pages": [
+     25
+    ],
+    "continuous": []
+   },
+   "表2-5": {
+    "pages": [
+     26
+    ],
+    "continuous": []
+   },
+   "表2-6": {
+    "pages": [
+     26
+    ],
+    "continuous": []
+   },
+   "表2-7": {
+    "pages": [
+     27
+    ],
+    "continuous": []
+   },
+   "表2-8": {
+    "pages": [
+     28
+    ],
+    "continuous": [
+     28
+    ]
+   },
+   "表2-9": {
+    "pages": [
+     29
+    ],
+    "continuous": []
+   },
+   "表2-10": {
+    "pages": [
+     30
+    ],
+    "continuous": [
+     30
+    ]
+   },
+   "表2-11": {
+    "pages": [
+     31
+    ],
+    "continuous": []
+   },
+   "表2-12": {
+    "pages": [
+     31
+    ],
+    "continuous": []
+   },
+   "表2-13": {
+    "pages": [
+     32
+    ],
+    "continuous": []
+   },
+   "表2-14": {
+    "pages": [
+     32
+    ],
+    "continuous": []
+   },
+   "表2-15": {
+    "pages": [
+     33
+    ],
+    "continuous": []
+   },
+   "表2-16": {
+    "pages": [
+     33
+    ],
+    "continuous": []
+   },
+   "表2-17": {
+    "pages": [
+     34
+    ],
+    "continuous": []
+   },
+   "表2-18": {
+    "pages": [
+     35
+    ],
+    "continuous": []
+   },
+   "表2-19": {
+    "pages": [
+     35
+    ],
+    "continuous": []
+   },
+   "表2-20": {
+    "pages": [
+     36
+    ],
+    "continuous": []
+   },
+   "表2-21": {
+    "pages": [
+     36
+    ],
+    "continuous": []
+   },
+   "表2-22": {
+    "pages": [
+     37
+    ],
+    "continuous": []
+   },
+   "表2-23": {
+    "pages": [
+     37
+    ],
+    "continuous": []
+   }
+  }
+ },
+ "ch03": {
+  "ch": 3,
+  "name": "螺纹连接和螺纹零件结构要素",
+  "printed": "38-55",
+  "pages": 18,
+  "table_count": 30,
+  "tables": {
+   "表3-1": {
+    "pages": [
+     38
+    ],
+    "continuous": []
+   },
+   "表3-2": {
+    "pages": [
+     39
+    ],
+    "continuous": []
+   },
+   "表3-3": {
+    "pages": [
+     39
+    ],
+    "continuous": []
+   },
+   "表3-4": {
+    "pages": [
+     40
+    ],
+    "continuous": []
+   },
+   "表3-5": {
+    "pages": [
+     40
+    ],
+    "continuous": []
+   },
+   "表3-6": {
+    "pages": [
+     41
+    ],
+    "continuous": []
+   },
+   "表3-7": {
+    "pages": [
+     41
+    ],
+    "continuous": []
+   },
+   "表3-8": {
+    "pages": [
+     41
+    ],
+    "continuous": []
+   },
+   "表3-9": {
+    "pages": [
+     42
+    ],
+    "continuous": []
+   },
+   "表3-10": {
+    "pages": [
+     43
+    ],
+    "continuous": []
+   },
+   "表3-11": {
+    "pages": [
+     43
+    ],
+    "continuous": []
+   },
+   "表3-13": {
+    "pages": [
+     45
+    ],
+    "continuous": []
+   },
+   "表3-14": {
+    "pages": [
+     45
+    ],
+    "continuous": []
+   },
+   "表3-15": {
+    "pages": [
+     46
+    ],
+    "continuous": []
+   },
+   "表3-16": {
+    "pages": [
+     47
+    ],
+    "continuous": []
+   },
+   "表3-17": {
+    "pages": [
+     48
+    ],
+    "continuous": []
+   },
+   "表3-18": {
+    "pages": [
+     49
+    ],
+    "continuous": []
+   },
+   "表3-19": {
+    "pages": [
+     50
+    ],
+    "continuous": []
+   },
+   "表3-20": {
+    "pages": [
+     50
+    ],
+    "continuous": []
+   },
+   "表3-21": {
+    "pages": [
+     51
+    ],
+    "continuous": []
+   },
+   "表3-22": {
+    "pages": [
+     51
+    ],
+    "continuous": []
+   },
+   "表3-23": {
+    "pages": [
+     52
+    ],
+    "continuous": []
+   },
+   "表3-24": {
+    "pages": [
+     52
+    ],
+    "continuous": []
+   },
+   "表3-25": {
+    "pages": [
+     53
+    ],
+    "continuous": []
+   },
+   "表3-26": {
+    "pages": [
+     53
+    ],
+    "continuous": []
+   },
+   "表3-27": {
+    "pages": [
+     54
+    ],
+    "continuous": []
+   },
+   "表3-28": {
+    "pages": [
+     54
+    ],
+    "continuous": []
+   },
+   "表3-29": {
+    "pages": [
+     55
+    ],
+    "continuous": []
+   },
+   "表3-30": {
+    "pages": [
+     55
+    ],
+    "continuous": []
+   },
+   "表3-12": {
+    "pages": [
+     44
+    ],
+    "continuous": []
+   }
+  }
+ },
+ "ch04": {
+  "ch": 4,
+  "name": "键连接和销连接",
+  "printed": "56-61",
+  "pages": 6,
+  "table_count": 8,
+  "tables": {
+   "表4-1": {
+    "pages": [
+     56,
+     57
+    ],
+    "continuous": []
+   },
+   "表4-2": {
+    "pages": [
+     57
+    ],
+    "continuous": []
+   },
+   "表4-3": {
+    "pages": [
+     58
+    ],
+    "continuous": []
+   },
+   "表4-4": {
+    "pages": [
+     59
+    ],
+    "continuous": []
+   },
+   "表4-5": {
+    "pages": [
+     59
+    ],
+    "continuous": []
+   },
+   "表4-6": {
+    "pages": [
+     60
+    ],
+    "continuous": []
+   },
+   "表4-7": {
+    "pages": [
+     60
+    ],
+    "continuous": []
+   },
+   "表4-8": {
+    "pages": [
+     61
+    ],
+    "continuous": []
+   }
+  }
+ },
+ "ch05": {
+  "ch": 5,
+  "name": "轴系零件的紧固件",
+  "printed": "62-67",
+  "pages": 6,
+  "table_count": 8,
+  "tables": {
+   "表5-1": {
+    "pages": [
+     62
+    ],
+    "continuous": []
+   },
+   "表5-2": {
+    "pages": [
+     62
+    ],
+    "continuous": []
+   },
+   "表5-3": {
+    "pages": [
+     63
+    ],
+    "continuous": []
+   },
+   "表5-4": {
+    "pages": [
+     64
+    ],
+    "continuous": []
+   },
+   "表5-5": {
+    "pages": [
+     65
+    ],
+    "continuous": []
+   },
+   "表5-6": {
+    "pages": [
+     66
+    ],
+    "continuous": []
+   },
+   "表5-7": {
+    "pages": [
+     67
+    ],
+    "continuous": []
+   },
+   "表5-8": {
+    "pages": [
+     67
+    ],
+    "continuous": []
+   }
+  }
+ },
+ "ch06": {
+  "ch": 6,
+  "name": "滚动轴承",
+  "printed": "68-88",
+  "pages": 21,
+  "table_count": 17,
+  "tables": {
+   "表6-1": {
+    "pages": [
+     68,
+     72,
+     74,
+     75,
+     76,
+     78,
+     84
+    ],
+    "continuous": [
+     72,
+     74,
+     78,
+     84
+    ]
+   },
+   "表6-2": {
+    "pages": [
+     71
+    ],
+    "continuous": []
+   },
+   "表6-3": {
+    "pages": [
+     73
+    ],
+    "continuous": []
+   },
+   "表6-4": {
+    "pages": [
+     75
+    ],
+    "continuous": []
+   },
+   "表6-5": {
+    "pages": [
+     76
+    ],
+    "continuous": []
+   },
+   "表6-6": {
+    "pages": [
+     77
+    ],
+    "continuous": []
+   },
+   "表6-7": {
+    "pages": [
+     79
+    ],
+    "continuous": []
+   },
+   "表6-8": {
+    "pages": [
+     82
+    ],
+    "continuous": []
+   },
+   "表6-9": {
+    "pages": [
+     85
+    ],
+    "continuous": []
+   },
+   "表6-10": {
+    "pages": [
+     85
+    ],
+    "continuous": []
+   },
+   "表6-11": {
+    "pages": [
+     85
+    ],
+    "continuous": []
+   },
+   "表6-12": {
+    "pages": [
+     86
+    ],
+    "continuous": []
+   },
+   "表6-13": {
+    "pages": [
+     86
+    ],
+    "continuous": []
+   },
+   "表6-14": {
+    "pages": [
+     86
+    ],
+    "continuous": []
+   },
+   "表6-15": {
+    "pages": [
+     87
+    ],
+    "continuous": []
+   },
+   "表6-16": {
+    "pages": [
+     88
+    ],
+    "continuous": []
+   },
+   "表6-17": {
+    "pages": [
+     88
+    ],
+    "continuous": []
+   }
+  }
+ },
+ "ch07": {
+  "ch": 7,
+  "name": "润滑与密封",
+  "printed": "89-96",
+  "pages": 8,
+  "table_count": 19,
+  "tables": {
+   "表7-1": {
+    "pages": [
+     89
+    ],
+    "continuous": []
+   },
+   "表7-2": {
+    "pages": [
+     90
+    ],
+    "continuous": []
+   },
+   "表7-3": {
+    "pages": [
+     90
+    ],
+    "continuous": []
+   },
+   "表7-4": {
+    "pages": [
+     91
+    ],
+    "continuous": []
+   },
+   "表7-5": {
+    "pages": [
+     91
+    ],
+    "continuous": [],
+    "note": "页图 p.91 实有「表7-5 压配式压注油杯（JB/T 7940.4—1995）」，2026-10-25 由 ch07 验收补登"
+   },
+   "表7-6": {
+    "pages": [
+     91
+    ],
+    "continuous": []
+   },
+   "表7-7": {
+    "pages": [
+     92
+    ],
+    "continuous": []
+   },
+   "表7-8": {
+    "pages": [
+     92
+    ],
+    "continuous": []
+   },
+   "表7-9": {
+    "pages": [
+     93
+    ],
+    "continuous": []
+   },
+   "表7-10": {
+    "pages": [
+     93
+    ],
+    "continuous": []
+   },
+   "表7-11": {
+    "pages": [
+     93
+    ],
+    "continuous": []
+   },
+   "表7-12": {
+    "pages": [
+     94
+    ],
+    "continuous": []
+   },
+   "表7-13": {
+    "pages": [
+     94
+    ],
+    "continuous": []
+   },
+   "表7-14": {
+    "pages": [
+     95
+    ],
+    "continuous": []
+   },
+   "表7-15": {
+    "pages": [
+     96
+    ],
+    "continuous": []
+   },
+   "表7-16": {
+    "pages": [
+     96
+    ],
+    "continuous": []
+   },
+   "表7-17": {
+    "pages": [
+     96
+    ],
+    "continuous": []
+   },
+   "表7-18": {
+    "pages": [
+     96
+    ],
+    "continuous": []
+   },
+   "表7-19": {
+    "pages": [
+     96
+    ],
+    "continuous": []
+   }
+  }
+ },
+ "ch08": {
+  "ch": 8,
+  "name": "联轴器和离合器",
+  "printed": "97-106",
+  "pages": 10,
+  "table_count": 11,
+  "tables": {
+   "表8-1": {
+    "pages": [
+     97
+    ],
+    "continuous": []
+   },
+   "表8-2": {
+    "pages": [
+     98
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表8-3": {
+    "pages": [
+     99
+    ],
+    "continuous": []
+   },
+   "表8-4": {
+    "pages": [
+     100
+    ],
+    "continuous": []
+   },
+   "表8-5": {
+    "pages": [
+     101
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表8-6": {
+    "pages": [
+     102
+    ],
+    "continuous": []
+   },
+   "表8-7": {
+    "pages": [
+     103
+    ],
+    "continuous": []
+   },
+   "表8-8": {
+    "pages": [
+     104
+    ],
+    "continuous": []
+   },
+   "表8-9": {
+    "pages": [
+     105
+    ],
+    "continuous": []
+   },
+   "表8-10": {
+    "pages": [
+     106
+    ],
+    "continuous": []
+   },
+   "表8-11": {
+    "pages": [
+     106
+    ],
+    "continuous": []
+   }
+  }
+ },
+ "ch09": {
+  "ch": 9,
+  "name": "极限与配合、几何公差和表面粗糙度",
+  "printed": "107-128",
+  "pages": 22,
+  "table_count": 17,
+  "tables": {
+   "表9-1": {
+    "pages": [
+     107,
+     108
+    ],
+    "continuous": []
+   },
+   "表9-2": {
+    "pages": [
+     109
+    ],
+    "continuous": []
+   },
+   "表9-7": {
+    "pages": [
+     120
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账：清单记 109 是正文引用页，实表在印刷 120（p014 页首「线性尺寸的未注公差（GB/T 1804—2000）」）"
+   },
+   "表9-3": {
+    "pages": [
+     110
+    ],
+    "continuous": []
+   },
+   "表9-4": {
+    "pages": [
+     110
+    ],
+    "continuous": []
+   },
+   "表9-5": {
+    "pages": [
+     111
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表9-6": {
+    "pages": [
+     116
+    ],
+    "continuous": []
+   },
+   "表9-8": {
+    "pages": [
+     120
+    ],
+    "continuous": []
+   },
+   "表9-9": {
+    "pages": [
+     121,
+     122,
+     124,
+     125
+    ],
+    "continuous": [
+     124,
+     125
+    ]
+   },
+   "表9-10": {
+    "pages": [
+     122
+    ],
+    "continuous": []
+   },
+   "表9-11": {
+    "pages": [
+     123
+    ],
+    "continuous": []
+   },
+   "表9-12": {
+    "pages": [
+     124
+    ],
+    "continuous": [
+     124
+    ]
+   },
+   "表9-13": {
+    "pages": [
+     125
+    ],
+    "continuous": [
+     125
+    ]
+   },
+   "表9-14": {
+    "pages": [
+     125
+    ],
+    "continuous": [
+     125
+    ]
+   },
+   "表9-15": {
+    "pages": [
+     126
+    ],
+    "continuous": []
+   },
+   "表9-16": {
+    "pages": [
+     126
+    ],
+    "continuous": []
+   },
+   "表9-17": {
+    "pages": [
+     127
+    ],
+    "continuous": [
+     127
+    ]
+   }
+  }
+ },
+ "ch10": {
+  "ch": 10,
+  "name": "齿轮传动、蜗杆传动和链传动公差",
+  "printed": "129-163",
+  "pages": 35,
+  "table_count": 52,
+  "tables": {
+   "表10-1": {
+    "pages": [
+     129
+    ],
+    "continuous": []
+   },
+   "表10-2": {
+    "pages": [
+     129
+    ],
+    "continuous": []
+   },
+   "表10-3": {
+    "pages": [
+     132
+    ],
+    "continuous": []
+   },
+   "表10-4": {
+    "pages": [
+     133
+    ],
+    "continuous": []
+   },
+   "表10-5": {
+    "pages": [
+     133,
+     134
+    ],
+    "continuous": []
+   },
+   "表10-6": {
+    "pages": [
+     134,
+     135,
+     136,
+     137
+    ],
+    "continuous": []
+   },
+   "表10-7": {
+    "pages": [
+     134,
+     138
+    ],
+    "continuous": []
+   },
+   "表10-8": {
+    "pages": [
+     139
+    ],
+    "continuous": []
+   },
+   "表10-9": {
+    "pages": [
+     140
+    ],
+    "continuous": []
+   },
+   "表10-10": {
+    "pages": [
+     140
+    ],
+    "continuous": []
+   },
+   "表10-11": {
+    "pages": [
+     140,
+     141
+    ],
+    "continuous": []
+   },
+   "表10-12": {
+    "pages": [
+     142
+    ],
+    "continuous": []
+   },
+   "表10-13": {
+    "pages": [
+     142
+    ],
+    "continuous": []
+   },
+   "表10-14": {
+    "pages": [
+     142
+    ],
+    "continuous": []
+   },
+   "表10-15": {
+    "pages": [
+     143
+    ],
+    "continuous": []
+   },
+   "表10-16": {
+    "pages": [
+     143
+    ],
+    "continuous": []
+   },
+   "表10-17": {
+    "pages": [
+     143
+    ],
+    "continuous": []
+   },
+   "表10-18": {
+    "pages": [
+     145
+    ],
+    "continuous": []
+   },
+   "表10-19": {
+    "pages": [
+     145
+    ],
+    "continuous": []
+   },
+   "表10-20": {
+    "pages": [
+     145
+    ],
+    "continuous": []
+   },
+   "表10-21": {
+    "pages": [
+     145,
+     146
+    ],
+    "continuous": []
+   },
+   "表10-22": {
+    "pages": [
+     145,
+     146
+    ],
+    "continuous": []
+   },
+   "表10-29": {
+    "pages": [
+     145,
+     146,
+     150,
+     152
+    ],
+    "continuous": []
+   },
+   "表10-24": {
+    "pages": [
+     146,
+     148
+    ],
+    "continuous": []
+   },
+   "表10-27": {
+    "pages": [
+     146,
+     149
+    ],
+    "continuous": []
+   },
+   "表10-25": {
+    "pages": [
+     146,
+     148
+    ],
+    "continuous": []
+   },
+   "表10-26": {
+    "pages": [
+     146,
+     148
+    ],
+    "continuous": []
+   },
+   "表10-28": {
+    "pages": [
+     146,
+     149
+    ],
+    "continuous": []
+   },
+   "表10-23": {
+    "pages": [
+     147
+    ],
+    "continuous": []
+   },
+   "表10-33": {
+    "pages": [
+     150,
+     152
+    ],
+    "continuous": []
+   },
+   "表10-30": {
+    "pages": [
+     151
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表10-32": {
+    "pages": [
+     151
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表10-31": {
+    "pages": [
+     151
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表10-34": {
+    "pages": [
+     152
+    ],
+    "continuous": []
+   },
+   "表10-35": {
+    "pages": [
+     153
+    ],
+    "continuous": []
+   },
+   "表10-36": {
+    "pages": [
+     154
+    ],
+    "continuous": []
+   },
+   "表10-37": {
+    "pages": [
+     154
+    ],
+    "continuous": []
+   },
+   "表10-38": {
+    "pages": [
+     154,
+     155
+    ],
+    "continuous": []
+   },
+   "表10-39": {
+    "pages": [
+     156
+    ],
+    "continuous": []
+   },
+   "表10-40": {
+    "pages": [
+     156
+    ],
+    "continuous": []
+   },
+   "表10-49": {
+    "pages": [
+     156,
+     161
+    ],
+    "continuous": []
+   },
+   "表10-50": {
+    "pages": [
+     156,
+     161
+    ],
+    "continuous": []
+   },
+   "表10-41": {
+    "pages": [
+     157
+    ],
+    "continuous": []
+   },
+   "表10-42": {
+    "pages": [
+     157
+    ],
+    "continuous": []
+   },
+   "表10-43": {
+    "pages": [
+     158
+    ],
+    "continuous": []
+   },
+   "表10-44": {
+    "pages": [
+     158
+    ],
+    "continuous": []
+   },
+   "表10-46": {
+    "pages": [
+     158,
+     159
+    ],
+    "continuous": []
+   },
+   "表10-45": {
+    "pages": [
+     158
+    ],
+    "continuous": []
+   },
+   "表10-48": {
+    "pages": [
+     158,
+     160
+    ],
+    "continuous": []
+   },
+   "表10-47": {
+    "pages": [
+     158,
+     160
+    ],
+    "continuous": []
+   },
+   "表10-51": {
+    "pages": [
+     162
+    ],
+    "continuous": []
+   },
+   "表10-52": {
+    "pages": [
+     163
+    ],
+    "continuous": []
+   }
+  }
+ },
+ "ch11": {
+  "ch": 11,
+  "name": "减速器设计资料",
+  "printed": "164-172",
+  "pages": 9,
+  "table_count": 12,
+  "tables": {
+   "表11-1": {
+    "pages": [
+     164,
+     172
+    ],
+    "continuous": []
+   },
+   "表11-2": {
+    "pages": [
+     164,
+     167
+    ],
+    "continuous": []
+   },
+   "表11-11": {
+    "pages": [
+     164,
+     172
+    ],
+    "continuous": []
+   },
+   "表11-3": {
+    "pages": [
+     167
+    ],
+    "continuous": []
+   },
+   "表11-4": {
+    "pages": [
+     167
+    ],
+    "continuous": []
+   },
+   "表11-5": {
+    "pages": [
+     168
+    ],
+    "continuous": []
+   },
+   "表11-6": {
+    "pages": [
+     169
+    ],
+    "continuous": []
+   },
+   "表11-7": {
+    "pages": [
+     170
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表11-8": {
+    "pages": [
+     170
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表11-9": {
+    "pages": [
+     171
+    ],
+    "continuous": []
+   },
+   "表11-10": {
+    "pages": [
+     172
+    ],
+    "continuous": []
+   },
+   "表11-12": {
+    "pages": [
+     172
+    ],
+    "continuous": []
+   }
+  }
+ },
+ "ch12": {
+  "ch": 12,
+  "name": "电动机",
+  "printed": "173-194",
+  "pages": 22,
+  "table_count": 23,
+  "tables": {
+   "表12-1": {
+    "pages": [
+     173
+    ],
+    "continuous": []
+   },
+   "表12-2": {
+    "pages": [
+     175
+    ],
+    "continuous": []
+   },
+   "表12-3": {
+    "pages": [
+     176
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表12-4": {
+    "pages": [
+     177
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表12-5": {
+    "pages": [
+     178
+    ],
+    "continuous": [],
+    "note": "2026-10-25 ch12 验收时按页图补登（清单原缺此号）"
+   },
+   "表12-6": {
+    "pages": [
+     179
+    ],
+    "continuous": [],
+    "note": "2026-10-25 ch12 验收时按页图补登（清单原缺此号）"
+   },
+   "表12-7": {
+    "pages": [
+     180
+    ],
+    "continuous": []
+   },
+   "表12-8": {
+    "pages": [
+     180,
+     181
+    ],
+    "continuous": []
+   },
+   "表12-9": {
+    "pages": [
+     181
+    ],
+    "continuous": []
+   },
+   "表12-10": {
+    "pages": [
+     182
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表12-11": {
+    "pages": [
+     183
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   },
+   "表12-12": {
+    "pages": [
+     184
+    ],
+    "continuous": []
+   },
+   "表12-13": {
+    "pages": [
+     184
+    ],
+    "continuous": []
+   },
+   "表12-14": {
+    "pages": [
+     180,
+     185
+    ],
+    "continuous": []
+   },
+   "表12-15": {
+    "pages": [
+     185
+    ],
+    "continuous": []
+   },
+   "表12-16": {
+    "pages": [
+     186
+    ],
+    "continuous": [
+     186
+    ]
+   },
+   "表12-17": {
+    "pages": [
+     187
+    ],
+    "continuous": []
+   },
+   "表12-18": {
+    "pages": [
+     187
+    ],
+    "continuous": []
+   },
+   "表12-19": {
+    "pages": [
+     188
+    ],
+    "continuous": []
+   },
+   "表12-20": {
+    "pages": [
+     188
+    ],
+    "continuous": []
+   },
+   "表12-21": {
+    "pages": [
+     189
+    ],
+    "continuous": []
+   },
+   "表12-22": {
+    "pages": [
+     190
+    ],
+    "continuous": []
+   },
+   "表12-23": {
+    "pages": [
+     186,
+     191
+    ],
+    "continuous": [
+     186
+    ]
+   }
+  }
+ },
+ "ch13": {
+  "ch": 13,
+  "name": "机械设计课程设计概述",
+  "printed": "195-196",
+  "pages": 2,
+  "table_count": 0,
+  "tables": {}
+ },
+ "ch14": {
+  "ch": 14,
+  "name": "机械系统总体设计",
+  "printed": "197-207",
+  "pages": 11,
+  "table_count": 6,
+  "tables": {
+   "表14-1": {
+    "pages": [
+     198
+    ],
+    "continuous": []
+   },
+   "表14-2": {
+    "pages": [
+     200
+    ],
+    "continuous": []
+   },
+   "表14-3": {
+    "pages": [
+     201,
+     204
+    ],
+    "continuous": []
+   },
+   "表14-4": {
+    "pages": [
+     201,
+     202
+    ],
+    "continuous": [
+     202
+    ]
+   },
+   "表14-5": {
+    "pages": [
+     204
+    ],
+    "continuous": []
+   },
+   "表14-6": {
+    "pages": [
+     204,
+     206
+    ],
+    "continuous": []
+   }
+  }
+ },
+ "ch15": {
+  "ch": 15,
+  "name": "传动装置总体设计",
+  "printed": "208-209",
+  "pages": 2,
+  "table_count": 0,
+  "tables": {}
+ },
+ "ch16": {
+  "ch": 16,
+  "name": "传动零件的设计计算",
+  "printed": "210-215",
+  "pages": 6,
+  "table_count": 0,
+  "tables": {}
+ },
+ "ch17": {
+  "ch": 17,
+  "name": "总装图和部件装配图的设计",
+  "printed": "216-247",
+  "pages": 32,
+  "table_count": 3,
+  "tables": {
+   "表17-1": {
+    "pages": [
+     231
+    ],
+    "continuous": []
+   },
+   "表17-2": {
+    "pages": [
+     243
+    ],
+    "continuous": []
+   },
+   "表17-3": {
+    "pages": [
+     244
+    ],
+    "continuous": [],
+    "note": "2026-10-25 索引对账按页图/验收记录修正页"
+   }
+  }
+ },
+ "ch18": {
+  "ch": 18,
+  "name": "减速器零件工作图设计",
+  "printed": "248-253",
+  "pages": 6,
+  "table_count": 4,
+  "tables": {
+   "表18-1": {
+    "pages": [
+     249
+    ],
+    "continuous": []
+   },
+   "表18-2": {
+    "pages": [
+     250
+    ],
+    "continuous": [
+     250
+    ]
+   },
+   "表18-3": {
+    "pages": [
+     251
+    ],
+    "continuous": [
+     251
+    ]
+   },
+   "表18-4": {
+    "pages": [
+     251,
+     252
+    ],
+    "continuous": [
+     251
+    ]
+   }
+  }
+ },
+ "ch19": {
+  "ch": 19,
+  "name": "编写设计说明书和准备答辩",
+  "printed": "254-258",
+  "pages": 5,
+  "table_count": 1,
+  "tables": {
+   "表19-1": {
+    "pages": [
+     254,
+     255
+    ],
+    "continuous": []
+   }
+  }
+ },
+ "ch20": {
+  "ch": 20,
+  "name": "参考图例",
+  "printed": "259-301",
+  "pages": 43,
+  "table_count": 0,
+  "tables": {}
+ },
+ "ch21": {
+  "ch": 21,
+  "name": "设计题目",
+  "printed": "302-315",
+  "pages": 14,
+  "table_count": 0,
+  "tables": {}
+ }
+}

@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="880" viewBox="0 0 1000 880" role="img" aria-label="mechanical-kit 项目架构图">
+  <title>mechanical-kit 项目架构</title>
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arwh"/>
+    </marker>
+    <style>
+    /* 深色单主题：GitHub 用 img 标签渲染 SVG，其中的 prefers-color-scheme 媒体查询
+       拿不到页面主题（camo 代理不传偏好），双主题会恒定走浅色分支——故只留深色。 */
+    text { font-family: "SF Mono", ui-monospace, Menlo, Consolas, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; }
+    .hd { font-size: 26px; font-weight: 700; fill: #f1f5f9; letter-spacing: -0.02em; }
+    .st { font-size: 13.5px; fill: #94a3b8; }
+    .bl { font-size: 16px; font-weight: 700; fill: #f1f5f9; }
+    .bn { font-size: 13px; fill: #94a3b8; }
+    .fl { font-size: 12.5px; fill: #94a3b8; }
+    .d1 { font-size: 14px; font-weight: 600; fill: #e2e8f0; }
+    .d2 { font-size: 13px; fill: #cbd5e1; }
+    .d3 { font-size: 12px; fill: #94a3b8; }
+    .lg { font-size: 12.5px; fill: #cbd5e1; }
+    .ft { font-size: 11.5px; fill: #64748b; }
+    .bg { fill: #020617; }
+    .box { fill: #0f172a; stroke-width: 1.5; }
+    .c-slate  { stroke: #64748b; fill: rgba(148,163,184,0.10); }
+    .c-green  { stroke: #34d399; fill: rgba(52,211,153,0.12); }
+    .c-amber  { stroke: #fbbf24; fill: rgba(251,191,36,0.10); }
+    .c-orange { stroke: #fb923c; fill: rgba(251,146,60,0.12); }
+    .c-violet { stroke: #a78bfa; fill: rgba(167,139,250,0.12); }
+    .c-rose   { stroke: #fb7185; fill: rgba(251,113,133,0.12); }
+    .c-cyan   { stroke: #22d3ee; fill: rgba(34,211,238,0.12); }
+    .dash { stroke-dasharray: 5 4; }
+    .numc { fill: none; stroke: #334155; stroke-width: 1.3; }
+    .numt { font-size: 11px; font-weight: 700; fill: #94a3b8; }
+    .sep { stroke: #1e293b; }
+    .arw { stroke: #475569; stroke-width: 1.5; fill: none; }
+    .arwh { fill: #475569; }
+    .tri { fill: #475569; }
+</style>
+  </defs>
+  <rect class="bg" width="1000" height="880"/>
+  <text x="24" y="50" class="hd">mechanical-kit · 项目架构</text>
+  <text x="24" y="77" class="st sans">v0.1.0-alpha.1 · 三本书 → 一章一库 · 25 个 mdkit 子命令 · 60 个测试目标 / 9,302 条断言</text>
+  <line x1="24" y1="96" x2="976" y2="96" class="sep"/>
+  <circle cx="34" cy="119" r="10" class="numc"/>
+  <text x="34" y="123.5" class="numt" text-anchor="middle">1</text>
+  <text x="54" y="124" class="bl">书源与证据链</text>
+  <text x="196" y="124" class="bn sans">全流程零模型 · 纯工具</text>
+  <rect x="24.0" y="140" width="166.4" height="120" rx="9" class="box c-slate"/>
+  <text x="38.0" y="168" class="d1">三本书 PDF</text>
+  <text x="38.0" y="192" class="d2 sans">机械设计 406p</text>
+  <text x="38.0" y="211" class="d2 sans">机械制图 331p</text>
+  <text x="38.0" y="230" class="d2 sans">课程设计 330p</text>
+  <text x="38.0" y="249" class="d3 sans">本机文件 · 不进仓库</text>
+  <line x1="194.4" y1="200.0" x2="215.4" y2="200.0" class="arw" marker-end="url(#arw)"/>
+  <rect x="220.4" y="140" width="166.4" height="120" rx="9" class="box c-green"/>
+  <text x="234.4" y="168" class="d1">bin/ · Swift 工具</text>
+  <text x="234.4" y="192" class="d2 sans">页眉扫描 · 拆章</text>
+  <text x="234.4" y="211" class="d2 sans">带坐标 OCR</text>
+  <text x="234.4" y="230" class="d2 sans">PDF → PNG 渲染</text>
+  <text x="234.4" y="249" class="d3 sans">二进制 + Swift 源码</text>
+  <line x1="390.8" y1="200.0" x2="411.8" y2="200.0" class="arw" marker-end="url(#arw)"/>
+  <rect x="416.8" y="140" width="166.4" height="120" rx="9" class="box c-amber"/>
+  <text x="430.8" y="168" class="d1">raw/ · 证据层</text>
+  <text x="430.8" y="192" class="d2 sans">页图 PNG · 全章 OCR</text>
+  <text x="430.8" y="211" class="d3 sans">Obsidian 库 · 只增不改</text>
+  <text x="430.8" y="230" class="d3 sans">重建需半小时以上</text>
+  <line x1="587.2" y1="200.0" x2="608.2" y2="200.0" class="arw" marker-end="url(#arw)"/>
+  <rect x="613.2" y="140" width="166.4" height="120" rx="9" class="box c-green"/>
+  <text x="627.2" y="168" class="d1">book_prepare.py</text>
+  <text x="627.2" y="192" class="d2 sans">目录页码 + 页眉</text>
+  <text x="627.2" y="211" class="d2 sans">→ 章边界 · 勘误插值</text>
+  <line x1="783.6" y1="200.0" x2="804.6" y2="200.0" class="arw" marker-end="url(#arw)"/>
+  <rect x="809.6" y="140" width="166.4" height="120" rx="9" class="box c-orange"/>
+  <text x="823.6" y="168" class="d1">books/&lt;书&gt;/</text>
+  <text x="823.6" y="192" class="d2 sans">沉淀进度 · 验收记录</text>
+  <text x="823.6" y="211" class="d2 sans">章知识 · 收官总表</text>
+  <text x="823.6" y="230" class="d3 sans">全书状态的唯一真相</text>
+  <text x="500.0" y="284" class="fl sans" text-anchor="middle">逐章核读：外部 agent 逐章交批 · 三关验收</text>
+  <path d="M 358.0 275 l 9 0 l -4.5 7 z" class="tri"/>
+  <path d="M 634.0 275 l 9 0 l -4.5 7 z" class="tri"/>
+  <circle cx="34" cy="307" r="10" class="numc"/>
+  <text x="34" y="311.5" class="numt" text-anchor="middle">2</text>
+  <text x="54" y="312" class="bl">沉淀资产</text>
+  <text x="196" y="312" class="bn sans">人工核出来的 · 不能重建</text>
+  <rect x="24.0" y="328" width="168.0" height="104" rx="9" class="box c-violet"/>
+  <text x="38.0" y="354" class="d1">lib/design/</text>
+  <text x="38.0" y="377" class="d2 sans">公式型 · 12 个章库</text>
+  <text x="38.0" y="395" class="d2 sans">2,123 条断言</text>
+  <rect x="220.0" y="328" width="168.0" height="104" rx="9" class="box c-violet"/>
+  <text x="234.0" y="354" class="d1">lib/handbook/</text>
+  <text x="234.0" y="377" class="d2 sans">表型三层 · 274 表</text>
+  <text x="234.0" y="395" class="d2 sans">56,774 格</text>
+  <text x="234.0" y="413" class="d3 sans">1,896 + 42 条断言</text>
+  <rect x="416.0" y="328" width="168.0" height="104" rx="9" class="box c-violet"/>
+  <text x="430.0" y="354" class="d1">lib/drawing/</text>
+  <text x="430.0" y="377" class="d2 sans">图样型 · 画法函数</text>
+  <text x="430.0" y="395" class="d2 sans">图幅层 · AST 契约</text>
+  <text x="430.0" y="413" class="d3 sans">134 用例 · 632 断言</text>
+  <rect x="612.0" y="328" width="168.0" height="104" rx="9" class="box c-violet"/>
+  <text x="626.0" y="354" class="d1">draw/ · 出图管线</text>
+  <text x="626.0" y="377" class="d2 sans">GB 图元 · 毫米坐标</text>
+  <text x="626.0" y="395" class="d2 sans">SVG → PDF → PNG</text>
+  <text x="626.0" y="413" class="d3 sans">像素扫线 RESULT: PASS</text>
+  <rect x="808.0" y="328" width="168.0" height="104" rx="9" class="box c-violet"/>
+  <text x="822.0" y="354" class="d1">templates/</text>
+  <text x="822.0" y="377" class="d2 sans">交付版式 · 计算书 PDF</text>
+  <text x="822.0" y="395" class="d3 sans">book.css 唯一真源</text>
+  <text x="822.0" y="413" class="d3 sans">离线 KaTeX 断网可打印</text>
+  <text x="500.0" y="456" class="fl sans" text-anchor="middle">被调用：查表 / 选型 / 校核 / 出图 / 排版</text>
+  <path d="M 363.7 447 l 9 0 l -4.5 7 z" class="tri"/>
+  <path d="M 628.3 447 l 9 0 l -4.5 7 z" class="tri"/>
+  <circle cx="34" cy="479" r="10" class="numc"/>
+  <text x="34" y="483.5" class="numt" text-anchor="middle">3</text>
+  <text x="54" y="484" class="bl">验收与入口</text>
+  <text x="196" y="484" class="bn sans">一个入口 · 一套脚本 · 两个 skill</text>
+  <rect x="24.0" y="500" width="215.5" height="104" rx="9" class="box c-rose dash"/>
+  <text x="38.0" y="526" class="d1">check/ · 验收器</text>
+  <text x="38.0" y="549" class="d2 sans">逐格比页图 · 像素扫线</text>
+  <text x="38.0" y="567" class="d2 sans">数字回原文 · 三方对账</text>
+  <text x="38.0" y="585" class="d3 sans">只读测量 · 编号闭环</text>
+  <line x1="243.5" y1="552.0" x2="264.5" y2="552.0" class="arw" marker-end="url(#arw)"/>
+  <rect x="269.5" y="500" width="215.5" height="104" rx="9" class="box c-cyan"/>
+  <text x="283.5" y="526" class="d1">mdkit.py · 25 个子命令</text>
+  <text x="283.5" y="549" class="d2 sans">唯一命令行入口</text>
+  <text x="283.5" y="567" class="d2 sans">读库 · 扫描 · 验收 · 排版</text>
+  <text x="283.5" y="585" class="d3 sans">缺省三本书 · 0 断言即红</text>
+  <line x1="489.0" y1="552.0" x2="510.0" y2="552.0" class="arw" marker-end="url(#arw)"/>
+  <rect x="515.0" y="500" width="215.5" height="104" rx="9" class="box c-green"/>
+  <text x="529.0" y="526" class="d1">skills/ · 操作规程</text>
+  <text x="529.0" y="549" class="d2 sans">mechanical-book-deposit</text>
+  <text x="529.0" y="567" class="d2 sans">mechanical-homework</text>
+  <text x="529.0" y="585" class="d3 sans">整书沉淀 · 做题画图计算书</text>
+  <line x1="734.5" y1="552.0" x2="755.5" y2="552.0" class="arw" marker-end="url(#arw)"/>
+  <rect x="760.5" y="500" width="215.5" height="104" rx="9" class="box c-cyan"/>
+  <text x="774.5" y="526" class="d1">交付物</text>
+  <text x="774.5" y="549" class="d2 sans">查表校核 · 计算书 PDF</text>
+  <text x="774.5" y="567" class="d2 sans">零件图 PDF · 章知识 · 报告</text>
+  <text x="774.5" y="585" class="d3 sans">毫秒级调用 · 可直接打印</text>
+  <text x="500.0" y="628" class="fl sans" text-anchor="middle">提交与镜像</text>
+  <path d="M 448.8 619 l 9 0 l -4.5 7 z" class="tri"/>
+  <path d="M 543.2 619 l 9 0 l -4.5 7 z" class="tri"/>
+  <circle cx="34" cy="651" r="10" class="numc"/>
+  <text x="34" y="655.5" class="numt" text-anchor="middle">4</text>
+  <text x="54" y="656" class="bl">版本与镜像</text>
+  <text x="196" y="656" class="bn sans">本地仓库 · 先提交 · 不擅自推远端</text>
+  <rect x="24.0" y="672" width="298.7" height="104" rx="9" class="box c-slate"/>
+  <text x="38.0" y="698" class="d1">git 仓库 · mechanical-kit</text>
+  <text x="38.0" y="721" class="d2 sans">origin：Natasha123-bit/mechanical-kit</text>
+  <text x="38.0" y="739" class="d3 sans">分支 main · 只 ignore 可重建产物</text>
+  <rect x="350.7" y="672" width="298.7" height="104" rx="9" class="box c-slate"/>
+  <text x="364.7" y="698" class="d1">等价性 · 两处真身</text>
+  <text x="364.7" y="721" class="d2 sans">实体 ~/Documents/…/mdkit</text>
+  <text x="364.7" y="739" class="d2 sans">软链 ~/.hermes/lib/mdkit</text>
+  <text x="364.7" y="757" class="d3 sans">备份要备 Documents 这一侧</text>
+  <rect x="677.3" y="672" width="298.7" height="104" rx="9" class="box c-cyan"/>
+  <text x="691.3" y="698" class="d1">版本 v0.1.0-alpha.1 · skill 镜像</text>
+  <text x="691.3" y="721" class="d2 sans">VERSION 与 --version 同源</text>
+  <text x="691.3" y="739" class="d2 sans">skills ← sync-skills.sh 单向镜像</text>
+  <text x="691.3" y="757" class="d3 sans">镜像由脚本生成 · 不要手改</text>
+  <line x1="24" y1="804" x2="976" y2="804" class="sep"/>
+  <rect x="24" y="818" width="12" height="12" rx="3" class="box c-slate"/>
+  <text x="42" y="828.5" class="lg sans">书源 / 仓库</text>
+  <rect x="132.1" y="818" width="12" height="12" rx="3" class="box c-green"/>
+  <text x="150.1" y="828.5" class="lg sans">工具</text>
+  <rect x="201.1" y="818" width="12" height="12" rx="3" class="box c-amber"/>
+  <text x="219.1" y="828.5" class="lg sans">证据（页图 / OCR）</text>
+  <rect x="354.0" y="818" width="12" height="12" rx="3" class="box c-orange"/>
+  <text x="372.0" y="828.5" class="lg sans">记录与状态</text>
+  <rect x="460.5" y="818" width="12" height="12" rx="3" class="box c-violet"/>
+  <text x="478.5" y="828.5" class="lg sans">沉淀资产</text>
+  <rect x="554.5" y="818" width="12" height="12" rx="3" class="box c-rose dash"/>
+  <text x="572.5" y="828.5" class="lg sans">验收器（只读）</text>
+  <rect x="686.0" y="818" width="12" height="12" rx="3" class="box c-cyan"/>
+  <text x="704.0" y="828.5" class="lg sans">入口 / 交付 / 版本</text>
+  <text x="24" y="856" class="ft sans">mechanical-kit · 图源 docs/architecture.svg（改图直接改它，别另存 PNG） · 2026-10-27</text>
+</svg>
