@@ -25,7 +25,11 @@ SKILLS_ROOT="${HERMES_SKILLS_ROOT:-$HOME/.hermes/skills}/engineering"
 ENTRY="$HOME/.hermes/lib/mdkit"
 
 # ---------- 1) 落点 ----------
-if [ "$REPO" = "$ENTRY" ]; then
+# REPO 用 -P 取物理路径，ENTRY 来自 $HOME（可能是逻辑路径）；两边都取物理路径再比，
+# 否则 /tmp -> /private/tmp、或 $HOME 本身带软链时，标准布局会被误判成「已存在且不是链接」。
+ENTRY_REAL="$(cd -P "$ENTRY" 2>/dev/null && pwd -P || echo "")"
+
+if [ "$REPO" = "$ENTRY" ] || [ -n "$ENTRY_REAL" ] && [ "$REPO" = "$ENTRY_REAL" ]; then
   echo "标准布局：本体就在 $ENTRY"
 elif [ -L "$ENTRY" ]; then
   cur="$(readlink "$ENTRY")"
@@ -61,14 +65,15 @@ fi
 
 # ---------- 2) skill 装进 Hermes ----------
 # 方向是「仓库快照 -> Hermes」。作者本机的真身可能比快照新，硬装等于回退。
-if [ "$REPO" != "$ENTRY" ] && [ "$FORCE_SKILLS" = 0 ]; then
+# 同样按物理路径比较：$HOME 带软链（或 /tmp）时逻辑路径与 REPO 不相等，会误判成「开发布局」
+if [ "$REPO" != "${ENTRY_REAL:-$ENTRY}" ] && [ "$FORCE_SKILLS" = 0 ]; then
   echo
   echo "开发布局：跳过 skill 安装（仓库快照可能比本机真身旧，装了会回退）。"
   echo "  回写方向（Hermes 真身 -> 仓库快照）：$REPO/sync-skills.sh 说明"
   echo "  确实要用快照覆盖真身：./install.sh --dev-link --force-skills"
   echo
   echo "版本：mechanical-kit $(cat "$ENTRY/VERSION" 2>/dev/null || echo unknown)"
-echo "验证：python3 $ENTRY/mdkit.py test all"
+  echo "验证：python3 $ENTRY/mdkit.py test all"
   exit 0
 fi
 

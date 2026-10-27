@@ -4,6 +4,8 @@
 
 ## 1. 本项目自有的部分
 
+`LICENSE`（MIT）**只覆盖代码**；数据与整理成果另按 `LICENSE-DATA`（CC BY-NC 4.0）授权。分界如下：
+
 | 部分 | 许可 |
 |---|---|
 | 代码：`mdkit.py`、`bin/`、`check/`、`draw/`、`templates/`、`scripts/`、`lib/**/*.py`、`install.sh`、`sync-skills.sh` | MIT（见 [LICENSE](LICENSE)） |

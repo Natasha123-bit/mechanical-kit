@@ -19,10 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
---------------------------------------------------------------------------------
-本许可（MIT）只覆盖**代码**：mdkit.py、bin/、check/、draw/、templates/、
-scripts/、lib/ 下的 .py 文件、install.sh、sync-skills.sh。
-
-**数据与整理成果**（lib/handbook/ 的表值字典、references/ 的章知识、books/ 的报告）
-另按 CC BY-NC 4.0 授权，见 LICENSE-DATA；数值来源与第三方权利见 NOTICE。

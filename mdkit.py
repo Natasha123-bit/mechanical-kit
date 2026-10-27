@@ -67,7 +67,23 @@ def _version() -> str:
 
 
 PY39 = Path("/usr/bin/python3")
-PY312 = Path.home() / ".local/bin/python3.12"
+def _find_py312() -> Path:
+    """python3.12 的落点：先作者机的 ~/.local/bin，再 PATH 与常见前缀（访客机多半在 PATH 里）。"""
+    home = Path.home() / ".local" / "bin" / "python3.12"
+    if home.exists():
+        return home
+    for cand in ("/opt/homebrew/bin/python3.12", "/usr/local/bin/python3.12",
+                 "/usr/bin/python3.12"):
+        if Path(cand).exists():
+            return Path(cand)
+    for d in os.environ.get("PATH", "").split(os.pathsep):
+        cand = Path(d) / "python3.12"
+        if cand.exists():
+            return cand
+    return home
+
+
+PY312 = _find_py312()
 DEFAULT_BOOK = "design"
 
 
