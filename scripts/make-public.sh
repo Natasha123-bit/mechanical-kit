@@ -84,7 +84,12 @@ for d in "${FORBIDDEN_DIRS[@]}"; do
   if [ "$HITS" -gt 0 ]; then echo "   ✗ 出现目录 $d：$HITS 个"; FAIL=1; fi
 done
 for n in "${FORBIDDEN_NAMES[@]}"; do
-  HITS=$(find "$DEST" -name "$n" | wc -l | tr -d ' ' || true)
+  if [ "$n" = "*.pdf" ]; then
+    # 例外：gear_pipeline 的零件图样例 PDF 是自己画的（无教材版面、无署名），允许公开
+    HITS=$(find "$DEST" -name "$n" ! -path "*/gear_pipeline/样例-*" | wc -l | tr -d ' ' || true)
+  else
+    HITS=$(find "$DEST" -name "$n" | wc -l | tr -d ' ' || true)
+  fi
   if [ "$HITS" -gt 0 ]; then echo "   ✗ 出现文件 $n：$HITS 个"; FAIL=1; fi
 done
 PATHS=$(grep -rIlE '/Users/[A-Za-z0-9._-]+' "$DEST" 2>/dev/null | wc -l | tr -d ' ' || true)

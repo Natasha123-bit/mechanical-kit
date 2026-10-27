@@ -242,23 +242,70 @@ def WAVY(x1, y1, x2, y2, amp=1.2, wavelength=6.0, style="thin"):
     return ("path", dict(d=d, style=style, fill="none"))
 
 
-# ============================================================ Sheet
-_PATH_CMD = re.compile(r"([MLA])((?:[^MLA])*)")
+# ============================================================ 路径命令
+# 元数与"哪些参数是 y 坐标"各一张表；只认这些命令，其余一律报错，不静默吞。
+_PATH_ARITY = {"M": 2, "L": 2, "H": 1, "V": 1, "C": 6, "S": 4, "Q": 4, "T": 2, "A": 7, "Z": 0}
+_PATH_Y = {"M": {1}, "L": {1}, "H": set(), "V": {0}, "C": {1, 3, 5},
+           "S": {1, 3}, "Q": {1, 3}, "T": {1}, "A": {6}, "Z": set()}
+_PATH_TOKEN = re.compile(r"([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)")
+_PATH_NUM = re.compile(r"[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?")
+
+
+def iter_path_commands(d: str):
+    """把 `d` 拆成 [(cmd, [原文字符串...]), ...]；一个命令后跟多组参数拆成多段。
+
+    M 之后的额外坐标对按规范转成 L/l（隐式 lineto），保留大小写。
+    未识别字符、参数个数不是元数整数倍 → ValueError（不静默吞，宁可炸也不出坏图）。
+    坐标保留原始文本，避免无谓的格式化噪声。
+    """
+    cmds, pos = [], 0
+    for m in _PATH_TOKEN.finditer(d):
+        gap = d[pos:m.start()].strip(" ,\t\r\n")
+        if gap:
+            raise ValueError("path 中有无法识别的内容 %r（位置 %d）" % (gap, pos))
+        cmd, body = m.group(1), m.group(2)
+        up = cmd.upper()
+        if _PATH_NUM.sub("", body).strip(" ,\t\r\n"):
+            raise ValueError("命令 %s 的参数里有无法识别的内容 %r" % (cmd, body))
+        nums = _PATH_NUM.findall(body)
+        ar = _PATH_ARITY[up]
+        if ar == 0:
+            if nums:
+                raise ValueError("命令 %s 不接受参数" % cmd)
+            cmds.append((cmd, []))
+        else:
+            if len(nums) % ar:
+                raise ValueError("命令 %s 给了 %d 个参数，应为 %d 的整数倍" % (cmd, len(nums), ar))
+            for i in range(0, len(nums), ar):
+                c = cmd
+                if up == "M" and i > 0:                      # 隐式 lineto
+                    c = "L" if cmd.isupper() else "l"
+                cmds.append((c, nums[i:i + ar]))
+        pos = m.end()
+    tail = d[pos:].strip(" ,\t\r\n")
+    if tail:
+        raise ValueError("path 结尾有无法识别的内容 %r" % tail)
+    return cmds
 
 
 def _flip_path(d: str, h: float) -> str:
-    """把图纸坐标路径翻成 SVG 坐标：M/L 的每个坐标对、A 的终点都要翻，A 的半径不翻。"""
-    def one(m):
-        cmd, body = m.group(1), m.group(2)
-        nums = re.findall(r"-?\d+(?:\.\d+)?", body)
-        if cmd in ("M", "L"):
-            for i in range(1, len(nums), 2):
-                nums[i] = _n(h - float(nums[i]))
-        elif cmd == "A" and len(nums) >= 7:
-            nums[-1] = _n(h - float(nums[-1]))
-        return cmd + " " + " ".join(nums)
+    """图纸坐标（y 向上）→ SVG 坐标（y 向下）。
 
-    return _PATH_CMD.sub(one, d)
+    只翻 y 类参数：M/L/T 的第 2 个、C 的 2/4/6、S/Q 的 2/4、A 的终点 y、V 的那一个；
+    H 不动，Z 无参。相对命令（小写）的 dy 取反，不是 h−y。
+    """
+    parts = []
+    for cmd, args in iter_path_commands(d):
+        up, rel = cmd.upper(), cmd.islower()
+        vals = []
+        for i, v in enumerate(args):
+            if i not in _PATH_Y[up]:                         # 不是 y 坐标（含 A 的半径/标志）
+                vals.append(v)
+                continue
+            nv = -float(v) if rel else h - float(v)           # 相对命令取反，绝对命令 h−y
+            vals.append("0" if nv == 0 else _n(nv))           # 避免出现 "-0"
+        parts.append(cmd if not vals else cmd + " " + " ".join(vals))
+    return " ".join(parts)
 
 
 @dataclass

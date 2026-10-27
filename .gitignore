@@ -12,6 +12,10 @@ draw/**/*.pdf
 draw/**/*.html
 draw/**/*.log
 
+# 例外：gear_pipeline 的参照样例要进仓库（其余 draw/ 下的渲染产物仍忽略）
+!draw/gear_pipeline/样例-*.svg
+!draw/gear_pipeline/样例-*.pdf
+
 # 单章 PDF：book_prepare.py --split-only 秒级重建
 books/**/_split/
 

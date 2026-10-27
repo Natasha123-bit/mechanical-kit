@@ -100,26 +100,30 @@ def 拼(*图形s) -> 图形:
     return out
 
 
-_PATH_CMD = re.compile(r"([MLA])((?:[^MLA])*)")
-
-
 def _移path(d: str, dx: float, dy: float) -> str:
-    """搬路径：M/L 的每个坐标对、A 的终点；A 的半径/角度/大小弧标志不搬。
+    """搬路径：按命令元数平移每个坐标；A 只搬终点，相对命令（小写）不受平移影响。
 
-    覆盖 gbdraw.ARC 的 `M x y A r r rot large sweep x y` 与 WAVY/PHASE 的 `M…L…`。
+    解析用 gbdraw.iter_path_commands（与输出层共用一份，避免两处各写一套再分叉）。
     """
-    def f(m):
-        cmd, body = m.group(1), m.group(2)
-        nums = re.findall(r"-?\d+(?:\.\d+)?", body)
-        if cmd in ("M", "L"):
-            for i in range(0, len(nums) - 1, 2):
-                nums[i] = _n3(float(nums[i]) + dx)
-                nums[i + 1] = _n3(float(nums[i + 1]) + dy)
-        elif cmd == "A" and len(nums) >= 7:
-            nums[-2] = _n3(float(nums[-2]) + dx)
-            nums[-1] = _n3(float(nums[-1]) + dy)
-        return cmd + " " + " ".join(nums)
-    return _PATH_CMD.sub(f, d)
+    parts = []
+    for cmd, args in gbdraw.iter_path_commands(d):
+        up, rel = cmd.upper(), cmd.islower()
+        if rel or up == "Z":                       # 相对量在平移下不变
+            parts.append(cmd if not args else cmd + " " + " ".join(args))
+            continue
+        vals = []
+        for i, v in enumerate(args):
+            if up == "H":
+                vals.append(_n3(float(v) + dx))
+            elif up == "V":
+                vals.append(_n3(float(v) + dy))
+            elif up == "A":
+                vals.append(_n3(float(v) + dx) if i == 5 else
+                            _n3(float(v) + dy) if i == 6 else v)
+            else:
+                vals.append(_n3(float(v) + dx) if i % 2 == 0 else _n3(float(v) + dy))
+        parts.append(cmd + " " + " ".join(vals))
+    return " ".join(parts)
 
 
 def _n3(v: float) -> str:
