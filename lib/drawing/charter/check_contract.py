@@ -118,12 +118,14 @@ def audit(rows, min_named=0.6):
 
     # C7 命名覆盖率。分母排除 MULTI_OK：C5 已经明确"剖面线/表格网格这类不要求逐个命名"，
     # 再让它们进 C7 的分母，等于同一条规则在一个地方放宽、在另一个地方扣分。
-    tot = sum(c for r, c in role_of.items() if r not in MULTI_OK)
-    named = sum(c for r, c in named_by_role.items() if r not in MULTI_OK)
-    cov = named / tot if tot else 0.0
+    # 局部变量，不能复用 tot/named——那两个是给 stat["with_role"] 用的，
+    # 覆盖掉会让报告里的 role 覆盖率算出 308/411 = 74.9%（看着像有 100 个图元没打角色）
+    c7_tot = sum(c for r, c in role_of.items() if r not in MULTI_OK)
+    c7_named = sum(c for r, c in named_by_role.items() if r not in MULTI_OK)
+    cov = c7_named / c7_tot if c7_tot else 0.0
     res.append(("C7", "非多实例组命名覆盖率 ≥ %.0f%%" % (min_named * 100), "警",
                 "通过" if cov >= min_named else "警示",
-                "%d/%d = %.1f%%" % (named, tot, 100 * cov)))
+                "%d/%d = %.1f%%" % (c7_named, c7_tot, 100 * cov)))
 
     # C8 语义可疑：同一 role+name 组内碎线过多（折线冒充曲线/轮廓）
     sus = []
@@ -137,9 +139,9 @@ def audit(rows, min_named=0.6):
 
     stat = {
         "total": n,
-        "with_role": tot,
-        "named": named,
-        "role_coverage": round(tot / n, 4) if n else 0,
+        "with_role": sum(role_of.values()),
+        "named": sum(named_by_role.values()),
+        "role_coverage": round(sum(role_of.values()) / n, 4) if n else 0,
         "name_coverage": round(cov, 4),
         "name_coverage_all": round(sum(named_by_role.values()) / max(sum(role_of.values()), 1), 4),
         "by_role": dict(role_of),
@@ -153,7 +155,7 @@ def report(path, res, stat):
     print("\nL0 契约检查 — %s" % Path(path).name)
     print("  图元 %d 个；role %d（%.1f%%）；name/feature %d（%.1f%%）" % (
         stat["total"], stat["with_role"], 100 * stat["role_coverage"],
-        stat["named"], 100 * stat["name_coverage"]))
+        stat["named"], 100 * stat["name_coverage_all"]))   # 全体口径；C7 那行是非多实例口径
     print()
     icon = {"通过": "✓", "不通过": "✗", "警示": "!"}
     for rid, name, sev, st, detail in res:
