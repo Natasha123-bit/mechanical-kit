@@ -131,7 +131,9 @@ cd ~/.hermes/lib/mdkit && ./install.sh
 
 三处脚本坑（都踩过，改完就别退回去）：`set -euo pipefail` 下 `grep` 无命中返回 1 会误杀脚本（管道末加 `|| true`）；`[ 条件 ] && {...}` 在 `set -e` 下为零会中断（写 `if`）；自检会在目标树里生成 `__pycache__`（`PYTHONDONTWRITEBYTECODE=1` + 收尾清理，否则文件数从 324 虚涨到 402）。
 
-公开仓库建法：导出树里 `git init -b main` → **单个 initial commit**（不带私有历史，别用 `--mirror`）→ `gh repo create <名> --public --source . --push` → `git tag -a v0.1.0-alpha.1` → 设描述 / topics / Issues 开、PR 开、Discussions 关（README 写「个人项目，不承诺响应」）。
+**`LICENSE` 必须是标准 MIT 正文的最后一行。** 后面再附「本许可只覆盖代码、数据见 LICENSE-DATA」这类中文说明，GitHub 的 licensee 就匹配不上，侧栏显示 `Other`（`spdx_id=NOASSERTION`，实测一次）。范围说明写进 `NOTICE` 第一节，`LICENSE` 只留正文；发布后用 `gh api repos/<o>/<r> --jq .license.spdx_id` 复核。
+
+公开仓库建法：导出树里 `git init -b main` → **单个 initial commit**（不带私有历史，别用 `--mirror`）→ `gh repo create <名> --public --source . --push` → `git tag -a v0.1.0-alpha.1` → 设描述 / topics / Issues 开、PR 开、Discussions 关（README 写「个人项目，不承诺响应」）。**已发布的 tag 不移动**（首版 tag 就停在首版），后续修复走普通提交，等有实质变化再开 `alpha.N+1`。
 
 **要交代的边界**（不是 bug）：`lib/**` 的 docstring 里仍有「依据：books/…/handoff-ch08/…」这类内部引用，公开版没有那些文件，读者只能当"作者核过"的标记；`check/` 四个验收器都要**页图**当输入，访客得拿自己的图跑（`verify_table_cells.py --assets <根目录>` 可指定，默认指向作者的 Obsidian vault）。
 
@@ -169,6 +171,9 @@ GitHub 账号 `Natasha123-bit`（`gh auth status` 已登录，含 `repo` scope�
 - **`$VAR` 后面紧跟中文标点必须写 `${VAR}`。** bash 把全角标点的字节也当变量名的一部分，`set -u` 下直接 `REPO?: unbound variable` 退出——`echo "本仓库在 $REPO，但…"`、`echo "…（$cur）"` 实测各中一次，都是分支走到才炸，主路径看不出问题。写完扫一遍：`grep -n '\$[A-Za-z_][A-Za-z0-9_]*[^ -~]' install.sh sync-skills.sh`，命中就是隐患。
 - **测脚本分支用假 HOME，别在真身上试。** `HOME=/tmp/fh ./install.sh` 会把 `ENTRY`、`SKILLS_ROOT` 一起导到假目录，五种分支（无参数 / `--dev-link` / `--force-skills` / 入口已指向自己 / 入口指向别处）都能安全跑一遍；`HERMES_SKILLS_ROOT=/tmp/x ./install.sh` 还能单独把 skill 装到临时目录，不碰真身。
 - **`install.sh` 与 `sync-skills.sh` 方向相反，谁都不能替代谁。** 前者「仓库快照 → Hermes」（装新机/访客），后者「Hermes 真身 → 仓库」（作者回写）。在作者本机跑前者会把尚未同步的真身改动盖回去，所以脚本里有「克隆不在标准位置就跳过 skill 安装」的护栏，绕过它要显式 `--force-skills`。
+- **脚本里比路径一律比物理路径。** `ENTRY="$HOME/.hermes/lib/mdkit"` 是逻辑路径，`REPO=$(cd -P … && pwd)` 是物理路径；`$HOME` 带软链（macOS `/tmp → /private/tmp`、外置盘 home）时两者不等，标准布局会被误判成「已存在且不是链接」→ `exit 1`，skill 一个都装不上。写法：`ENTRY_REAL="$(cd -P "$ENTRY" 2>/dev/null && pwd -P || echo "")"`，落点判定与「跳过 skill 安装」那道闸都拿它与 `$REPO` 比。
+- **解释器别写死一个位置。** `PY312 = Path.home()/".local/bin/python3.12"` 只在作者机成立；访客把 3.12 装在 Homebrew 或 PATH 里就只跑单解释器，断字数掉一半（8,700 → 4,350）。查找顺序写成 `~/.local/bin` → `/opt/homebrew/bin` → `/usr/local/bin` → `/usr/bin` → `PATH`。README 里报断言数时注明「双解释器 N 条，单解释器约一半」。
+- **发布前在假 HOME 里把公开版当陌生人装一遍**（`git clone <公开地址> /tmp/sh/.hermes/lib/mdkit` → `HOME=/tmp/sh ./install.sh` → `HOME=/tmp/sh python3 mdkit.py selftest` → 看 `/tmp/sh/.hermes/skills` 里 skill 在不在）。上面两条都是这一步才现形的：作者机路径不带软链、3.12 恰好在 `~/.local/bin`，两个 bug 在自己的机器上永远看不见。
 
 ## 11. README 与版本号
 
