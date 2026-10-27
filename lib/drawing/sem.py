@@ -34,6 +34,7 @@ ROLES = {
     "datum", "tolerance-frame", "tolerance-symbol",  # 几何公差
     "roughness",                                  # 表面结构
     "cutting-plane", "view-label",                # 剖切位置与视图名
+    "zone-mark",                                  # 轴向区段代号（a/b/c）与其界线
     "projection-symbol",                          # 投影法符号
     "text",                                       # 不属于以上任何类的说明文字
 }
@@ -43,11 +44,11 @@ ROLE_TAGS = {
     "sheet": {"rect", "line"},
     "title-grid": {"line", "rect", "text", "polygon"},
     "table-grid": {"line", "rect", "text", "polygon"},
-    "outline": {"line", "path", "circle", "rect", "polygon"},
+    "outline": {"line", "path", "circle", "rect", "polygon", "polyline"},
     "hidden": {"line", "path"},
     "centerline": {"line", "path"},
-    "section-outline": {"line", "path", "circle"},
-    "key-outline": {"line", "path"},
+    "section-outline": {"line", "path", "circle", "polyline"},
+    "key-outline": {"line", "path", "polyline"},
     "hatch": {"line"},
     "dimension": {"line", "path", "text"},       # 尺寸数字属于尺寸标注本体
     "extension": {"line", "path"},
@@ -55,16 +56,17 @@ ROLE_TAGS = {
     "leader": {"line", "path", "polyline"},
     "datum": {"line", "path", "polygon", "rect", "text"},   # 基准符号=三角+连线+方框+字母
     "tolerance-frame": {"rect", "line", "text"},
-    "tolerance-symbol": {"line", "path", "text", "polygon"},
-    "roughness": {"line", "path", "text", "polygon"},
+    "tolerance-symbol": {"line", "path", "text", "polygon", "circle"},   # 圆度符号就是个圆
+    "roughness": {"line", "path", "text", "polygon", "polyline"},
     "cutting-plane": {"line", "polygon", "text"},
     "view-label": {"text"},
+    "zone-mark": {"line", "text"},       # 区段代号点划线、两端短界线、代号字母
     "projection-symbol": {"line", "circle", "ellipse", "path"},
     "text": {"text"},
 }
 
 # 这几种角色的图元数量天然很多（剖面线、表格网格），L0 不对它们设数量上限
-MULTI_OK = {"hatch", "title-grid", "table-grid", "centerline", "extension"}
+MULTI_OK = {"hatch", "title-grid", "table-grid", "centerline", "extension", "zone-mark"}
 
 # 分组内按元素类型分派子角色：`G("dimension", L, ARROW, T)` 里箭头是 arrow、文字是 text，
 # 不能一律继承 dimension——否则 L0 的 C3（role 与元素类型匹配）会把这些记成越界，

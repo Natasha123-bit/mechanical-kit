@@ -116,11 +116,12 @@ def audit(rows, min_named=0.6):
                 "通过" if ok6 else "警示",
                 "dimension %d / arrow %d" % (n_dim, n_arr)))
 
-    # C7 命名覆盖率
-    tot = sum(role_of.values())
-    named = sum(named_by_role.values())
+    # C7 命名覆盖率。分母排除 MULTI_OK：C5 已经明确"剖面线/表格网格这类不要求逐个命名"，
+    # 再让它们进 C7 的分母，等于同一条规则在一个地方放宽、在另一个地方扣分。
+    tot = sum(c for r, c in role_of.items() if r not in MULTI_OK)
+    named = sum(c for r, c in named_by_role.items() if r not in MULTI_OK)
     cov = named / tot if tot else 0.0
-    res.append(("C7", "role 组命名覆盖率 ≥ %.0f%%" % (min_named * 100), "警",
+    res.append(("C7", "非多实例组命名覆盖率 ≥ %.0f%%" % (min_named * 100), "警",
                 "通过" if cov >= min_named else "警示",
                 "%d/%d = %.1f%%" % (named, tot, 100 * cov)))
 
@@ -140,6 +141,7 @@ def audit(rows, min_named=0.6):
         "named": named,
         "role_coverage": round(tot / n, 4) if n else 0,
         "name_coverage": round(cov, 4),
+        "name_coverage_all": round(sum(named_by_role.values()) / max(sum(role_of.values()), 1), 4),
         "by_role": dict(role_of),
         "by_tag_missing_role": dict(unrole),
         "by_role_tag": {k: dict(v) for k, v in per_role_tag.items()},
