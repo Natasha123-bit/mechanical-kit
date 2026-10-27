@@ -77,6 +77,7 @@ JS = r"""
       id: el.getAttribute('id') || '',
       role: el.getAttribute('data-role') || '',
       name: el.getAttribute('data-name') || '',
+      view: el.getAttribute('data-view') || '',
       xmin: Math.min.apply(null, xs), xmax: Math.max.apply(null, xs),
       ymin: Math.min.apply(null, ys), ymax: Math.max.apply(null, ys)
     };
@@ -88,7 +89,7 @@ JS = r"""
         var a = apply(m, +el.getAttribute('x1'), +el.getAttribute('y1'));
         var b = apply(m, +el.getAttribute('x2'), +el.getAttribute('y2'));
         out.segments.push({x1: a[0], y1: a[1], x2: b[0], y2: b[1],
-                           role: rec.role, name: rec.name, id: rec.id});
+                           role: rec.role, name: rec.name, id: rec.id, view: rec.view});
       }
       out.boxes.push(rec);
     }

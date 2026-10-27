@@ -40,6 +40,28 @@ python3 lib/drawing/charter/measure.py 图.svg -o 证据/bounds.json
 
 **不传 `--bounds` 时 L3 会全部判“未检查”**，屏幕上照样一堆 ✓，很容易当成通过。`check.py` 把顺序固定死，就是为了避免这个。
 
+## 改图循环：devloop.sh
+
+画图过程中别每改一处就跑一遍“检查 + 截图 + 裁剪 + 目视”。`draw/gear_pipeline/devloop.sh`
+把四件事合成一条：
+
+```bash
+cd draw/gear_pipeline
+./devloop.sh build_gear.py --svg 齿轮零件图.svg --calc calc.json --fig-no CS1-01
+./devloop.sh --no-build --svg 齿轮零件图.svg      # 图已生成，只检查+看图
+```
+
+它做：build → check（只留 ✗ 和汇总）→ 整页截图 → 按 `data-view` 裁出各视图。
+
+产物落在**图所在目录**的 `预览/`：`整页.png` + `局部_main.png` / `局部_end.png` /
+`局部_title.png` …，一步拿到全部图片路径，一轮只要一次工具调用 + 一次 vision。
+
+裁剪只认 `data-view` 锚点，不按 bbox 聚类猜（ID-02）。图上没有 `data-view` 时只出整页，
+并提示去补锚点。`--pad` 默认 3mm，`--max` 默认 5 张。
+
+和 `build.sh` 的分工：`devloop.sh` 是改图时的秒级反馈（只出 PNG），
+`build.sh` 是交付时的 PDF + 逐页 PNG + 像素复核。
+
 ## 四种状态
 
 | 状态 | 含义 |
