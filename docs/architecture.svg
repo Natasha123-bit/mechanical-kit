@@ -39,7 +39,7 @@
   </defs>
   <rect class="bg" width="1000" height="880"/>
   <text x="24" y="50" class="hd">mechanical-kit · 项目架构</text>
-  <text x="24" y="77" class="st sans">v0.1.0-alpha.1 · 三本书 → 一章一库 · 25 个 mdkit 子命令 · 60 个测试目标 / 9,302 条断言</text>
+  <text x="24" y="77" class="st sans">v0.1.0-alpha.2 · 三本书 → 一章一库 · 25 个 mdkit 子命令 · 60 个测试目标 / 9,302 条断言</text>
   <line x1="24" y1="96" x2="976" y2="96" class="sep"/>
   <circle cx="34" cy="119" r="10" class="numc"/>
   <text x="34" y="123.5" class="numt" text-anchor="middle">1</text>
@@ -153,7 +153,7 @@
   <text x="364.7" y="739" class="d2 sans">软链 ~/.hermes/lib/mdkit</text>
   <text x="364.7" y="757" class="d3 sans">备份要备 Documents 这一侧</text>
   <rect x="677.3" y="672" width="298.7" height="104" rx="9" class="box c-cyan"/>
-  <text x="691.3" y="698" class="d1">版本 v0.1.0-alpha.1 · skill 镜像</text>
+  <text x="691.3" y="698" class="d1">版本 v0.1.0-alpha.2 · skill 镜像</text>
   <text x="691.3" y="721" class="d2 sans">VERSION 与 --version 同源</text>
   <text x="691.3" y="739" class="d2 sans">skills ← sync-skills.sh 单向镜像</text>
   <text x="691.3" y="757" class="d3 sans">镜像由脚本生成 · 不要手改</text>

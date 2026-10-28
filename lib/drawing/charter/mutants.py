@@ -27,6 +27,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 import tempfile
 from dataclasses import dataclass
@@ -40,10 +41,13 @@ if str(ROOT) not in sys.path:
 from lib.drawing.charter.check_rules import run as check_run   # noqa: E402
 from lib.drawing.charter.measure import measure               # noqa: E402
 
-SVG = ROOT / "draw/gear_pipeline/样例-输出轴零件图.svg"
-CALC = Path.home() / "Documents/Hermes/机械设计作业/设计测试/calc/s3_shaft.json"
+# 底图与计算书一律放仓库内 fixtures/：以前指向 ~/Documents 下的项目目录，
+# 那边一改目录名，注错反测不是报错而是静默失效（跑完 exit 0 或误报漏抓）。
+FIX = Path(__file__).resolve().parent / "fixtures"
+SVG = FIX / "样例-输出轴零件图.svg"
+CALC = FIX / "calc_shaft.json"
 FIG_NO = "SJCS-1"
-FEATURES = ROOT / "draw/gear_pipeline/证据/features_shaft.json"
+FEATURES = FIX / "features_shaft.json"
 
 
 def tag_with(text: str, needle: str) -> str:
@@ -74,6 +78,46 @@ class Case:
     edit: Callable[[str], str]
     bounds: bool = False   # L3 需要重新量测（慢，只有 L3 用例开）
     known_gap: bool = False  # 已登记盲区：漏抓只提示、不判失败（MUT-03）
+    part: str | None = None  # 该用例要连 common/part 插件一起跑（"shaft"/"gear"）
+    svg: Path | None = None  # 换底图（part 层要一张带 calc 段表的轴图）
+    calc: str | None = None  # 配套计算书
+    features: Path | None = None  # 配套要素清单（完备性用例要）
+
+
+def _mut_first_outline(src, mode):
+    """坐标无关的注错：把第一条够长的横/竖 outline 线改坏。
+
+    part 层用例不能写死某张图的坐标（换图就失效），所以按几何挑第一条长线。
+    mode='h'：整条上移 1mm（母线半径对不上）；mode='v'：砍掉中段 10mm（轴肩线断）。
+    """
+    for m in re.finditer(r"<line\b[^>]*>", src):
+        tag = m.group(0)
+        if 'data-role="outline"' not in tag:
+            continue
+        d = dict(re.findall(r'([\w-]+)="([^"]*)"', tag))
+        try:
+            x1, y1, x2, y2 = (float(d["x1"]), float(d["y1"]),
+                              float(d["x2"]), float(d["y2"]))
+        except (KeyError, ValueError):
+            continue
+        if mode == "h" and abs(y1 - y2) < 1e-6 and abs(x2 - x1) > 20:
+            new = re.sub(r'\by1="[^"]*"', 'y1="%g"' % (y1 + 1), tag, 1)
+            new = re.sub(r'\by2="[^"]*"', 'y2="%g"' % (y2 + 1), new, 1)
+            return src.replace(tag, new, 1)
+        if mode == "v" and abs(x1 - x2) < 1e-6 and abs(y2 - y1) > 20:
+            mid = (y1 + y2) / 2
+            hi = re.sub(r'\by2="[^"]*"', 'y2="%g"' % (mid + 6), tag, 1)
+            lo = re.sub(r'\by1="[^"]*"', 'y1="%g"' % (mid - 6), tag, 1)
+            lo = re.sub(r'\by2="[^"]*"', 'y2="%g"' % y2, lo, 1)
+            return src.replace(tag, hi + lo, 1)
+    return src
+
+
+PART_SVG = FIX / "中间轴零件图.svg"
+PART_CALC = str(FIX / "中间轴_calc.json")
+GEAR_SVG = FIX / "齿轮零件图.svg"
+GEAR_CALC = str(FIX / "齿轮_calc.json")
+GEAR_FEAT = FIX / "齿轮_features.json"
 
 
 CASES = [
@@ -120,7 +164,7 @@ CASES = [
     Case("keyway_flip", "L1", "L1-11", "错向槽口",
          "断面 A 的键槽开到轴线另一侧（x 125 → 91，关于圆心镜像）",
          lambda s: s.replace('<line x1="125" y1="215.7" x2="125" y2="202.3"',
-                             '<line x1="91" y1="215.7" x2="91" y2="202.3"', 1), known_gap=True),
+                             '<line x1="91" y1="215.7" x2="91" y2="202.3"', 1)),
 
     Case("feat_missing", "L2", "L2-10", "其它",
          "删掉清单里的一条轮廓线（完备性：该画的没画）",
@@ -136,6 +180,10 @@ CASES = [
          "技术要求挪到轴上母线（字压轮廓）",
          lambda s: swap(swap(s, ">技术要求<", 'x="35"', 'x="60"'), ">技术要求<", 'y="243"', 'y="97"'),
          bounds=True),
+    Case("text_on_arc", "L3", "L3-02", "穿字",
+         "数字 41 挪到断面 A 整圆弧 45° 处 (123.9,193.1)——只认 <line> 的老判据会漏",
+         lambda s: swap(swap(s, ">41<", 'x="85.5"', 'x="123.9"'),
+                        ">41<", 'y="45.5"', 'y="193.1"'), bounds=True),
     Case("text_dim", "L3", "L3-03", "穿字",
          "数字 41 的 y 45.5→47（压到尺寸线上）",
          lambda s: swap(s, ">41<", 'y="45.5"', 'y="47"'), bounds=True),
@@ -144,6 +192,31 @@ CASES = [
          lambda s: s.replace("</svg>", '<line x1="90" y1="20" x2="90" y2="80" class="thin" '
                                        'data-role="dimension" data-name="mut"/></svg>', 1),
          bounds=True),
+    # ---------------- common / part 层（G-xx / P-xx）----------------
+    # 这几个在 L1~L3 里没有对应判据，必须用 part 打开插件层才跑得到。
+    Case("datum_lift", "GDT", "G-01", "其它",
+         "基准三角形整体上移 4mm，底边脱离轮廓线",
+         lambda s: s.replace('points="74,137 72.5,139.6 75.5,139.6"',
+                             'points="74,133 72.5,135.6 75.5,135.6"', 1), part="shaft"),
+    Case("glyph_missing", "GDT", "G-13", "其它",
+         "塞一个仿宋没有的字符（U+10FFFD 私用区）——字体栈判据看不出来，只有字形覆盖能抓",
+         lambda s: s.replace("</svg>", '<text x="200" y="150" font-size="3.5" class="txt" '
+                                       'data-role="text" data-name="mut">\U0010FFFD</text></svg>', 1),
+         part="shaft"),
+    Case("gen_radius", "PART", "P-01", "其它",
+         "首条长横轮廓整条上移 1mm（该段母线半径对不上 d/2）",
+         lambda s: _mut_first_outline(s, "h"), part="shaft",
+         svg=PART_SVG, calc=PART_CALC),
+    Case("shoulder_gap", "L2", "L2-14", "其它",
+         "首条长竖轮廓砍掉中段 12mm（轴肩线该盖的没盖；L2-01 会绿，L2-14 必须红）",
+         lambda s: _mut_first_outline(s, "v"),
+         svg=PART_SVG, calc=PART_CALC),
+    Case("gear_feat_missing", "L2", "L2-10", "其它",
+         "删掉一条腹板孔口竖线（00: 齿轮图没有要素清单时这条抓不到）",
+         lambda s: __import__("re").sub(
+             r'<line x1="([\d.]+)" y1="[\d.]+" x2="\1" y2="[\d.]+"[^>]*'
+             r'data-feature="web\.hole"[^>]*/>\s*', "", s, count=1),
+         svg=GEAR_SVG, calc=GEAR_CALC, features=GEAR_FEAT),
     Case("fill_text", "L3", "L3-05", "穿字",
          "数字挪到箭头尖上（压住实心符号）",
          lambda s: swap(swap(s, ">41<", 'x="85.5"', 'x="147"'), ">41<", 'y="45.5"', 'y="90.5"'),
@@ -155,7 +228,7 @@ def sha(s: str) -> str:
     return hashlib.sha256(s.encode("utf-8")).hexdigest()[:12]
 
 
-def run_case(c: Case, src: str, tmp: Path) -> tuple[str, str]:
+def run_case(c: Case, src: str, tmp: Path, base_dir: Path | None = None) -> tuple[str, str]:  # noqa: C901
     """返回 (结果, 说明)。结果 ∈ 抓到 / 漏抓 / 注入未生效。"""
     try:
         new = c.edit(src)
@@ -165,12 +238,22 @@ def run_case(c: Case, src: str, tmp: Path) -> tuple[str, str]:
         return "注入未生效", "改完哈希没变——用例本身坏了，不算检查器漏抓"
     f = tmp / ("mut_%s.svg" % c.name)
     f.write_text(new, encoding="utf-8")
+    # 相对路径的字体/贴图要在副本旁边找得到（否则 G-13 这类要读字体的规则全判未检查）
+    bd = base_dir or SVG.parent
+    if (bd / "fonts").exists() and not (tmp / "fonts").exists():
+        (tmp / "fonts").symlink_to(bd / "fonts")
     bp = None
     if c.bounds:
         bp = tmp / ("mut_%s.json" % c.name)
         bp.write_text(json.dumps(measure(f), ensure_ascii=False), encoding="utf-8")
-    rows = check_run(f, str(CALC), FIG_NO, str(bp) if bp else None,
-                     str(FEATURES) if FEATURES.exists() else None)
+    calc = c.calc or str(CALC)
+    feats = str(c.features) if c.features else (str(FEATURES) if FEATURES.exists() else None)
+    fig = FIG_NO
+    rows = check_run(f, calc, fig, str(bp) if bp else None, feats)
+    if c.part:                      # common/part 层（G-xx / P-xx）也要跑，否则漏抓判不准
+        from lib.drawing.charter.check_rules import make_ctx, run_plugins
+        rows = rows + run_plugins(make_ctx(f, calc, fig,
+                                           str(bp) if bp else None, feats), c.part)
     st = {r[0]: (r[4], r[5]) for r in rows}
     got = st.get(c.expect)
     if got is None:
@@ -180,7 +263,19 @@ def run_case(c: Case, src: str, tmp: Path) -> tuple[str, str]:
     return "漏抓", "%s 判成 %s：%s" % (c.expect, got[0], got[1][:90])
 
 
+def require_fixtures():
+    """夹具缺失时明确报错，不让 L4 静默失效（MUT-03 的前提是底图在）。"""
+    need = [SVG, FEATURES, Path(CALC), PART_SVG, Path(PART_CALC),
+            GEAR_SVG, Path(GEAR_CALC), GEAR_FEAT]
+    miss = [str(p) for p in need if not p.exists()]
+    if miss:
+        print("L4 夹具缺失：%s" % "、".join(miss), file=sys.stderr)
+        print("  charter/fixtures/ 应随仓库分发，不要指向用户项目目录", file=sys.stderr)
+        raise SystemExit(2)                       # 2 = 检查器自身没法跑，不是图错
+
+
 def main():
+    require_fixtures()
     ap = argparse.ArgumentParser()
     ap.add_argument("-k", help="只跑某一层（L1/L2/L3），MUT-02 要求别重复跑无关用例")
     ap.add_argument("--list", action="store_true")
@@ -207,7 +302,9 @@ def _run_cases(cases, verbose=True):
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
         for c in cases:
-            res, why = run_case(c, src, tmp)
+            srcp = c.svg if (c.svg and c.svg.exists()) else SVG
+            base = srcp.read_text(encoding="utf-8")
+            res, why = run_case(c, base, tmp, srcp.parent)
             if res == "漏抓" and c.known_gap:
                 icon = "?"                      # 已登记盲区，不算失败但要看得见
             else:

@@ -23,6 +23,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from collections import Counter
 from pathlib import Path
@@ -46,6 +47,9 @@ def main():
     ap.add_argument("--fig-no", help="应出现的图号")
     ap.add_argument("--no-browser", action="store_true", help="不启动 Chromium 量测")
     ap.add_argument("--selftest", action="store_true", help="顺带跑 L4 变异自检")
+    ap.add_argument("--part", choices=("shaft", "gear"),
+                    help="加载零件类型规则包（common 层总是加载）")
+    ap.add_argument("--json", help="把逐条结果写成 JSON（落盘审计：sha256/字节数/证据）")
     a = ap.parse_args()
 
     path = Path(a.svg)
@@ -91,10 +95,42 @@ def main():
         if guess.exists():
             fp = str(guess)
             print("\n要素清单：自动找到 %s" % guess.name)
-    rows = run_rules(path, a.calc, a.fig_no, bounds, fp)
+    # 坏输入（JSON 读不了）不是「图不通过」：契约里 2 = 检查器/输入异常。
+    # 以前这里直接抛栈 exit 1，与「有规则不通过」同码，CI 分不清是图坏还是输入坏。
+    for label, fpath in (("--calc", a.calc), ("--features", fp)):
+        if not fpath:
+            continue
+        try:
+            json.loads(Path(fpath).read_text(encoding="utf-8"))
+        except (OSError, ValueError) as e:
+            print("\n输入文件读不了：%s %s —— %r" % (label, fpath, e), file=sys.stderr)
+            print("  这是输入错，不是图错（契约：2 = 检查器或输入异常）", file=sys.stderr)
+            return 2
+
+    try:
+        rows = run_rules(path, a.calc, a.fig_no, bounds, fp)
+    except Exception as e:
+        print("\nL1~L3 检查器异常：%r" % (e,), file=sys.stderr)
+        return 2
     print("\nL1 结构 / L2 几何 / L3 碰撞")
     for rid, name, ch, sev, st, ev in rows:
         print("  %s %-6s %-32s %s" % (ICON.get(st, " "), rid, name, ev))
+
+    # ---------- common / part ----------
+    from lib.drawing.charter.check_rules import make_ctx, run_plugins
+    try:
+        plug = run_plugins(make_ctx(path, a.calc, a.fig_no, bounds, fp), a.part)
+    except Exception as e:
+        print("\ncommon/part 规则异常：%r" % (e,), file=sys.stderr)
+        return 2
+    if plug:
+        print("\ncommon%s 规则" % ("＋part（%s）" % a.part if a.part else ""))
+        for rid, name, ch, sev, st, ev in plug:
+            print("  %s %-6s %-32s %s" % (ICON.get(st, " "), rid, name, ev))
+        pst = Counter(x[4] for x in plug)
+        print("  → %d 通过 / %d 不通过 / %d 警示 / %d 未检查"
+              % (pst.get("通过", 0), pst.get("不通过", 0),
+                 pst.get("警示", 0), pst.get("未检查", 0)))
 
     # ---------- L4 ----------
     mut_rc = None
@@ -104,20 +140,48 @@ def main():
         mut_rc = mutants.run_all()      # 不能调 main()：它会解析 check.py 的 argv
 
     # ---------- 汇总 ----------
-    st_all = Counter(x[1] for x in l0) + Counter(x[4] for x in rows)
+    st_all = Counter(x[1] for x in l0) + Counter(x[4] for x in rows) + Counter(x[4] for x in plug)
     bad = st_all.get("不通过", 0)
     unk = st_all.get("未检查", 0)
     print("\n── 汇总 ──")
-    print("  L0 %d 条，L1~L3 %d 条：%d 通过 / %d 不通过 / %d 警示 / %d 未检查"
-          % (len(l0), len(rows), st_all.get("通过", 0), bad,
-             st_all.get("警示", 0), unk))
+    print("  L0 %d 条 + L1~L3 %d 条 + common/part %d 条（合计 %d）：%d 通过 / %d 不通过 / %d 警示 / %d 未检查"
+          % (len(l0), len(rows), len(plug), len(l0) + len(rows) + len(plug),
+             st_all.get("通过", 0), bad, st_all.get("警示", 0), unk))
     if unk:
-        names = [x[0] for x in l0 if x[1] == "未检查"] + [x[0] for x in rows if x[4] == "未检查"]
+        names = ([x[0] for x in l0 if x[1] == "未检查"]
+                 + [x[0] for x in rows if x[4] == "未检查"]
+                 + [x[0] for x in plug if x[4] == "未检查"])
         print("  未检查：%s" % "、".join(names))
         print("  （未检查 ≠ 通过。CHK-08 要求把没自动覆盖的类型写出来，不能算进绿。）")
     if bad:
-        names = [x[0] for x in l0 if x[1] == "不通过"] + [x[0] for x in rows if x[4] == "不通过"]
+        names = ([x[0] for x in l0 if x[1] == "不通过"]
+                 + [x[0] for x in rows if x[4] == "不通过"]
+                 + [x[0] for x in plug if x[4] == "不通过"])
         print("  不通过：%s" % "、".join(names))
+
+    if a.json:                      # 落盘：图纸哈希绑住这一版证据，事后能对得上
+        import datetime
+        import hashlib
+        raw = Path(a.svg).read_bytes()
+        rec = {
+            "svg": str(path), "bytes": len(raw),
+            "sha256": hashlib.sha256(raw).hexdigest(),
+            "fig_no": a.fig_no,
+            "ts": datetime.datetime.now().isoformat(timespec="seconds"),
+            "scale": "见 L0",
+            "l0": [{"id": r[0], "status": r[1], "evidence": r[2]} for r in l0],
+            "rules": [{"id": r[0], "name": r[1], "chapter": r[2], "severity": r[3],
+                       "status": r[4], "evidence": r[5]} for r in rows],
+            "summary": {"pass": st_all.get("通过", 0), "fail": bad,
+                        "warn": st_all.get("警示", 0), "unknown": unk,
+                        "n_l0": len(l0), "n_rules": len(rows),
+                        "n_plugin": len(plug)},
+            "mutants": None if mut_rc is None else {"rc": mut_rc},
+        }
+        Path(a.json).parent.mkdir(parents=True, exist_ok=True)
+        Path(a.json).write_text(json.dumps(rec, ensure_ascii=False, indent=1),
+                                encoding="utf-8")
+        print("\n结果已落盘：%s" % a.json)
 
     if mut_rc == 2:
         print("\n退出码 2：L4 自检漏抓或注入未生效")

@@ -6,8 +6,10 @@
 #   build.sh    交付时用，出 PDF、逐页转 PNG、扫像素复核
 #
 # 用法：
-#   ./devloop.sh build_gear.py --svg 齿轮零件图.svg --calc calc.json --fig-no CS1-01
+#   ./devloop.sh build_gear.py --svg 齿轮零件图.svg --calc calc.json --fig-no CS1-01 --part gear
 #   ./devloop.sh --no-build --svg 齿轮零件图.svg    # 已经 build 过，只检查+看图
+#
+# --part shaft|gear 要传：不传就只有 L0~L3 + common，零件层规则（P-xx）不跑。
 #
 # 生成器可以是任意项目的脚本（相对路径按你当前目录算），不要求放进本仓库。
 #
@@ -23,6 +25,8 @@ BUILD=""
 SVG=""
 CALC=""
 FIGNO=""
+PART=""
+FEATURES=""
 OUTDIR=""      # 空 = SVG 所在目录下的 预览/
 DPI=4
 DO_BUILD=1
@@ -32,6 +36,8 @@ while [ $# -gt 0 ]; do
     --svg)      SVG="$2"; shift 2 ;;
     --calc)     CALC="$2"; shift 2 ;;
     --fig-no)   FIGNO="$2"; shift 2 ;;
+    --part)     PART="$2"; shift 2 ;;
+    --features) FEATURES="$2"; shift 2 ;;
     --outdir)   OUTDIR="$2"; shift 2 ;;
     --dpi)      DPI="$2"; shift 2 ;;
     --no-build) DO_BUILD=0; shift ;;
@@ -44,7 +50,7 @@ done
 [ -z "$OUTDIR" ] && OUTDIR="$(dirname "$SVG")/预览"
 
 if [ -z "$SVG" ] || { [ "$DO_BUILD" = 1 ] && [ -z "$BUILD" ]; }; then
-  echo "用法：$0 <生成器.py> --svg <图.svg> [--calc 计算书.json] [--fig-no 图号]" >&2
+  echo "用法：$0 <生成器.py> --svg <图.svg> [--calc 计算书.json] [--fig-no 图号] [--part shaft|gear] [--features 清单.json]" >&2
   echo "      $0 --no-build --svg <图.svg>" >&2
   exit 2
 fi
@@ -76,6 +82,8 @@ fi
 echo "== 2) check"
 ARGS=(--fig-no "${FIGNO:-X}")
 [ -n "$CALC" ] && ARGS+=(--calc "$CALC")
+[ -n "$PART" ] && ARGS+=(--part "$PART")
+[ -n "$FEATURES" ] && ARGS+=(--features "$FEATURES")
 python3 "$ROOT/lib/drawing/charter/check.py" "$SVG" "${ARGS[@]}" > "$OUTDIR/check.txt" 2>&1
 RC=$?
 grep -E "✗|通过 /|未检查：|不通过：" "$OUTDIR/check.txt" || echo "   （没有 ✗）"

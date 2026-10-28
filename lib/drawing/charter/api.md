@@ -42,11 +42,11 @@
 | 接口 | 签名 | 说明 |
 |---|---|---|
 | `R` | `(role, name=None, elem=None, *, feature=None, view=None, src=None)` | 给单个图元打角色。 |
-| `G` | `(role, *elems, name=None, view=None, src=None)` | 把一组图元打成 group；role/view/src 由子元素继承，name/feature 各自保留。 |
+| `G` | `(role, *elems, name=None, view=None, src=None)` | 把一组图元打成 group。 |
 | `SemSheet` | `class` | 在 Sheet 的基础上，把 AST 里的 role/name/feature/view/src 落成 data-* 属性。 |
-| `ROLES` | `{arrow, centerline, cutting-plane, datum, dimension, extension, hatch, hidden…}` | 共 21 项 |
-| `ROLE_TAGS` | `dict`，21 项 | 键：sheet, title-grid, table-grid, outline, hidden, centerline, section-outline, key-outline |
-| `MULTI_OK` | `{centerline, extension, hatch, table-grid, title-grid}` | 共 5 项 |
+| `ROLES` | `{arrow, centerline, cutting-plane, datum, dimension, extension, hatch, hidden…}` | 共 22 项 |
+| `ROLE_TAGS` | `dict`，22 项 | 键：sheet, title-grid, table-grid, outline, hidden, centerline, section-outline, key-outline |
+| `MULTI_OK` | `{centerline, extension, hatch, table-grid, title-grid, zone-mark}` | 共 6 项 |
 
 ## 底层原语与输出器（英文名）
 

@@ -25,9 +25,11 @@ L1/L2 拿错元数据算出"通过"，后者更难查。
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 import xml.etree.ElementTree as ET
+
 from collections import defaultdict
 from pathlib import Path
 
@@ -35,6 +37,7 @@ ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from lib.drawing.charter.check_rules import _path_cmds   # noqa: E402
 from lib.drawing.sem import ROLE_TAGS, ROLES, MULTI_OK  # noqa: E402
 
 SKIP = {"svg", "style", "title", "desc", "defs", "metadata", "g"}
@@ -337,10 +340,47 @@ def assign_names(root):
     return added
 
 
+def assign_views(root, spec):
+    """按**人工声明**的视图区域打 data-view（8.8）。
+
+    ID-02 禁止按 bbox 聚类推断视图归属，所以区域必须由人给：
+        {"视图": [{"名": "main", "区域": [25, 5, 415, 200]}, ...]}
+    区域重叠直接报错——不给“就近归属”的猜测留口子。
+    图元按**包围盒中心**落区，落不进任何区域的保持无 data-view（L3-06 判未检查）。
+    """
+    regs = []
+    for v in spec.get("视图") or []:
+        x0, y0, x1, y1 = v["区域"]
+        regs.append((v["名"], min(x0, x1), min(y0, y1), max(x0, x1), max(y0, y1)))
+    for i in range(len(regs)):
+        for j in range(i + 1, len(regs)):
+            a, b = regs[i], regs[j]
+            if not (a[3] <= b[1] or b[3] <= a[1] or a[4] <= b[2] or b[4] <= a[2]):
+                raise ValueError("视图区域重叠：%s 与 %s（ID-02 不许猜归属）" % (a[0], b[0]))
+    n, miss = defaultdict(int), 0
+    for e in root.iter():
+        tag = e.tag.split("}")[-1]
+        if tag in ("svg", "style", "title", "desc", "defs", "metadata", "g"):
+            continue
+        bx0, by0, bx1, by1 = _bbox(tag, e.attrib)
+        cx, cy = (bx0 + bx1) / 2, (by0 + by1) / 2
+        for nm, x0, y0, x1, y1 in regs:
+            if x0 <= cx <= x1 and y0 <= cy <= y1:
+                e.attrib["data-view"] = nm
+                n[nm] += 1
+                break
+        else:
+            if not e.attrib.get("data-view"):
+                miss += 1
+    return n, miss
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("svg")
     ap.add_argument("--write", action="store_true", help="写回 SVG（先留一份 .orig）")
+    ap.add_argument("--views", help="人工声明的视图区域 JSON（{\"视图\":[{名,区域:[x0,y0,x1,y1]}]}）"
+                                    "：ID-02 不许按 bbox 聚类猜归属，所以只能人来划")
     a = ap.parse_args()
     path = Path(a.svg)
     tree = ET.parse(path)
@@ -350,6 +390,10 @@ def main():
     inferred, still = infer_roles(root)
     unresolved = unresolved + still
     added = assign_names(root)
+    vmap = {}
+    if a.views:
+        spec = json.loads(Path(a.views).read_text(encoding="utf-8"))
+        vmap, vmiss = assign_views(root, spec)
 
     print("\n身份标注 — %s" % path.name)
     print("  role 归一 %d 处；按几何推断 %d 处；补 name %d 处；判不出 %d 处"
@@ -370,6 +414,10 @@ def main():
         for role, _tag, _nm in added:
             agg[role] += 1
         print("  补名：%s" % ", ".join("%s×%d" % (k, v) for k, v in sorted(agg.items())))
+    if vmap:
+        print("  data-view（按人工区域）：%s；落在区域外 %d 个"
+              % (", ".join("%s×%d" % kv for kv in sorted(vmap.items(), key=lambda kv: -kv[1])),
+                 vmiss))
     if unresolved:
         print("  判不出（留给 L0 报红）：")
         for tag, _id, why in unresolved[:10]:

@@ -68,12 +68,109 @@ def rule(rid, name, chapter, severity="必"):
     return deco
 
 
+# ============================================================ 变换（8.7）
+IDENT = (1.0, 0.0, 0.0, 1.0, 0.0, 0.0)          # a b c d e f，x'=ax+cy+e
+
+
+def _mat_mul(m, n):
+    """先 n 后 m：m ∘ n。"""
+    a1, b1, c1, d1, e1, f1 = m
+    a2, b2, c2, d2, e2, f2 = n
+    return (a1 * a2 + c1 * b2, b1 * a2 + d1 * b2,
+            a1 * c2 + c1 * d2, b1 * c2 + d1 * d2,
+            a1 * e2 + c1 * f2 + e1, b1 * e2 + d1 * f2 + f1)
+
+
+def _parse_transform(t):
+    """只支持 translate / scale / rotate / matrix 四种；别的抛 ValueError。"""
+    m = IDENT
+    for name, args in re.findall(r"(\w+)\s*\(([^)]*)\)", t or ""):
+        v = [float(x) for x in re.split(r"[\s,]+", args.strip()) if x]
+        if name == "translate":
+            n = (1, 0, 0, 1, v[0], v[1] if len(v) > 1 else 0)
+        elif name == "scale":
+            n = (v[0], 0, 0, v[-1], 0, 0)
+        elif name == "rotate":
+            th = math.radians(v[0])
+            co, si = math.cos(th), math.sin(th)
+            n = (co, si, -si, co, 0, 0)
+            if len(v) >= 3:                      # 绕 (cx,cy)
+                n = _mat_mul(_mat_mul((1, 0, 0, 1, v[1], v[2]), n),
+                             (1, 0, 0, 1, -v[1], -v[2]))
+        elif name == "matrix" and len(v) == 6:
+            n = tuple(v)
+        else:
+            raise ValueError(name)
+        m = _mat_mul(m, n)
+    return m
+
+
+def _similarity(m):
+    """相似变换（旋转+等比缩放+平移）返回 (s, is_sim)；非相似返回 (0, False)。"""
+    a, b, c, d = m[0], m[1], m[2], m[3]
+    s = math.hypot(a, b)
+    if abs(math.hypot(c, d) - s) < 1e-9 and abs(a * c + b * d) < 1e-9 and s > 0:
+        return s, True
+    return 0.0, False
+
+
+def _tp(m, x, y):
+    return (m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5])
+
+
+def _xf_attrs(tag, a, m):
+    """把一条图元的属性换成变换后的值；不支持时返回 None。"""
+    if m == IDENT:
+        return a
+    b = dict(a)
+    s, sim = _similarity(m)
+    if tag == "line":
+        b["x1"], b["y1"] = _tp(m, float(a["x1"]), float(a["y1"]))
+        b["x2"], b["y2"] = _tp(m, float(a["x2"]), float(a["y2"]))
+        return b
+    if tag == "circle":
+        if not sim:
+            return None
+        b["cx"], b["cy"] = _tp(m, float(a["cx"]), float(a["cy"]))
+        b["r"] = float(a["r"]) * s
+        return b
+    if tag in ("polygon", "polyline"):
+        pts = re.findall(r"([-\d.]+)\s*,\s*([-\d.]+)", a.get("points", ""))
+        b["points"] = " ".join("%.6g,%.6g" % _tp(m, float(x), float(y)) for x, y in pts)
+        return b
+    if tag == "rect":
+        if abs(m[1]) > 1e-12 or abs(m[2]) > 1e-12:      # 有旋转 → 不再是轴对齐矩形
+            return None
+        x, y = _tp(m, float(a["x"]), float(a["y"]))
+        b["x"], b["y"] = x, y
+        b["width"] = float(a["width"]) * abs(m[0])
+        b["height"] = float(a["height"]) * abs(m[3])
+        return b
+    if tag == "path":
+        if not sim:
+            return None
+        out = []
+        for cmd, nums, p0, p1 in _path_cmds(a.get("d", "")):
+            if cmd in ("L", "M"):
+                q = _tp(m, p1[0], p1[1])
+                out.append("%s %.6g %.6g" % (cmd, q[0], q[1]))
+            elif cmd == "A" and len(nums) >= 7:
+                q = _tp(m, p1[0], p1[1])
+                out.append("A %.6g %.6g 0 %d %d %.6g %.6g"
+                           % (nums[0] * s, nums[1] * s, int(nums[3]), int(nums[4]), q[0], q[1]))
+        if out:
+            b["d"] = out[0][0] + out[0][1:] + ("  " if len(out) > 1 else "") + " ".join(out[1:])                 if False else (out[0] if len(out) == 1 else out[0]) + " " + " ".join(out[1:])
+        return b
+    return a            # text 等：不换算（文字用 measure 的实测框）
+
+
 # ============================================================ 上下文
 class Ctx:
     """一次检查的全部输入。规则函数只读它，不碰全局。"""
 
     def __init__(self, svg, calc=None, fig_no=None, title_fields=None, bounds=None,
                  features=None):
+        self.path = Path(svg)
         self.root = ET.parse(svg).getroot()
         self.bounds = bounds
         self.view_of = {}
@@ -82,11 +179,8 @@ class Ctx:
         self.fig_no = fig_no
         self.title_fields = title_fields or {}
         self.els = []                      # [(tag, attrib, text)]
-        for e in self.root.iter():
-            tag = e.tag.split("}")[-1]
-            if tag in ("svg", "style", "title", "desc", "defs", "metadata", "g"):
-                continue
-            self.els.append((tag, dict(e.attrib), (e.text or "").strip()))
+        self.xform_bad = []                # 变换解析不了的图元（报告里单列）
+        self._walk(self.root, IDENT, 0)
         # 图纸坐标（y 向上）下的几何量：SVG 已翻转，这里统一翻回来便于与模型对照
         self.h = float(self.root.attrib.get("height", "297").replace("mm", "")) or 297.0
         for _tag, a, _t in self.els:
@@ -94,6 +188,34 @@ class Ctx:
                 self.view_of[a["id"]] = a["data-view"]
         self._norm_roles()
         self.scale = self._read_scale()
+        # 实测墨迹表（可选）：scripts/inkbox.py 生成的 <svg 同目录>/inkbox.json
+        self.ink = {}
+        try:
+            _ij = json.loads((Path(svg).parent / "inkbox.json").read_text(encoding="utf-8"))
+            self.ink = _ij.get("boxes", {})
+        except Exception:
+            self.ink = {}
+        self._xy = {a.get("id"): (a.get("x"), a.get("y"), a.get("font-size"))
+                    for _t, a, _x in self.els if a.get("id")}
+
+    def text_geom(self, t):
+        """文字用于碰撞的框：优先实测墨迹（inkbox.json），否则退回浏览器 bbox 并按
+        0.10×字号 内缩——getBBox 含字身侧距与上下留白，比真实墨迹宽 0.2~0.4mm，
+        不内缩就会把「引线贴字边」这种正常排版判成压线。"""
+        tid = t.get("id")
+        b = self.ink.get(tid)
+        if b and b != [0.0, 0.0, 0.0, 0.0] and tid in self._xy:
+            x, y, _fs = self._xy[tid]
+            try:
+                x, y = float(x), float(y)
+                return {"xmin": x + b[0], "xmax": x + b[1],
+                        "ymin": y + b[2], "ymax": y + b[3], "src": "ink"}
+            except (TypeError, ValueError):
+                pass
+        fs = float(self._xy.get(tid, (0, 0, 3.5))[2] or 3.5)
+        pad = 0.10 * fs
+        return {"xmin": t["xmin"] + pad, "xmax": t["xmax"] - pad,
+                "ymin": t["ymin"] + pad, "ymax": t["ymax"] - pad, "src": "bbox"}
 
     def _read_scale(self):
         """从标题栏"比例"栏读 1:n。图上量到的是图面长度，零件真值 = 图面 × n。
@@ -105,6 +227,33 @@ class Ctx:
             if m:
                 return float(m.group(1))
         return 1.0
+
+    def _walk(self, node, m, depth):
+        """按文档顺序收图元，同时累乘祖先 <g transform>（8.7：L1/L2 用变换后的坐标）。"""
+        if depth > 32:
+            return
+        for e in node:
+            tag = e.tag.split("}")[-1]
+            if tag in ("style", "title", "desc", "defs", "metadata"):
+                continue
+            mm = m
+            if e.get("transform"):
+                try:
+                    mm = _mat_mul(m, _parse_transform(e.get("transform")))
+                except (ValueError, IndexError):
+                    self.xform_bad.append((e.get("id") or tag, e.get("transform")))
+                    mm = m
+            if tag == "g":
+                self._walk(e, mm, depth + 1)
+                continue
+            if tag == "svg":
+                self._walk(e, mm, depth + 1)
+                continue
+            a = _xf_attrs(tag, dict(e.attrib), mm)
+            if a is None:                       # 非相似变换下的圆/弧/矩形：判不了，别瞎判
+                self.xform_bad.append((e.get("id") or tag, e.get("transform") or "祖先变换"))
+                a = dict(e.attrib)
+            self.els.append((tag, a, (e.text or "").strip()))
 
     def _norm_roles(self):
         """把 role="label" 按 data-name 前缀归一成语义角色（旧图兼容，不动文件）。"""
@@ -379,7 +528,7 @@ def r_dim_parts(ctx):
     return "通过", "%d 条尺寸线（按链合并）箭头都够" % len(chains)
 
 
-@rule("L1-02", "尺寸文字与图面几何一致（按标题栏比例换算）", "DIM-01")
+@rule("L1-02", "尺寸文字与图面几何一致（按标题栏比例换算）", "SHT-05")
 def r_dim_values(ctx):
     """逐条尺寸线核：线上的箭头尖间距 = 该线的读数，与中点旁的尺寸文字比。
 
@@ -565,7 +714,7 @@ def r_cut_letters(ctx):
         "通过", "字母 %s 与断面 %s 对应" % (sorted(letters), sorted(sec_names)))
 
 
-@rule("L1-07", "标题栏字段齐全", "SHT-07")
+@rule("L1-07", "标题栏字段齐全", "SHT-03")
 def r_title_fields(ctx):
     tg = [e for e in ctx.els if e[1].get("data-role") == "title-grid"]
     if not tg:
@@ -596,7 +745,7 @@ def r_fig_no(ctx):
     return ("不通过", "；".join(bad)) if bad else ("通过", "图号 %s，无外题编号" % ctx.fig_no)
 
 
-@rule("L1-09", "键槽宽/槽深与计算书一致", "DIM-12")
+@rule("L1-09", "键槽宽/槽深与计算书一致", "CHK-03")
 def r_key_dims(ctx):
     ks = ctx.calc.get("键", {})
     keys = {n: v for n, v in ks.items() if isinstance(v, dict) and "b" in v}
@@ -625,7 +774,7 @@ def r_key_dims(ctx):
     return ("不通过", "；".join(bad[:5])) if bad else ("通过", "%d 处与键规格吻合" % n)
 
 
-@rule("L1-10", "材料与热处理与计算书一致", "GATE-01")
+@rule("L1-10", "材料与热处理与计算书一致", "CHK-03")
 def r_material(ctx):
     mat = ctx.calc.get("材料45", {})
     if not mat:
@@ -851,6 +1000,112 @@ def _raw_ends(ctx):
     return ends
 
 
+@rule("L1-11", "断面键槽开口方向与剖切箭头一致", "VIEW-07")
+def r_keyway_dir(ctx):
+    """断面缺口的开口侧，必须与剖切符号箭头的指向同侧。
+
+    不靠 data-name 配对（样例图用 sec.4 / cp.2 这种序号命名，自己画的图用 Ⅱ/Ⅳ 命名），
+    全靠几何：section-outline 聚成一个个断面，圆心取最近的「中心线十字」交点，
+    开口侧＝离圆心最远的那条竖直 section-outline 线在哪边；
+    箭头方向取 cutting-plane 里不竖直的那条细线（粗短线是剖切位置线，不参与）。
+    本判据是「同图自洽约定」而非国标原文：箭头指向 +x 则缺口开 +x。
+    """
+    def seg(a):
+        return tuple(float(a[k]) for k in ("x1", "y1", "x2", "y2"))
+
+    secs = [a for t, a, _ in ctx.els
+            if t == "line" and a.get("data-role") == "section-outline"]
+    ctr = [a for t, a, _ in ctx.els
+           if t == "line" and a.get("data-role") == "centerline"]
+    arrows = []
+    for t, a, _ in ctx.els:
+        if t != "line" or a.get("data-role") != "cutting-plane":
+            continue
+        x1, y1, x2, y2 = seg(a)
+        if abs(y2 - y1) < 1e-6 and abs(x2 - x1) > 1e-6:
+            arrows.append(1 if x2 > x1 else -1)
+    if not secs:
+        return "未检查", "图上没有断面轮廓（section-outline）"
+    if not arrows:
+        return "未检查", "图上没有剖切箭头细线，判不了开口方向"
+    if len(set(arrows)) > 1:
+        return "未检查", "剖切箭头 +x/−x 都有（%d 支），逐断面对不上号" % len(arrows)
+    adir = arrows[0]
+
+    boxes = []
+    for a in secs:
+        x1, y1, x2, y2 = seg(a)
+        boxes.append([min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2), a])
+    clusters = []
+    for b in boxes:                                   # 8mm 邻接聚成一簇
+        for c in clusters:
+            if not (b[2] < c[0] - 8 or b[0] > c[2] + 8
+                    or b[3] < c[1] - 8 or b[1] > c[3] + 8):
+                c[0], c[1] = min(c[0], b[0]), min(c[1], b[1])
+                c[2], c[3] = max(c[2], b[2]), max(c[3], b[3])
+                c[4].append(b[4])
+                break
+        else:
+            clusters.append([b[0], b[1], b[2], b[3], [b[4]]])
+
+    verts = [a for a in ctr if abs(seg(a)[0] - seg(a)[2]) < 1e-6]
+    hors = [a for a in ctr if abs(seg(a)[1] - seg(a)[3]) < 1e-6]
+    bad, good, note = [], [], []
+    for c in clusters:
+        mid = ((c[0] + c[2]) / 2, (c[1] + c[3]) / 2)
+        cx, cy, best = mid[0], mid[1], 1e9
+        for v in verts:
+            vx = seg(v)[0]
+            vy0, vy1 = sorted((seg(v)[1], seg(v)[3]))
+            for h in hors:
+                hy = seg(h)[1]
+                hx0, hx1 = sorted((seg(h)[0], seg(h)[2]))
+                if not (vy0 - 1 <= hy <= vy1 + 1 and hx0 - 1 <= vx <= hx1 + 1):
+                    continue
+                d = (vx - mid[0]) ** 2 + (hy - mid[1]) ** 2
+                if d < best:
+                    best, cx, cy = d, vx, hy
+        if best > 1e8:                                 # 全图没有能配的十字 → 包围盒中心兜底
+            note.append("簇 @(%.0f,%.0f) 无中心线十字，圆心用包围盒中心" % mid)
+        vlines = [seg(a) for a in c[4] if abs(seg(a)[0] - seg(a)[2]) < 1e-6]
+        if not vlines:
+            note.append("簇 @(%.0f,%.0f) 里没有竖直槽底线" % mid)
+            continue
+        far = max(vlines, key=lambda t: abs(t[0] - cx))
+        side = 1 if far[0] > cx else -1
+        nm = c[4][0].get("data-name", "?")
+        if side != adir:
+            bad.append("%s 缺口开 %sx，箭头指向 %sx" % (nm, "+" if side > 0 else "-",
+                                                       "+" if adir > 0 else "-"))
+        else:
+            good.append(nm)
+    if bad:
+        return "不通过", "；".join(bad[:4])
+    if not good:
+        return "未检查", "；".join(note[:3]) or "断面里找不到可判的槽底线"
+    ev = "%d 个断面（%s）缺口开 %sx，剖切箭头 %sx，一致" % (
+        len(good), "、".join(good[:3]), "+" if adir > 0 else "-",
+        "+" if adir > 0 else "-")
+    if note:
+        ev += "；" + "；".join(note[:2])
+    return "通过", ev
+
+
+@rule("L1-12", "图元变换可解析（平移/旋转/等比缩放）", "CHK-06")
+def r_xform(ctx):
+    """带 <g transform> 的图元，L1/L2 一律用变换后的坐标判。
+
+    支持 translate / rotate / scale / matrix 的相似变换（圆、弧在相似变换下仍是圆/弧）；
+    非等比缩放或斜切时，圆会变成椭圆、弧变成椭圆弧，属性模型表达不了——这时**判未检查**
+    并列出图元，不装作判过（CHK-08）。
+    """
+    bad = getattr(ctx, "xform_bad", [])
+    if not bad:
+        return "通过", "图元坐标已按祖先 transform 累乘（非相似变换 0 个）"
+    return "未检查", "%d 个图元在非相似变换下，属性模型判不了：%s" % (
+        len(bad), "、".join("%s(%s)" % (i, t[:18]) for i, t in bad[:3]))
+
+
 @rule("L2-01", "轮廓线段的端点不留细缝", "CHK-02")
 def r_seam(ctx):
     """每个轮廓端点要么正好接上（≤0.02mm），要么本来就分开（>0.5mm）。
@@ -1019,7 +1274,7 @@ def r_hatch_inside(ctx):
     return "通过", "%d 条剖面线的两端都贴着轮廓" % len(hatches)
 
 
-@rule("L2-07", "同一断面剖面线角度与间距一致", "SHT-06")
+@rule("L2-07", "同一断面剖面线角度与间距一致", "VIEW-14")
 def r_hatch_uniform(ctx):
     """剖面线要平行、等距。角度或间距飘了，说明是按图元逐条算的，
     而不是按整块区域裁的——密度不均肉眼一瞥就能看出来。"""
@@ -1130,6 +1385,82 @@ def _b_hit(a, b, min_ov=0.15):
     return (ox, oy) if ox > min_ov and oy > min_ov else None
 
 
+# 线宽（mm）→ 半宽：把线段膨胀成胶囊，判「净距 > 0」而不是「有没有交点」。
+# 按零宽几何判会漏掉「两条 0.5 粗线中心距 0.4mm」这种视觉上已经粘在一起的情况。
+HALF_W = {"thick": 0.25, "thin": 0.125, "dimline": 0.10, "center": 0.125,
+          "hatch": 0.09, "ra": 0.10, "thick-hidden": 0.25, "hidden": 0.125,
+          "center-dash": 0.125, "double-dash": 0.125}
+
+
+def _half_w(a):
+    for c in str(a.get("class") or "").split():
+        if c in HALF_W:
+            return HALF_W[c]
+    return 0.125
+
+
+def capsules(ctx, roles):
+    """把指定角色的图元拆成带线宽的线段 [(x1,y1,x2,y2,half)]（SVG 坐标，y 向下）。
+
+    覆盖 `<line>`、`<path>` 的 L/M 与 A（弧按 _arc_points 采样）、`<circle>`（72 边）、
+    `<polygon>/<polyline>`——L3 的「文字压圆/压弧」靠这一层，属性坐标，不经 measure。
+    """
+    out = []
+    for tag, a, _ in ctx.els:
+        if a.get("data-role") not in roles:
+            continue
+        hw = _half_w(a)
+        role = a.get("data-role")
+        if tag == "line":
+            out.append((float(a["x1"]), float(a["y1"]), float(a["x2"]), float(a["y2"]), hw, role))
+        elif tag == "path":
+            for cmd, nums, p0, p1 in _path_cmds(a.get("d", "")):
+                if cmd == "A" and len(nums) >= 7:
+                    pts = _arc_points(p0, p1, nums[0], nums[1], nums[2],
+                                      int(nums[3]), int(nums[4]))
+                else:
+                    pts = [p0, p1]
+                for i in range(len(pts) - 1):
+                    out.append((pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1], hw, role))
+        elif tag == "circle":
+            cx, cy, r = float(a["cx"]), float(a["cy"]), float(a["r"])
+            n = 72
+            for i in range(n):
+                t1, t2 = 2 * math.pi * i / n, 2 * math.pi * (i + 1) / n
+                out.append((cx + r * math.cos(t1), cy + r * math.sin(t1),
+                            cx + r * math.cos(t2), cy + r * math.sin(t2), hw, role))
+        elif tag in ("polygon", "polyline"):
+            pts = [(float(m.group(1)), float(m.group(2)))
+                   for m in re.finditer(r"([-\d.]+)\s*,\s*([-\d.]+)", a.get("points", ""))]
+            n = len(pts)
+            for i in range(n if tag == "polygon" else n - 1):
+                p, q = pts[i], pts[(i + 1) % n]
+                out.append((p[0], p[1], q[0], q[1], hw, role))
+    return out
+
+
+def box_cap_dist(b, cap):
+    """矩形（文字实测框）到带线宽线段的净距；负值＝已侵入线宽。"""
+    x1, y1, x2, y2, hw = cap[:5]
+    bx0, bx1 = b["xmin"], b["xmax"]
+    by0, by1 = b["ymin"], b["ymax"]
+    # 端点在框内 → 0
+    if bx0 <= x1 <= bx1 and by0 <= y1 <= by1:
+        return -hw
+    if bx0 <= x2 <= bx1 and by0 <= y2 <= by1:
+        return -hw
+    # 框与线段相交 → 0
+    if _seg_hits_box({"x1": x1, "y1": y1, "x2": x2, "y2": y2}, b):
+        return -hw
+    d = min(pt_seg_dist(x, y, x1, y1, x2, y2)
+            for x in (bx0, bx1) for y in (by0, by1))
+    edges = ((bx0, by0, bx1, by0), (bx1, by0, bx1, by1),
+             (bx1, by1, bx0, by1), (bx0, by1, bx0, by0))
+    for e in edges:
+        d = min(d, pt_seg_dist(x1, y1, *e), pt_seg_dist(x2, y2, *e))
+    return d - hw
+
+
 def _seg_hits_box(s, b, pad=0.0):
     """线段与矩形相交：端点在框内，或与任一条边真交叉。"""
     bx0, bx1 = b["xmin"] + pad, b["xmax"] - pad
@@ -1224,7 +1555,7 @@ def _cover(seg, cands, perp_tol=0.15, join_tol=0.3):
     return cover / L, gap
 
 
-@rule("L2-10", "要素清单里的轮廓都在图上", "CHK-02 / GEO-06")
+@rule("L2-10", "要素清单里的轮廓都在图上", "ID-03")
 def r_features(ctx):
     """对照生成器的要素清单查完备性：清单说有、图上没有 → 报。
 
@@ -1281,6 +1612,69 @@ def r_features(ctx):
     return "通过", "清单 %d 条轮廓图上都有（图上线段 %d、圆 %d）" % (len(feats), len(segs), len(circles))
 
 
+@rule("L2-14", "该竖线上应被轮廓覆盖的区间都盖了（按段表正向推算）", "VIEW-12")
+def r_l2_14(ctx):
+    """轴肩竖线必须连续覆盖 ±大半径——判据从“别留缝”改成“该盖的都盖了”。
+
+    为什么要有这条：L2-01 只问端点有没有细缝，于是“把轴肩线拆成两截短头、端点落在圆角弧上”
+    成了过检查最省事的做法，检查绿、图纸错（见项目自检记录 ④→⑩）。这里由 calc 段表
+    正向算出该竖线上应有的覆盖区间，实测不足即报，并为圆角/倒角留出几何让步。
+    没有段表（非轴类或没给 --calc）就判未检查——不猜。
+    """
+    d = ctx.calc.get("派生") or {}
+    jie, rad = d.get("段界"), d.get("半径")
+    if not (isinstance(jie, list) and isinstance(rad, list) and len(jie) == len(rad) + 1):
+        return "未检查", "calc 没有 派生.段界/半径（段表），判不了该盖哪一段"
+    fil = {float(f.get("肩")): float(f.get("R") or 0)
+           for f in (d.get("圆角") or []) if f.get("肩") is not None}
+    # 轴线与 X0 从图上取（不依赖 data-name，样例与自绘图都能跑）
+    my = None
+    for tag, a, _ in ctx.els:
+        if tag != "line" or a.get("data-role") != "centerline":
+            continue
+        x1, y1, x2, y2 = (float(a["x1"]), float(a["y1"]), float(a["x2"]), float(a["y2"]))
+        if abs(y1 - y2) < 1e-6 and (my is None or abs(x2 - x1) > my[0]):
+            my = (abs(x2 - x1), y1)
+    xs = [min(float(a["x1"]), float(a["x2"])) for tag, a, _ in ctx.els
+          if tag == "line" and a.get("data-role") == "outline"]
+    if my is None or not xs:
+        return "未检查", "图上找不到轴线或轮廓左端"
+    my, x0 = my[1], min(xs)
+    vert = [(float(a["x1"]), (float(a["y1"]), float(a["y2"]))) for tag, a, _ in ctx.els
+            if tag == "line" and a.get("data-role") == "outline"
+            and abs(float(a["x1"]) - float(a["x2"])) < 1e-6]
+    bad, ok = [], 0
+    for i in range(len(rad) - 1):
+        xi = x0 + float(jie[i + 1])
+        rbig = max(float(rad[i]), float(rad[i + 1]))
+        spans = [sp for x, sp in vert if abs(x - xi) <= 0.6]
+        if not spans:
+            continue                       # 该处没有竖直肩线（全圆角过渡），交给 P-03 判
+        need0, need1 = my - rbig, my + rbig
+        gaps = []
+        cur = need0
+        for a0, b0 in sorted((min(a0, b0), max(a0, b0)) for a0, b0 in spans):
+            if a0 > cur + 0.05:
+                gaps.append((cur, min(a0, need1)))
+            cur = max(cur, b0)
+            if cur >= need1 - 0.05:
+                break
+        if cur < need1 - 0.05:
+            gaps.append((cur, need1))
+        gaps = [g for g in gaps if g[1] - g[0] > 0.05]
+        if gaps:
+            bad.append("x=%.1f 处应覆盖 ±%.1f，缺 %.1fmm（y %.1f~%.1f）"
+                       % (xi, rbig, sum(b - a for a, b in gaps), gaps[0][0], gaps[0][1]))
+        else:
+            ok += 1
+    if bad:
+        return "不通过", "；".join(bad[:3])
+    if not ok:
+        return "未检查", "段表里没有可判的竖直台阶"
+    return "通过", "%d 处台阶竖线连续覆盖 ±大半径（%s）" % (
+        ok, "、".join("x=%.1f" % (x0 + float(jie[i + 1])) for i in range(len(rad) - 1))[:80])
+
+
 @rule("L3-01", "文字之间不重叠", "CHK-04")
 def r_text_text(ctx):
     if not ctx.bounds:
@@ -1298,54 +1692,63 @@ def r_text_text(ctx):
     return "通过", "%d 个文字框两两不重叠" % len(ts)
 
 
-@rule("L3-02", "文字不压在轮廓与中心线上", "CHK-04")
+@rule("L3-02", "文字不压在轮廓与中心线上（圆/弧/路径 + 线宽）", "CHK-04")
 def r_text_graphics(ctx):
-    """轮廓线、剖切轮廓、键槽轮廓、虚线、中心线——文字压在这些上面一定看不清楚。
+    """文字与「轮廓类」图元的净距必须 > 0。
 
-    尺寸线、尺寸界线、剖面线不在这条里：数字本来就贴着尺寸线写（正常间距 1~2mm），
-    压不压由 L3-03 单独判。
+    几何取自属性（line / path 的 L、M 与 A 弧 / circle / polygon），线宽按 class 膨胀成
+    胶囊——因此「文字压在断面上那个圆」「压在采样过的弧上」都能判，不再只吃 `<line>`。
+    文字框仍来自 measure.py（真浏览器包围盒，含 rotate，CHK-06）。
     """
     if not ctx.bounds:
         return "未检查", "没提供 --bounds"
     roles = ("outline", "section-outline", "key-outline", "hidden", "centerline")
-    segs = [s for s in ctx.bounds["segments"] if s.get("role") in roles]
-    if not segs:
-        return "未检查", "量测里没有轮廓类线段"
-    bad = []
+    caps = capsules(ctx, roles)
+    if not caps:
+        return "未检查", "图上没有轮廓类图元"
+    bad, worst = [], (9e9, "", "")
     for t in ctx.bounds["texts"]:
-        for s in segs:
-            if _seg_hits_box(s, t, pad=0.05):
-                bad.append("%r 压在 %s 上" % (t.get("t", "")[:12], s.get("role")))
+        g = ctx.text_geom(t)
+        for cap in caps:
+            d = box_cap_dist(g, cap)
+            if d < worst[0]:
+                worst = (d, t.get("t", "")[:12], cap[5])
+            if d < 0:
+                bad.append("%r 压 %s（净距 %.2f）" % (t.get("t", "")[:12], cap[5], d))
                 break
+    n_circle = sum(1 for tag, a, _ in ctx.els
+                   if tag == "circle" and a.get("data-role") in roles)
     if bad:
         return "不通过", "%d 处：%s" % (len(bad), "；".join(bad[:4]))
-    return "通过", "%d 个文字都没压轮廓（%d 条轮廓线）" % (len(ctx.bounds["texts"]), len(segs))
+    return "通过", ("%d 个文字都没压轮廓（胶囊 %d 段，含圆 %d 个；最小净距 %.2f mm）"
+                    % (len(ctx.bounds["texts"]), len(caps), n_circle, worst[0]))
 
 
-@rule("L3-03", "文字不压在尺寸线与界线上", "CHK-04")
+@rule("L3-03", "文字不压在尺寸线与界线上（线宽胶囊）", "DIM-09")
 def r_text_dims(ctx):
-    """尺寸数字离自己的尺寸线 1~2mm 是正常的；真压上去（相交）就是画错了。
-
-    公差的上下偏差之间间距只有 0.5mm 左右，那是排版惯例，不算碰撞——它们不相交。
-    """
+    """尺寸数字离自己的尺寸线 1~2mm 是正常的；以线宽膨胀后净距 < 0 才算压上。"""
     if not ctx.bounds:
         return "未检查", "没提供 --bounds"
-    segs = [s for s in ctx.bounds["segments"] if s.get("role") in ("dimension", "extension", "arrow")]
-    if not segs:
-        return "未检查", "量测里没有尺寸类线段"
-    bad = []
+    caps = capsules(ctx, ("dimension", "extension", "arrow"))
+    if not caps:
+        return "未检查", "图上没有尺寸类图元"
+    bad, worst = [], (9e9, "", "")
     for t in ctx.bounds["texts"]:
-        for s in segs:
-            if _seg_hits_box(s, t, pad=0.05):
-                bad.append("%r 压在 %s（%s）上"
-                           % (t.get("t", "")[:12], s.get("role"), s.get("name", "")[:14]))
+        g = ctx.text_geom(t)
+        for cap in caps:
+            d = box_cap_dist(g, cap)
+            if d < worst[0]:
+                worst = (d, t.get("t", "")[:12], cap[5])
+            if d < 0:
+                bad.append("%r 压线（净距 %.2f）" % (t.get("t", "")[:12], d))
                 break
     if bad:
         return "不通过", "%d 处：%s" % (len(bad), "；".join(bad[:4]))
-    return "通过", "%d 个文字都没压尺寸线（%d 条）" % (len(ctx.bounds["texts"]), len(segs))
+    return "通过", "%d 个文字都没压尺寸线（胶囊 %d 段；最小净距 %.2f mm）" % (
+        len(ctx.bounds["texts"]), len(caps), worst[0])
 
 
-@rule("L3-04", "尺寸线之间不互相穿插", "CHK-04")
+@rule("L3-04", "尺寸线之间不互相穿插", "DIM-08")
 def r_dim_cross(ctx):
     """两条尺寸线真交叉（不是共用端点、不是互相垂直的正常布局）就是标注打架。
 
@@ -1412,7 +1815,7 @@ def r_filled_text(ctx):
     return "通过", "%d 个填充符号都不与文字重叠" % len(fills)
 
 
-@rule("L3-06", "不同视图的图元不互相侵入", "CHK-04")
+@rule("L3-06", "不同视图的图元不互相侵入", "LAY-04")
 def r_view_overlap(ctx):
     """视图—视图碰撞。判据要有视图归属才行；本批图没有 data-view，
     按 bbox 聚类猜视图等于用猜测代替身份（ID-02 明令禁止）。"""
@@ -1439,7 +1842,36 @@ def r_view_overlap(ctx):
         return "不通过", "视图重叠：%s" % "、".join(sorted(set(bad))[:4])
     return "通过", "%d 个视图互不侵入" % len(names)
 
-def run(svg, calc_path=None, fig_no=None, bounds_path=None, features_path=None):
+PLUGIN_COMMON = ("common.gdt", "common.font", "common.lw", "common.table")
+PLUGIN_PART = {"shaft": "part.shaft", "gear": "part.gear"}
+
+
+def run_plugins(ctx, part=None):
+    """common（任何工程图都查）＋ part（按零件类型加载）两层规则。
+
+    与 L1~L3 分开返回，好让报告单列一节（8.1 的接口约定）；
+    插件抛异常一律记「未检查」并写明原因，绝不静默算通过。
+    """
+    import importlib
+    mods = list(PLUGIN_COMMON)
+    if part:
+        if part not in PLUGIN_PART:
+            raise ValueError("未知 --part：%s（可选 %s）" % (part, "、".join(PLUGIN_PART)))
+        mods.append(PLUGIN_PART[part])
+    out = []
+    for name in mods:
+        mod = importlib.import_module("lib.drawing.charter." + name)
+        for rid, rname, ch, sev, fn in mod.RULES:
+            try:
+                st, ev = fn(ctx)
+            except Exception as e:                       # 规则自己的 bug 不算通过
+                st, ev = "未检查", "规则异常 %r" % (e,)
+            out.append((rid, rname, ch, sev, st, ev))
+    return out
+
+
+def make_ctx(svg, calc_path=None, fig_no=None, bounds_path=None, features_path=None):
+    """造 Ctx：L1~L3 与 common/part 插件共用同一个（量测只跑一次）。"""
     calc = {}
     if calc_path:
         calc = json.loads(Path(calc_path).read_text(encoding="utf-8"))
@@ -1453,7 +1885,11 @@ def run(svg, calc_path=None, fig_no=None, bounds_path=None, features_path=None):
         _d = (features_path if isinstance(features_path, dict)
               else json.loads(Path(features_path).read_text(encoding="utf-8")))
         feats = _d.get("要素", []) if isinstance(_d, dict) else list(_d)
-    ctx = Ctx(svg, calc=calc, fig_no=fig_no, bounds=bounds, features=feats)
+    return Ctx(svg, calc=calc, fig_no=fig_no, bounds=bounds, features=feats)
+
+
+def run(svg, calc_path=None, fig_no=None, bounds_path=None, features_path=None):
+    ctx = make_ctx(svg, calc_path, fig_no, bounds_path, features_path)
     out = []
     for rid, name, chapter, sev, fn in RULES:
         try:
@@ -1484,10 +1920,15 @@ def main():
     ap.add_argument("--calc", help="计算书 JSON（期望值的独立来源）")
     ap.add_argument("--fig-no", help="应出现的图号")
     ap.add_argument("--bounds", help="measure.py 导出的包围盒 JSON（L3 用）")
+    ap.add_argument("--features", help="要素清单 JSON（L2-10 用；不给则自动找图旁 features.json）")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()
     try:
-        rows = run(a.svg, a.calc, a.fig_no, a.bounds)
+        fp = a.features
+        if not fp:
+            guess = Path(a.svg).with_name("features.json")
+            fp = str(guess) if guess.exists() else None
+        rows = run(a.svg, a.calc, a.fig_no, a.bounds, fp)
     except Exception as e:
         print("检查器异常：%r" % (e,), file=sys.stderr)
         return 2

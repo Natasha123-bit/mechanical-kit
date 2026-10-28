@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420 297">
+<title>中间轴零件图 CS2-01</title>
+<style>.thick{stroke:#000;stroke-width:0.5;fill:none;stroke-linecap:round;}.thin{stroke:#000;stroke-width:0.25;fill:none;stroke-linecap:round;}.center{stroke:#000;stroke-width:0.25;fill:none;stroke-linecap:round;stroke-dasharray:8 2 1 2;}.hidden{stroke:#000;stroke-width:0.25;fill:none;stroke-linecap:round;stroke-dasharray:4 1.5;}.wavy{stroke:#000;stroke-width:0.25;fill:none;stroke-linecap:round;stroke-dasharray:6 2;}.phase{stroke:#000;stroke-width:0.25;fill:none;stroke-linecap:round;}.thick-hidden{stroke:#000;stroke-width:0.5;fill:none;stroke-linecap:round;stroke-dasharray:4 1.5;}.thick-center{stroke:#000;stroke-width:0.5;fill:none;stroke-linecap:round;stroke-dasharray:18 3 1 3;}.double-dash{stroke:#000;stroke-width:0.25;fill:none;stroke-linecap:round;stroke-dasharray:18 5 1 5 1 5;}@font-face{font-family:'GBFang';src:url('fonts/STFANGSO.ttf') format('truetype');}.dimline{stroke:#000;stroke-width:0.2;fill:none;stroke-linecap:round}.hatch{stroke:#000;stroke-width:0.18;fill:none;stroke-linecap:butt}.ra{stroke:#000;stroke-width:0.2;fill:none;stroke-linecap:round}.txt{fill:#000;font-family:'FangSong','STFangsong','GBFang','华文仿宋',serif;}polygon.solid{fill:#000}</style>
+<rect x="5" y="5" width="410" height="287" class="thin" fill="none" data-role="sheet" data-name="幅面线" id="sheet001"/>
+<rect x="25" y="10" width="385" height="277" class="thick" fill="none" data-role="sheet" data-name="内图框" id="sheet002"/>
+<rect x="258" y="247" width="152" height="40" class="thick" fill="none" data-role="title-grid" data-name="标题栏" id="title-grid003"/>
+<line x1="258" y1="277" x2="410" y2="277" class="thin" data-role="title-grid" data-name="标题栏" id="title-grid004"/>
+<line x1="258" y1="267.5" x2="410" y2="267.5" class="thin" data-role="title-grid" data-name="标题栏" id="title-grid005"/>
+<line x1="314" y1="257.5" x2="410" y2="257.5" class="thin" data-role="title-grid" data-name="标题栏" id="title-grid006"/>
+<line x1="272" y1="287" x2="272" y2="267.5" class="thin" data-role="title-grid" data-name="标题栏" id="title-grid007"/>
+<line x1="296" y1="287" x2="296" y2="267.5" class="thin" data-role="title-grid" data-name="标题栏" id="title-grid008"/>
+<line x1="326" y1="287" x2="326" y2="267.5" class="thin" data-role="title-grid" data-name="标题栏" id="title-grid009"/>
+<line x1="346" y1="277" x2="346" y2="267.5" class="thin" data-role="title-grid" data-name="标题栏" id="title-grid010"/>
+<line x1="368" y1="277" x2="368" y2="267.5" class="thin" data-role="title-grid" data-name="标题栏" id="title-grid011"/>
+<line x1="314" y1="267.5" x2="314" y2="247" class="thin" data-role="title-grid" data-name="标题栏" id="title-grid012"/>
+<line x1="336" y1="267.5" x2="336" y2="247" class="thin" data-role="title-grid" data-name="标题栏" id="title-grid013"/>
+<line x1="368" y1="267.5" x2="368" y2="247" class="thin" data-role="title-grid" data-name="标题栏" id="title-grid014"/>
+<text x="286" y="258.45" font-size="5" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid015">中间轴</text>
+<text x="325" y="252.778" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid016">材料</text>
+<text x="352" y="252.826" font-size="2.4" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid017">45</text>
+<text x="325" y="263.028" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid018">比例</text>
+<text x="352" y="263.172" font-size="2.8" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid019">1:1</text>
+<text x="389" y="252.778" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid020">图号</text>
+<text x="389" y="263.316" font-size="3.4" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid021">CS2-01</text>
+<text x="265" y="272.778" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid022">制图</text>
+<text x="284" y="272.85" font-size="2.5" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid023">雷小康</text>
+<text x="311" y="272.802" font-size="2.3" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid024">2026.10.28</text>
+<text x="336" y="272.778" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid025">数量</text>
+<text x="357" y="272.874" font-size="2.6" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid026">1</text>
+<text x="389" y="272.778" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid027">共 1 页  第 1 页</text>
+<text x="265" y="282.528" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid028">审核</text>
+<text x="368" y="282.72" font-size="3" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid029">中南林业科技大学</text>
+<text x="232" y="177" font-size="3.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text030">技术要求</text>
+<text x="232" y="183.5" font-size="2.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text031">1. 45 钢调质，硬度 217~255 HBW。</text>
+<text x="232" y="188.2" font-size="2.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text032">2. 未注线性、角度尺寸公差按 GB/T 1804—m；未注几何公差按 GB/T 1184—K。</text>
+<text x="232" y="192.9" font-size="2.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text033">3. 未注圆角 R2、未注倒角 C1；Ⅱ与Ⅲ之间台阶圆角 R1。</text>
+<text x="232" y="197.6" font-size="2.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text034">4. 两键槽在同一母线上；槽根圆角 R0.25~0.40。</text>
+<text x="232" y="202.3" font-size="2.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text035">5. 键槽工作侧面 Ra1.6，槽底 Ra6.3。</text>
+<text x="232" y="207" font-size="2.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text036">6. 配合面 φ55、φ61、φ71 的 Ra1.6；定位端面 Ra3.2。</text>
+<text x="232" y="211.7" font-size="2.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text037">7. 两处齿轮定位轴肩端面（Ⅱ左端面、轴环右端面）对 A—B 的端面圆跳动 0.02。</text>
+<text x="232" y="216.4" font-size="2.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text038">8. 未注表面粗糙度见统一注法；锐边去毛刺，不许有磕碰、划伤。</text>
+<line x1="30" y1="278.3" x2="44" y2="280.1" class="thin" data-role="projection-symbol" data-name="第一角" data-view="proj" id="projection-symbol039"/>
+<line x1="44" y1="280.1" x2="44" y2="271.3" class="thin" data-role="projection-symbol" data-name="第一角" data-view="proj" id="projection-symbol040"/>
+<line x1="44" y1="271.3" x2="30" y2="273.1" class="thin" data-role="projection-symbol" data-name="第一角" data-view="proj" id="projection-symbol041"/>
+<line x1="30" y1="273.1" x2="30" y2="278.3" class="thin" data-role="projection-symbol" data-name="第一角" data-view="proj" id="projection-symbol042"/>
+<circle cx="54" cy="275.7" r="4.4" class="thin" fill="none" data-role="projection-symbol" data-name="第一角" data-view="proj" id="projection-symbol043"/>
+<circle cx="54" cy="275.7" r="2.2" class="thin" fill="none" data-role="projection-symbol" data-name="第一角" data-view="proj" id="projection-symbol044"/>
+<line x1="48" y1="275.7" x2="60" y2="275.7" class="center" data-role="projection-symbol" data-name="第一角" data-view="proj" id="projection-symbol045"/>
+<line x1="54" y1="281.7" x2="54" y2="269.7" class="center" data-role="projection-symbol" data-name="第一角" data-view="proj" id="projection-symbol046"/>
+<line x1="41" y1="63.5" x2="85" y2="63.5" class="thick" data-role="outline" data-name="主视图" data-feature="seg1.od.up" data-view="main" id="outline047"/>
+<line x1="41" y1="118.5" x2="85" y2="118.5" class="thick" data-role="outline" data-name="主视图" data-feature="seg1.od.dn" data-view="main" id="outline048"/>
+<line x1="87" y1="60.5" x2="166" y2="60.5" class="thick" data-role="outline" data-name="主视图" data-feature="seg2.od.up" data-view="main" id="outline049"/>
+<line x1="87" y1="121.5" x2="166" y2="121.5" class="thick" data-role="outline" data-name="主视图" data-feature="seg2.od.dn" data-view="main" id="outline050"/>
+<line x1="167" y1="59" x2="182" y2="59" class="thick" data-role="outline" data-name="主视图" data-feature="seg3.od.up" data-view="main" id="outline051"/>
+<line x1="167" y1="123" x2="182" y2="123" class="thick" data-role="outline" data-name="主视图" data-feature="seg3.od.dn" data-view="main" id="outline052"/>
+<line x1="184" y1="55.5" x2="259" y2="55.5" class="thick" data-role="outline" data-name="主视图" data-feature="seg4.od.up" data-view="main" id="outline053"/>
+<line x1="184" y1="126.5" x2="259" y2="126.5" class="thick" data-role="outline" data-name="主视图" data-feature="seg4.od.dn" data-view="main" id="outline054"/>
+<line x1="261" y1="63.5" x2="306.5" y2="63.5" class="thick" data-role="outline" data-name="主视图" data-feature="seg5.od.up" data-view="main" id="outline055"/>
+<line x1="261" y1="118.5" x2="306.5" y2="118.5" class="thick" data-role="outline" data-name="主视图" data-feature="seg5.od.dn" data-view="main" id="outline056"/>
+<line x1="87" y1="121.5" x2="87" y2="120.5" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder1.dn" data-view="main" id="outline057"/>
+<line x1="87" y1="120.5" x2="87" y2="61.5" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder1.mid" data-view="main" id="outline058"/>
+<line x1="87" y1="61.5" x2="87" y2="60.5" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder1.up" data-view="main" id="outline059"/>
+<line x1="167" y1="123" x2="167" y2="122.5" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder2.dn" data-view="main" id="outline060"/>
+<line x1="167" y1="122.5" x2="167" y2="59.5" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder2.mid" data-view="main" id="outline061"/>
+<line x1="167" y1="59.5" x2="167" y2="59" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder2.up" data-view="main" id="outline062"/>
+<line x1="184" y1="126.5" x2="184" y2="125" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder3.dn" data-view="main" id="outline063"/>
+<line x1="184" y1="125" x2="184" y2="57" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder3.mid" data-view="main" id="outline064"/>
+<line x1="184" y1="57" x2="184" y2="55.5" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder3.up" data-view="main" id="outline065"/>
+<line x1="259" y1="126.5" x2="259" y2="120.5" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder4.dn" data-view="main" id="outline066"/>
+<line x1="259" y1="120.5" x2="259" y2="61.5" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder4.mid" data-view="main" id="outline067"/>
+<line x1="259" y1="61.5" x2="259" y2="55.5" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder4.up" data-view="main" id="outline068"/>
+<line x1="40" y1="117.5" x2="40" y2="64.5" class="thick" data-role="outline" data-name="主视图" data-feature="endface" data-view="main" id="outline069"/>
+<line x1="307.5" y1="117.5" x2="307.5" y2="64.5" class="thick" data-role="outline" data-name="主视图" data-feature="endface" data-view="main" id="outline070"/>
+<line x1="40" y1="64.5" x2="41" y2="63.5" class="thick" data-role="outline" data-name="主视图" data-feature="chamfer" data-view="main" id="outline071"/>
+<line x1="40" y1="117.5" x2="41" y2="118.5" class="thick" data-role="outline" data-name="主视图" data-feature="chamfer" data-view="main" id="outline072"/>
+<line x1="307.5" y1="64.5" x2="306.5" y2="63.5" class="thick" data-role="outline" data-name="主视图" data-feature="chamfer" data-view="main" id="outline073"/>
+<line x1="307.5" y1="117.5" x2="306.5" y2="118.5" class="thick" data-role="outline" data-name="主视图" data-feature="chamfer" data-view="main" id="outline074"/>
+<path d="M 85 63.5 A 2 2 0 0 0 87 61.5" class="thick" fill="none" data-role="outline" data-name="主视图" data-feature="fillet1" data-view="main" id="outline075"/>
+<path d="M 85 118.5 A 2 2 0 0 1 87 120.5" class="thick" fill="none" data-role="outline" data-name="主视图" data-feature="fillet1" data-view="main" id="outline076"/>
+<path d="M 166 60.5 A 1 1 0 0 0 167 59.5" class="thick" fill="none" data-role="outline" data-name="主视图" data-feature="fillet2" data-view="main" id="outline077"/>
+<path d="M 166 121.5 A 1 1 0 0 1 167 122.5" class="thick" fill="none" data-role="outline" data-name="主视图" data-feature="fillet2" data-view="main" id="outline078"/>
+<path d="M 182 59 A 2 2 0 0 0 184 57" class="thick" fill="none" data-role="outline" data-name="主视图" data-feature="fillet3" data-view="main" id="outline079"/>
+<path d="M 182 123 A 2 2 0 0 1 184 125" class="thick" fill="none" data-role="outline" data-name="主视图" data-feature="fillet3" data-view="main" id="outline080"/>
+<path d="M 261 63.5 A 2 2 0 0 1 259 61.5" class="thick" fill="none" data-role="outline" data-name="主视图" data-feature="fillet4" data-view="main" id="outline081"/>
+<path d="M 261 118.5 A 2 2 0 0 0 259 120.5" class="thick" fill="none" data-role="outline" data-name="主视图" data-feature="fillet4" data-view="main" id="outline082"/>
+<line x1="35" y1="91" x2="312.5" y2="91" class="center" data-role="centerline" data-name="主视图" data-feature="axis" data-view="main" id="centerline083"/>
+<line x1="104.5" y1="82" x2="149.5" y2="82" class="thick" data-role="key-outline" data-name="键槽Ⅱ" data-feature="key.Ⅱ.up" data-view="main" id="key-outline084"/>
+<line x1="104.5" y1="100" x2="149.5" y2="100" class="thick" data-role="key-outline" data-name="键槽Ⅱ" data-feature="key.Ⅱ.dn" data-view="main" id="key-outline085"/>
+<path d="M 104.5 82 A 9.0001 9.0001 0 1 0 104.5 100" class="thick" fill="none" data-role="key-outline" data-name="键槽Ⅱ" data-feature="key.Ⅱ.endL" data-view="main" id="key-outline086"/>
+<path d="M 149.5 100 A 9.0001 9.0001 0 1 0 149.5 82" class="thick" fill="none" data-role="key-outline" data-name="键槽Ⅱ" data-feature="key.Ⅱ.endR" data-view="main" id="key-outline087"/>
+<line x1="200" y1="81" x2="243" y2="81" class="thick" data-role="key-outline" data-name="键槽Ⅳ" data-feature="key.Ⅳ.up" data-view="main" id="key-outline088"/>
+<line x1="200" y1="101" x2="243" y2="101" class="thick" data-role="key-outline" data-name="键槽Ⅳ" data-feature="key.Ⅳ.dn" data-view="main" id="key-outline089"/>
+<path d="M 200 81 A 10.0001 10.0001 0 1 0 200 101" class="thick" fill="none" data-role="key-outline" data-name="键槽Ⅳ" data-feature="key.Ⅳ.endL" data-view="main" id="key-outline090"/>
+<path d="M 243 101 A 10.0001 10.0001 0 1 0 243 81" class="thick" fill="none" data-role="key-outline" data-name="键槽Ⅳ" data-feature="key.Ⅳ.endR" data-view="main" id="key-outline091"/>
+<path d="M 114.14189 192 A 30.5 30.5 0 0 0 54.5 201" class="thick" fill="none" data-role="section-outline" data-name="A" data-feature="sec.circle.u" data-view="A" id="section-outline092"/>
+<path d="M 54.5 201 A 30.5 30.5 0 0 0 114.14189 210" class="thick" fill="none" data-role="section-outline" data-name="A" data-feature="sec.circle.l" data-view="A" id="section-outline093"/>
+<line x1="114.142" y1="192" x2="108.8" y2="192" class="thick" data-role="section-outline" data-name="A" data-feature="sec.wall" data-view="A" id="section-outline094"/>
+<line x1="114.142" y1="210" x2="108.8" y2="210" class="thick" data-role="section-outline" data-name="A" data-feature="sec.wall" data-view="A" id="section-outline095"/>
+<line x1="108.5" y1="209.7" x2="108.5" y2="192.3" class="thick" data-role="section-outline" data-name="A" data-feature="sec.bottom" data-view="A" id="section-outline096"/>
+<path d="M 108.8 192 A 0.3 0.3 0 0 0 108.5 192.3" class="thick" fill="none" data-role="section-outline" data-name="A" data-feature="sec.root" data-view="A" id="section-outline097"/>
+<path d="M 108.8 210 A 0.3 0.3 0 0 1 108.5 209.7" class="thick" fill="none" data-role="section-outline" data-name="A" data-feature="sec.root" data-view="A" id="section-outline098"/>
+<line x1="50.5" y1="201" x2="117.5" y2="201" class="center" data-role="centerline" data-name="A" data-feature="cl.h" data-view="A" id="centerline099"/>
+<line x1="85" y1="235.5" x2="85" y2="166.5" class="center" data-role="centerline" data-name="A" data-feature="cl.v" data-view="A" id="centerline100"/>
+<line x1="74.039" y1="229.463" x2="56.537" y2="211.961" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch101"/>
+<line x1="79.888" y1="231.069" x2="54.931" y2="206.112" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch102"/>
+<line x1="84.559" y1="231.497" x2="54.503" y2="201.441" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch103"/>
+<line x1="88.593" y1="231.288" x2="54.712" y2="197.407" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch104"/>
+<line x1="92.188" y1="230.641" x2="55.359" y2="193.812" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch105"/>
+<line x1="95.446" y1="229.656" x2="56.344" y2="190.554" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch106"/>
+<line x1="98.421" y1="228.388" x2="57.612" y2="187.579" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch107"/>
+<line x1="101.149" y1="226.874" x2="59.126" y2="184.851" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch108"/>
+<line x1="103.651" y1="225.133" x2="60.867" y2="182.349" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch109"/>
+<line x1="105.938" y1="223.178" x2="62.822" y2="180.062" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch110"/>
+<line x1="108.016" y1="221.013" x2="64.987" y2="177.984" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch111"/>
+<line x1="109.883" y1="218.637" x2="67.363" y2="176.117" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch112"/>
+<line x1="111.532" y1="216.043" x2="69.957" y2="174.468" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch113"/>
+<line x1="112.947" y1="213.216" x2="109.731" y2="210" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch114"/>
+<line x1="108.5" y1="208.769" x2="72.784" y2="173.053" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch115"/>
+<line x1="108.5" y1="204.526" x2="75.872" y2="171.898" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch116"/>
+<line x1="108.5" y1="200.283" x2="79.261" y2="171.045" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch117"/>
+<line x1="108.5" y1="196.041" x2="83.023" y2="170.564" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch118"/>
+<line x1="108.702" y1="192" x2="87.288" y2="170.586" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch119"/>
+<line x1="112.944" y1="192" x2="92.341" y2="171.397" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch120"/>
+<line x1="111.999" y1="186.812" x2="99.188" y2="174.001" class="hatch" data-role="hatch" data-name="A" data-view="A" id="hatch121"/>
+<text x="85" y="164.5" font-size="5" text-anchor="middle" class="txt" data-role="view-label" data-name="A" data-view="A" id="view-label122">A—A</text>
+<line x1="114.142" y1="192" x2="126" y2="192" class="thin" data-role="extension" data-name="键槽Ⅱ" data-view="A" id="extension123"/>
+<line x1="114.142" y1="210" x2="126" y2="210" class="thin" data-role="extension" data-name="键槽Ⅱ" data-view="A" id="extension124"/>
+<line x1="124" y1="210" x2="124" y2="192" class="dimline" data-role="dimension" data-name="键槽Ⅱ" data-feature="key.Ⅱ.b" data-view="A" id="dimension125"/>
+<polygon points="124,210 123.584,207.4 124.416,207.4" class="thin solid" fill="#000" data-role="arrow" data-name="键槽Ⅱ" data-view="A" id="arrow126"/>
+<polygon points="124,192 124.416,194.6 123.584,194.6" class="thin solid" fill="#000" data-role="arrow" data-name="键槽Ⅱ" data-view="A" id="arrow127"/>
+<text x="122.8" y="201" font-size="3.5" text-anchor="middle" class="txt" transform="rotate(-90 122.8 201)" data-role="dimension" data-name="键槽Ⅱ" data-view="A" id="dimension128">18 N9</text>
+<line x1="54.5" y1="201" x2="54.5" y2="245.5" class="thin" data-role="extension" data-name="键槽Ⅱ" data-view="A" id="extension129"/>
+<line x1="108.5" y1="210" x2="108.5" y2="245.5" class="thin" data-role="extension" data-name="键槽Ⅱ" data-view="A" id="extension130"/>
+<line x1="54.5" y1="243.5" x2="108.5" y2="243.5" class="dimline" data-role="dimension" data-name="键槽Ⅱ" data-feature="key.Ⅱ.depth" data-view="A" id="dimension131"/>
+<polygon points="54.5,243.5 57.1,243.084 57.1,243.916" class="thin solid" fill="#000" data-role="arrow" data-name="键槽Ⅱ" data-view="A" id="arrow132"/>
+<polygon points="108.5,243.5 105.9,243.916 105.9,243.084" class="thin solid" fill="#000" data-role="arrow" data-name="键槽Ⅱ" data-view="A" id="arrow133"/>
+<text x="81.5" y="241.5" font-size="3.5" text-anchor="middle" class="txt" data-role="dimension" data-name="键槽Ⅱ" data-view="A" id="dimension134">54</text>
+<text x="83.825" y="240.2" font-size="2.2" text-anchor="start" class="txt" data-role="dimension" data-name="upper deviation" data-view="A" id="dimension135">0</text>
+<text x="83.825" y="242.6" font-size="2.2" text-anchor="start" class="txt" data-role="dimension" data-name="lower deviation" data-view="A" id="dimension136">−0.2</text>
+<path d="M 214.06244 196 A 35.5 35.5 0 0 0 144.5 206" class="thick" fill="none" data-role="section-outline" data-name="B" data-feature="sec.circle.u" data-view="B" id="section-outline137"/>
+<path d="M 144.5 206 A 35.5 35.5 0 0 0 214.06244 216" class="thick" fill="none" data-role="section-outline" data-name="B" data-feature="sec.circle.l" data-view="B" id="section-outline138"/>
+<line x1="214.062" y1="196" x2="208.3" y2="196" class="thick" data-role="section-outline" data-name="B" data-feature="sec.wall" data-view="B" id="section-outline139"/>
+<line x1="214.062" y1="216" x2="208.3" y2="216" class="thick" data-role="section-outline" data-name="B" data-feature="sec.wall" data-view="B" id="section-outline140"/>
+<line x1="208" y1="215.7" x2="208" y2="196.3" class="thick" data-role="section-outline" data-name="B" data-feature="sec.bottom" data-view="B" id="section-outline141"/>
+<path d="M 208.3 196 A 0.3 0.3 0 0 0 208 196.3" class="thick" fill="none" data-role="section-outline" data-name="B" data-feature="sec.root" data-view="B" id="section-outline142"/>
+<path d="M 208.3 216 A 0.3 0.3 0 0 1 208 215.7" class="thick" fill="none" data-role="section-outline" data-name="B" data-feature="sec.root" data-view="B" id="section-outline143"/>
+<line x1="140.5" y1="206" x2="217.5" y2="206" class="center" data-role="centerline" data-name="B" data-feature="cl.h" data-view="B" id="centerline144"/>
+<line x1="180" y1="245.5" x2="180" y2="166.5" class="center" data-role="centerline" data-name="B" data-feature="cl.v" data-view="B" id="centerline145"/>
+<line x1="161.463" y1="236.276" x2="149.724" y2="224.537" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch146"/>
+<line x1="169.269" y1="239.839" x2="146.161" y2="216.731" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch147"/>
+<line x1="174.788" y1="241.115" x2="144.885" y2="211.212" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch148"/>
+<line x1="179.41" y1="241.495" x2="144.505" y2="206.59" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch149"/>
+<line x1="183.486" y1="241.328" x2="144.672" y2="202.514" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch150"/>
+<line x1="187.169" y1="240.769" x2="145.231" y2="198.831" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch151"/>
+<line x1="190.542" y1="239.899" x2="146.101" y2="195.458" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch152"/>
+<line x1="193.655" y1="238.769" x2="147.231" y2="192.345" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch153"/>
+<line x1="196.54" y1="237.412" x2="148.588" y2="189.46" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch154"/>
+<line x1="199.219" y1="235.848" x2="150.152" y2="186.781" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch155"/>
+<line x1="201.705" y1="234.092" x2="151.908" y2="184.295" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch156"/>
+<line x1="204.007" y1="232.151" x2="153.849" y2="181.993" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch157"/>
+<line x1="206.13" y1="230.031" x2="155.969" y2="179.87" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch158"/>
+<line x1="208.072" y1="227.731" x2="158.269" y2="177.928" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch159"/>
+<line x1="209.83" y1="225.246" x2="160.754" y2="176.17" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch160"/>
+<line x1="211.396" y1="222.569" x2="163.431" y2="174.604" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch161"/>
+<line x1="212.756" y1="219.686" x2="209.069" y2="216" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch162"/>
+<line x1="208" y1="214.931" x2="166.314" y2="173.244" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch163"/>
+<line x1="213.888" y1="216.576" x2="213.312" y2="216" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch164"/>
+<line x1="208" y1="210.688" x2="169.424" y2="172.112" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch165"/>
+<line x1="208" y1="206.445" x2="172.794" y2="171.239" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch166"/>
+<line x1="208" y1="202.203" x2="176.473" y2="170.676" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch167"/>
+<line x1="208" y1="197.96" x2="180.544" y2="170.504" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch168"/>
+<line x1="210.283" y1="196" x2="185.159" y2="170.877" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch169"/>
+<line x1="213.86" y1="195.335" x2="190.665" y2="172.14" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch170"/>
+<line x1="210.346" y1="187.578" x2="198.422" y2="175.654" class="hatch" data-role="hatch" data-name="B" data-view="B" id="hatch171"/>
+<text x="180" y="164.5" font-size="5" text-anchor="middle" class="txt" data-role="view-label" data-name="B" data-view="B" id="view-label172">B—B</text>
+<line x1="214.062" y1="196" x2="226" y2="196" class="thin" data-role="extension" data-name="键槽Ⅳ" data-view="B" id="extension173"/>
+<line x1="214.062" y1="216" x2="226" y2="216" class="thin" data-role="extension" data-name="键槽Ⅳ" data-view="B" id="extension174"/>
+<line x1="224" y1="216" x2="224" y2="196" class="dimline" data-role="dimension" data-name="键槽Ⅳ" data-feature="key.Ⅳ.b" data-view="B" id="dimension175"/>
+<polygon points="224,216 223.584,213.4 224.416,213.4" class="thin solid" fill="#000" data-role="arrow" data-name="键槽Ⅳ" data-view="B" id="arrow176"/>
+<polygon points="224,196 224.416,198.6 223.584,198.6" class="thin solid" fill="#000" data-role="arrow" data-name="键槽Ⅳ" data-view="B" id="arrow177"/>
+<text x="222.8" y="206" font-size="3.5" text-anchor="middle" class="txt" transform="rotate(-90 222.8 206)" data-role="dimension" data-name="键槽Ⅳ" data-view="B" id="dimension178">20 N9</text>
+<line x1="144.5" y1="206" x2="144.5" y2="255.5" class="thin" data-role="extension" data-name="键槽Ⅳ" data-view="B" id="extension179"/>
+<line x1="208" y1="216" x2="208" y2="255.5" class="thin" data-role="extension" data-name="键槽Ⅳ" data-view="B" id="extension180"/>
+<line x1="144.5" y1="253.5" x2="208" y2="253.5" class="dimline" data-role="dimension" data-name="键槽Ⅳ" data-feature="key.Ⅳ.depth" data-view="B" id="dimension181"/>
+<polygon points="144.5,253.5 147.1,253.084 147.1,253.916" class="thin solid" fill="#000" data-role="arrow" data-name="键槽Ⅳ" data-view="B" id="arrow182"/>
+<polygon points="208,253.5 205.4,253.916 205.4,253.084" class="thin solid" fill="#000" data-role="arrow" data-name="键槽Ⅳ" data-view="B" id="arrow183"/>
+<text x="176.25" y="251.5" font-size="3.5" text-anchor="middle" class="txt" data-role="dimension" data-name="键槽Ⅳ" data-view="B" id="dimension184">63.5</text>
+<text x="180.5" y="250.2" font-size="2.2" text-anchor="start" class="txt" data-role="dimension" data-name="upper deviation" data-view="B" id="dimension185">0</text>
+<text x="180.5" y="252.6" font-size="2.2" text-anchor="start" class="txt" data-role="dimension" data-name="lower deviation" data-view="B" id="dimension186">−0.2</text>
+<line x1="140" y1="58.5" x2="140" y2="54.5" class="thick" data-role="cutting-plane" data-name="A" data-view="main" id="cutting-plane187"/>
+<line x1="140" y1="56.5" x2="147" y2="56.5" class="thin" data-role="cutting-plane" data-name="A" data-view="main" id="cutting-plane188"/>
+<polygon points="147.8,56.5 145.6,56.852 145.6,56.148" class="thin solid" fill="#000" data-role="arrow" data-name="A" data-view="main" id="arrow189"/>
+<text x="137.8" y="53.6" font-size="3.5" text-anchor="middle" class="txt" data-role="cutting-plane" data-name="A" data-view="main" id="cutting-plane190">A</text>
+<line x1="140" y1="123.5" x2="140" y2="127.5" class="thick" data-role="cutting-plane" data-name="A" data-view="main" id="cutting-plane191"/>
+<line x1="140" y1="125.5" x2="147" y2="125.5" class="thin" data-role="cutting-plane" data-name="A" data-view="main" id="cutting-plane192"/>
+<polygon points="147.8,125.5 145.6,125.852 145.6,125.148" class="thin solid" fill="#000" data-role="arrow" data-name="A" data-view="main" id="arrow193"/>
+<text x="137.8" y="131.9" font-size="3.5" text-anchor="middle" class="txt" data-role="cutting-plane" data-name="A" data-view="main" id="cutting-plane194">A</text>
+<line x1="205" y1="53.5" x2="205" y2="49.5" class="thick" data-role="cutting-plane" data-name="B" data-view="main" id="cutting-plane195"/>
+<line x1="205" y1="51.5" x2="212" y2="51.5" class="thin" data-role="cutting-plane" data-name="B" data-view="main" id="cutting-plane196"/>
+<polygon points="212.8,51.5 210.6,51.852 210.6,51.148" class="thin solid" fill="#000" data-role="arrow" data-name="B" data-view="main" id="arrow197"/>
+<text x="202.8" y="48.6" font-size="3.5" text-anchor="middle" class="txt" data-role="cutting-plane" data-name="B" data-view="main" id="cutting-plane198">B</text>
+<line x1="205" y1="128.5" x2="205" y2="132.5" class="thick" data-role="cutting-plane" data-name="B" data-view="main" id="cutting-plane199"/>
+<line x1="205" y1="130.5" x2="212" y2="130.5" class="thin" data-role="cutting-plane" data-name="B" data-view="main" id="cutting-plane200"/>
+<polygon points="212.8,130.5 210.6,130.852 210.6,130.148" class="thin solid" fill="#000" data-role="arrow" data-name="B" data-view="main" id="arrow201"/>
+<text x="202.8" y="136.9" font-size="3.5" text-anchor="middle" class="txt" data-role="cutting-plane" data-name="B" data-view="main" id="cutting-plane202">B</text>
+<line x1="40" y1="63.9" x2="40" y2="15" class="thin" data-role="extension" data-name="总长" data-view="main" id="extension203"/>
+<line x1="307.5" y1="63.9" x2="307.5" y2="15" class="thin" data-role="extension" data-name="总长" data-view="main" id="extension204"/>
+<line x1="40" y1="17" x2="307.5" y2="17" class="dimline" data-role="dimension" data-name="总长" data-view="main" id="dimension205"/>
+<polygon points="40,17 42.6,16.584 42.6,17.416" class="thin solid" fill="#000" data-role="arrow" data-name="总长" data-view="main" id="arrow206"/>
+<polygon points="307.5,17 304.9,17.416 304.9,16.584" class="thin solid" fill="#000" data-role="arrow" data-name="总长" data-view="main" id="arrow207"/>
+<text x="173.75" y="15.9" font-size="3.5" text-anchor="middle" class="txt" data-role="dimension" data-name="总长" data-view="main" id="dimension208">267.5</text>
+<line x1="40" y1="63.9" x2="40" y2="25" class="thin" data-role="extension" data-name="段长Ⅰ" data-view="main" id="extension209"/>
+<line x1="87" y1="59.9" x2="87" y2="25" class="thin" data-role="extension" data-name="段长Ⅰ" data-view="main" id="extension210"/>
+<line x1="40" y1="27" x2="87" y2="27" class="dimline" data-role="dimension" data-name="段长Ⅰ" data-view="main" id="dimension211"/>
+<polygon points="40,27 42.6,26.584 42.6,27.416" class="thin solid" fill="#000" data-role="arrow" data-name="段长Ⅰ" data-view="main" id="arrow212"/>
+<polygon points="87,27 84.4,27.416 84.4,26.584" class="thin solid" fill="#000" data-role="arrow" data-name="段长Ⅰ" data-view="main" id="arrow213"/>
+<text x="63.5" y="25.9" font-size="3.5" text-anchor="middle" class="txt" data-role="dimension" data-name="段长Ⅰ" data-view="main" id="dimension214">47</text>
+<line x1="167" y1="58.4" x2="167" y2="25" class="thin" data-role="extension" data-name="段长Ⅱ" data-view="main" id="extension215"/>
+<line x1="87" y1="27" x2="167" y2="27" class="dimline" data-role="dimension" data-name="段长Ⅱ" data-view="main" id="dimension216"/>
+<polygon points="87,27 89.6,26.584 89.6,27.416" class="thin solid" fill="#000" data-role="arrow" data-name="段长Ⅱ" data-view="main" id="arrow217"/>
+<polygon points="167,27 164.4,27.416 164.4,26.584" class="thin solid" fill="#000" data-role="arrow" data-name="段长Ⅱ" data-view="main" id="arrow218"/>
+<text x="127" y="25.9" font-size="3.5" text-anchor="middle" class="txt" data-role="dimension" data-name="段长Ⅱ" data-view="main" id="dimension219">80</text>
+<line x1="184" y1="54.9" x2="184" y2="25" class="thin" data-role="extension" data-name="段长Ⅲ" data-view="main" id="extension220"/>
+<line x1="167" y1="27" x2="184" y2="27" class="dimline" data-role="dimension" data-name="段长Ⅲ" data-view="main" id="dimension221"/>
+<polygon points="167,27 169.6,26.584 169.6,27.416" class="thin solid" fill="#000" data-role="arrow" data-name="段长Ⅲ" data-view="main" id="arrow222"/>
+<polygon points="184,27 181.4,27.416 181.4,26.584" class="thin solid" fill="#000" data-role="arrow" data-name="段长Ⅲ" data-view="main" id="arrow223"/>
+<text x="175.5" y="25.9" font-size="3.5" text-anchor="middle" class="txt" data-role="dimension" data-name="段长Ⅲ" data-view="main" id="dimension224">17</text>
+<line x1="259" y1="54.9" x2="259" y2="25" class="thin" data-role="extension" data-name="段长Ⅳ" data-view="main" id="extension225"/>
+<line x1="184" y1="27" x2="259" y2="27" class="dimline" data-role="dimension" data-name="段长Ⅳ" data-view="main" id="dimension226"/>
+<polygon points="184,27 186.6,26.584 186.6,27.416" class="thin solid" fill="#000" data-role="arrow" data-name="段长Ⅳ" data-view="main" id="arrow227"/>
+<polygon points="259,27 256.4,27.416 256.4,26.584" class="thin solid" fill="#000" data-role="arrow" data-name="段长Ⅳ" data-view="main" id="arrow228"/>
+<text x="221.5" y="25.9" font-size="3.5" text-anchor="middle" class="txt" data-role="dimension" data-name="段长Ⅳ" data-view="main" id="dimension229">75</text>
+<line x1="307.5" y1="63.9" x2="307.5" y2="25" class="thin" data-role="extension" data-name="段长Ⅴ" data-view="main" id="extension230"/>
+<line x1="259" y1="27" x2="307.5" y2="27" class="dimline" data-role="dimension" data-name="段长Ⅴ" data-view="main" id="dimension231"/>
+<polygon points="259,27 261.6,26.584 261.6,27.416" class="thin solid" fill="#000" data-role="arrow" data-name="段长Ⅴ" data-view="main" id="arrow232"/>
+<polygon points="307.5,27 304.9,27.416 304.9,26.584" class="thin solid" fill="#000" data-role="arrow" data-name="段长Ⅴ" data-view="main" id="arrow233"/>
+<text x="283.25" y="25.9" font-size="3.5" text-anchor="middle" class="txt" data-role="dimension" data-name="段长Ⅴ" data-view="main" id="dimension234">48.5</text>
+<line x1="48" y1="118.5" x2="48" y2="63.5" class="dimline" data-role="dimension" data-name="φ55k6L" data-feature="seg1.od" data-view="main" id="dimension235"/>
+<polygon points="48,118.5 47.584,115.9 48.416,115.9" class="thin solid" fill="#000" data-role="arrow" data-name="φ55k6L" data-view="main" id="arrow236"/>
+<polygon points="48,63.5 48.416,66.1 47.584,66.1" class="thin solid" fill="#000" data-role="arrow" data-name="φ55k6L" data-view="main" id="arrow237"/>
+<text x="47" y="76" font-size="3.5" text-anchor="middle" class="txt" transform="rotate(-90 47 76)" data-role="dimension" data-name="φ55k6L" data-view="main" id="dimension238">φ55 k6</text>
+<line x1="94" y1="121.5" x2="94" y2="60.5" class="dimline" data-role="dimension" data-name="φ61h6" data-feature="seg2.od" data-view="main" id="dimension239"/>
+<polygon points="94,121.5 93.584,118.9 94.416,118.9" class="thin solid" fill="#000" data-role="arrow" data-name="φ61h6" data-view="main" id="arrow240"/>
+<polygon points="94,60.5 94.416,63.1 93.584,63.1" class="thin solid" fill="#000" data-role="arrow" data-name="φ61h6" data-view="main" id="arrow241"/>
+<text x="93" y="70.5" font-size="3.5" text-anchor="middle" class="txt" transform="rotate(-90 93 70.5)" data-role="dimension" data-name="φ61h6" data-view="main" id="dimension242">φ61 h6</text>
+<line x1="175.5" y1="123" x2="175.5" y2="59" class="dimline" data-role="dimension" data-name="φ64h11" data-feature="seg3.od" data-view="main" id="dimension243"/>
+<polygon points="175.5,123 175.084,120.4 175.916,120.4" class="thin solid" fill="#000" data-role="arrow" data-name="φ64h11" data-view="main" id="arrow244"/>
+<polygon points="175.5,59 175.916,61.6 175.084,61.6" class="thin solid" fill="#000" data-role="arrow" data-name="φ64h11" data-view="main" id="arrow245"/>
+<text x="174.5" y="78" font-size="3.5" text-anchor="middle" class="txt" transform="rotate(-90 174.5 78)" data-role="dimension" data-name="φ64h11" data-view="main" id="dimension246">φ64 h11</text>
+<line x1="193" y1="126.5" x2="193" y2="55.5" class="dimline" data-role="dimension" data-name="φ71h6" data-feature="seg4.od" data-view="main" id="dimension247"/>
+<polygon points="193,126.5 192.584,123.9 193.416,123.9" class="thin solid" fill="#000" data-role="arrow" data-name="φ71h6" data-view="main" id="arrow248"/>
+<polygon points="193,55.5 193.416,58.1 192.584,58.1" class="thin solid" fill="#000" data-role="arrow" data-name="φ71h6" data-view="main" id="arrow249"/>
+<text x="192" y="69" font-size="3.5" text-anchor="middle" class="txt" transform="rotate(-90 192 69)" data-role="dimension" data-name="φ71h6" data-view="main" id="dimension250">φ71 h6</text>
+<line x1="279" y1="118.5" x2="279" y2="63.5" class="dimline" data-role="dimension" data-name="φ55k6R" data-feature="seg5.od" data-view="main" id="dimension251"/>
+<polygon points="279,118.5 278.584,115.9 279.416,115.9" class="thin solid" fill="#000" data-role="arrow" data-name="φ55k6R" data-view="main" id="arrow252"/>
+<polygon points="279,63.5 279.416,66.1 278.584,66.1" class="thin solid" fill="#000" data-role="arrow" data-name="φ55k6R" data-view="main" id="arrow253"/>
+<text x="278" y="76" font-size="3.5" text-anchor="middle" class="txt" transform="rotate(-90 278 76)" data-role="dimension" data-name="φ55k6R" data-view="main" id="dimension254">φ55 k6</text>
+<line x1="95.5" y1="91.6" x2="95.5" y2="147" class="thin" data-role="extension" data-name="键槽长Ⅱ" data-view="main" id="extension255"/>
+<line x1="158.5" y1="91.6" x2="158.5" y2="147" class="thin" data-role="extension" data-name="键槽长Ⅱ" data-view="main" id="extension256"/>
+<line x1="95.5" y1="145" x2="158.5" y2="145" class="dimline" data-role="dimension" data-name="键槽长Ⅱ" data-view="main" id="dimension257"/>
+<polygon points="95.5,145 98.1,144.584 98.1,145.416" class="thin solid" fill="#000" data-role="arrow" data-name="键槽长Ⅱ" data-view="main" id="arrow258"/>
+<polygon points="158.5,145 155.9,145.416 155.9,144.584" class="thin solid" fill="#000" data-role="arrow" data-name="键槽长Ⅱ" data-view="main" id="arrow259"/>
+<text x="126.6" y="143.8" font-size="3.5" text-anchor="end" class="txt" data-role="dimension" data-name="键槽长Ⅱ" data-view="main" id="dimension260">63</text>
+<text x="127.4" y="141.8" font-size="2" text-anchor="start" class="txt" data-role="dimension" data-name="upper deviation" data-view="main" id="dimension261">+0.3</text>
+<text x="127.4" y="144.3" font-size="2" text-anchor="start" class="txt" data-role="dimension" data-name="lower deviation" data-view="main" id="dimension262">0</text>
+<line x1="87" y1="91.6" x2="87" y2="155" class="thin" data-role="extension" data-name="键槽位Ⅱ" data-view="main" id="extension263"/>
+<line x1="95.5" y1="122.1" x2="95.5" y2="155" class="thin" data-role="extension" data-name="键槽位Ⅱ" data-view="main" id="extension264"/>
+<line x1="87" y1="153" x2="95.5" y2="153" class="dimline" data-role="dimension" data-name="键槽位Ⅱ" data-view="main" id="dimension265"/>
+<polygon points="87,153 84.4,153.416 84.4,152.584" class="thin solid" fill="#000" data-role="arrow" data-name="键槽位Ⅱ" data-view="main" id="arrow266"/>
+<polygon points="95.5,153 98.1,152.584 98.1,153.416" class="thin solid" fill="#000" data-role="arrow" data-name="键槽位Ⅱ" data-view="main" id="arrow267"/>
+<text x="91.25" y="151.9" font-size="3.5" text-anchor="middle" class="txt" data-role="dimension" data-name="键槽位Ⅱ" data-view="main" id="dimension268">8.5</text>
+<line x1="190" y1="91.6" x2="190" y2="147" class="thin" data-role="extension" data-name="键槽长Ⅳ" data-view="main" id="extension269"/>
+<line x1="253" y1="91.6" x2="253" y2="147" class="thin" data-role="extension" data-name="键槽长Ⅳ" data-view="main" id="extension270"/>
+<line x1="190" y1="145" x2="253" y2="145" class="dimline" data-role="dimension" data-name="键槽长Ⅳ" data-view="main" id="dimension271"/>
+<polygon points="190,145 192.6,144.584 192.6,145.416" class="thin solid" fill="#000" data-role="arrow" data-name="键槽长Ⅳ" data-view="main" id="arrow272"/>
+<polygon points="253,145 250.4,145.416 250.4,144.584" class="thin solid" fill="#000" data-role="arrow" data-name="键槽长Ⅳ" data-view="main" id="arrow273"/>
+<text x="221.1" y="143.8" font-size="3.5" text-anchor="end" class="txt" data-role="dimension" data-name="键槽长Ⅳ" data-view="main" id="dimension274">63</text>
+<text x="221.9" y="141.8" font-size="2" text-anchor="start" class="txt" data-role="dimension" data-name="upper deviation" data-view="main" id="dimension275">+0.3</text>
+<text x="221.9" y="144.3" font-size="2" text-anchor="start" class="txt" data-role="dimension" data-name="lower deviation" data-view="main" id="dimension276">0</text>
+<line x1="184" y1="91.6" x2="184" y2="155" class="thin" data-role="extension" data-name="键槽位Ⅳ" data-view="main" id="extension277"/>
+<line x1="190" y1="127.1" x2="190" y2="155" class="thin" data-role="extension" data-name="键槽位Ⅳ" data-view="main" id="extension278"/>
+<line x1="184" y1="153" x2="190" y2="153" class="dimline" data-role="dimension" data-name="键槽位Ⅳ" data-view="main" id="dimension279"/>
+<polygon points="184,153 181.4,153.416 181.4,152.584" class="thin solid" fill="#000" data-role="arrow" data-name="键槽位Ⅳ" data-view="main" id="arrow280"/>
+<polygon points="190,153 192.6,152.584 192.6,153.416" class="thin solid" fill="#000" data-role="arrow" data-name="键槽位Ⅳ" data-view="main" id="arrow281"/>
+<text x="187" y="151.9" font-size="3.5" text-anchor="middle" class="txt" data-role="dimension" data-name="键槽位Ⅳ" data-view="main" id="dimension282">6</text>
+<line x1="40.45" y1="63.95" x2="45" y2="56.5" class="thin" data-role="leader" data-name="倒角" data-view="main" id="leader283"/>
+<polygon points="40.45,63.95 41.296,61.889 41.897,62.256" class="thin solid" fill="#000" data-role="arrow" data-name="倒角" data-view="main" id="arrow284"/>
+<line x1="45" y1="56.5" x2="46.6" y2="56.5" class="thin" data-role="leader" data-name="倒角" data-view="main" id="leader285"/>
+<text x="47.3" y="56.5" font-size="3.5" text-anchor="start" class="txt" data-role="text" data-name="倒角" data-view="main" id="text286">2×1×45°</text>
+<line x1="85.6" y1="120.1" x2="80.5" y2="130.5" class="thin" data-role="leader" data-name="圆角R2" data-view="main" id="leader287"/>
+<polygon points="85.6,120.1 84.947,122.23 84.315,121.92" class="thin solid" fill="#000" data-role="arrow" data-name="圆角R2" data-view="main" id="arrow288"/>
+<line x1="80.5" y1="130.5" x2="79.1" y2="130.5" class="thin" data-role="leader" data-name="圆角R2" data-view="main" id="leader289"/>
+<text x="78.4" y="130.5" font-size="3.5" text-anchor="end" class="txt" data-role="text" data-name="圆角R2" data-view="main" id="text290">R2</text>
+<line x1="166.2" y1="122.3" x2="160.5" y2="130.5" class="thin" data-role="leader" data-name="圆角R1" data-view="main" id="leader291"/>
+<polygon points="166.2,122.3 165.233,124.307 164.655,123.906" class="thin solid" fill="#000" data-role="arrow" data-name="圆角R1" data-view="main" id="arrow292"/>
+<line x1="160.5" y1="130.5" x2="159.1" y2="130.5" class="thin" data-role="leader" data-name="圆角R1" data-view="main" id="leader293"/>
+<text x="158.4" y="130.5" font-size="3.5" text-anchor="end" class="txt" data-role="text" data-name="圆角R1" data-view="main" id="text294">R1</text>
+<rect x="94" y="35" width="7" height="6" class="thin" fill="none" data-role="tolerance-frame" data-name="φ61跳动" data-view="main" id="tolerance-frame295"/>
+<rect x="101" y="35" width="15" height="6" class="thin" fill="none" data-role="tolerance-frame" data-name="φ61跳动" data-view="main" id="tolerance-frame296"/>
+<text x="108.5" y="40.1" font-size="3" text-anchor="middle" class="txt" data-role="text" data-name="φ61跳动" data-view="main" id="text297">0.02</text>
+<rect x="116" y="35" width="14" height="6" class="thin" fill="none" data-role="tolerance-frame" data-name="φ61跳动" data-view="main" id="tolerance-frame298"/>
+<text x="123" y="40.1" font-size="3" text-anchor="middle" class="txt" data-role="text" data-name="φ61跳动" data-view="main" id="text299">A—B</text>
+<line x1="101" y1="41" x2="101" y2="35" class="thin" data-role="tolerance-frame" data-name="φ61跳动" data-view="main" id="tolerance-frame300"/>
+<line x1="116" y1="41" x2="116" y2="35" class="thin" data-role="tolerance-frame" data-name="φ61跳动" data-view="main" id="tolerance-frame301"/>
+<circle cx="97.5" cy="38" r="1" class="thin" fill="none" data-role="tolerance-symbol" data-name="圆跳动" id="tolerance-symbol302"/>
+<line x1="98.05" y1="37.16" x2="99.3" y2="35.9" class="thin" data-role="tolerance-symbol" data-name="圆跳动" id="tolerance-symbol303"/>
+<line x1="99.3" y1="35.9" x2="99.184" y2="36.335" class="thin" data-role="tolerance-symbol" data-name="圆跳动" id="tolerance-symbol304"/>
+<line x1="99.3" y1="35.9" x2="98.865" y2="36.016" class="thin" data-role="tolerance-symbol" data-name="圆跳动" id="tolerance-symbol305"/>
+<line x1="112" y1="41" x2="112" y2="59.3" class="thin" data-role="leader" data-name="φ61跳动" data-view="main" id="leader306"/>
+<polygon points="112,60.5 111.648,58.3 112.352,58.3" class="thin solid" fill="#000" data-role="arrow" data-name="φ61跳动" data-view="main" id="arrow307"/>
+<rect x="188" y="35" width="7" height="6" class="thin" fill="none" data-role="tolerance-frame" data-name="φ71跳动" data-view="main" id="tolerance-frame308"/>
+<rect x="195" y="35" width="15" height="6" class="thin" fill="none" data-role="tolerance-frame" data-name="φ71跳动" data-view="main" id="tolerance-frame309"/>
+<text x="202.5" y="40.1" font-size="3" text-anchor="middle" class="txt" data-role="text" data-name="φ71跳动" data-view="main" id="text310">0.02</text>
+<rect x="210" y="35" width="14" height="6" class="thin" fill="none" data-role="tolerance-frame" data-name="φ71跳动" data-view="main" id="tolerance-frame311"/>
+<text x="217" y="40.1" font-size="3" text-anchor="middle" class="txt" data-role="text" data-name="φ71跳动" data-view="main" id="text312">A—B</text>
+<line x1="195" y1="41" x2="195" y2="35" class="thin" data-role="tolerance-frame" data-name="φ71跳动" data-view="main" id="tolerance-frame313"/>
+<line x1="210" y1="41" x2="210" y2="35" class="thin" data-role="tolerance-frame" data-name="φ71跳动" data-view="main" id="tolerance-frame314"/>
+<circle cx="191.5" cy="38" r="1" class="thin" fill="none" data-role="tolerance-symbol" data-name="圆跳动" id="tolerance-symbol315"/>
+<line x1="192.05" y1="37.16" x2="193.3" y2="35.9" class="thin" data-role="tolerance-symbol" data-name="圆跳动" id="tolerance-symbol316"/>
+<line x1="193.3" y1="35.9" x2="193.184" y2="36.335" class="thin" data-role="tolerance-symbol" data-name="圆跳动" id="tolerance-symbol317"/>
+<line x1="193.3" y1="35.9" x2="192.865" y2="36.016" class="thin" data-role="tolerance-symbol" data-name="圆跳动" id="tolerance-symbol318"/>
+<line x1="196" y1="41" x2="196" y2="54.3" class="thin" data-role="leader" data-name="φ71跳动" data-view="main" id="leader319"/>
+<polygon points="196,55.5 195.648,53.3 196.352,53.3" class="thin solid" fill="#000" data-role="arrow" data-name="φ71跳动" data-view="main" id="arrow320"/>
+<polygon points="50.5,118.5 53.5,118.5 52,121.1" class="thin solid" fill="#000" data-role="datum" data-name="A" data-view="main" id="datum321"/>
+<line x1="52" y1="121.1" x2="52" y2="123.5" class="thin" data-role="datum" data-name="A" data-view="main" id="datum322"/>
+<rect x="49" y="123.5" width="6" height="6" class="thin" fill="none" data-role="datum" data-name="A" data-view="main" id="datum323"/>
+<text x="52" y="127.375" font-size="2.5" text-anchor="middle" class="txt" data-role="text" data-name="A" data-view="main" id="text324">A</text>
+<polygon points="294,118.5 297,118.5 295.5,121.1" class="thin solid" fill="#000" data-role="datum" data-name="B" data-view="main" id="datum325"/>
+<line x1="295.5" y1="121.1" x2="295.5" y2="123.5" class="thin" data-role="datum" data-name="B" data-view="main" id="datum326"/>
+<rect x="292.5" y="123.5" width="6" height="6" class="thin" fill="none" data-role="datum" data-name="B" data-view="main" id="datum327"/>
+<text x="295.5" y="127.375" font-size="2.5" text-anchor="middle" class="txt" data-role="text" data-name="B" data-view="main" id="text328">B</text>
+<polygon points="64,63.7 62.672,61.4 65.328,61.4 64,63.7" class="ra" fill="none" data-role="roughness" data-name="φ55L粗糙度" data-view="main" id="roughness329"/>
+<line x1="64" y1="63.7" x2="66.309" y2="59.7" class="ra" data-role="roughness" data-name="φ55L粗糙度" data-view="main" id="roughness330"/>
+<line x1="66.309" y1="59.7" x2="74.784" y2="59.7" class="ra" data-role="roughness" data-name="φ55L粗糙度" data-view="main" id="roughness331"/>
+<text x="67.009" y="62.25" font-size="2.5" text-anchor="start" class="txt" data-role="text" data-name="φ55L粗糙度" data-view="main" id="text332">Ra1.6</text>
+<polygon points="125,60.7 123.672,58.4 126.328,58.4 125,60.7" class="ra" fill="none" data-role="roughness" data-name="φ61粗糙度" data-view="main" id="roughness333"/>
+<line x1="125" y1="60.7" x2="127.309" y2="56.7" class="ra" data-role="roughness" data-name="φ61粗糙度" data-view="main" id="roughness334"/>
+<line x1="127.309" y1="56.7" x2="135.784" y2="56.7" class="ra" data-role="roughness" data-name="φ61粗糙度" data-view="main" id="roughness335"/>
+<text x="128.009" y="59.25" font-size="2.5" text-anchor="start" class="txt" data-role="text" data-name="φ61粗糙度" data-view="main" id="text336">Ra1.6</text>
+<polygon points="230,55.7 228.672,53.4 231.328,53.4 230,55.7" class="ra" fill="none" data-role="roughness" data-name="φ71粗糙度" data-view="main" id="roughness337"/>
+<line x1="230" y1="55.7" x2="232.309" y2="51.7" class="ra" data-role="roughness" data-name="φ71粗糙度" data-view="main" id="roughness338"/>
+<line x1="232.309" y1="51.7" x2="240.784" y2="51.7" class="ra" data-role="roughness" data-name="φ71粗糙度" data-view="main" id="roughness339"/>
+<text x="233.009" y="54.25" font-size="2.5" text-anchor="start" class="txt" data-role="text" data-name="φ71粗糙度" data-view="main" id="text340">Ra1.6</text>
+<polygon points="291,63.7 289.672,61.4 292.328,61.4 291,63.7" class="ra" fill="none" data-role="roughness" data-name="φ55R粗糙度" data-view="main" id="roughness341"/>
+<line x1="291" y1="63.7" x2="293.309" y2="59.7" class="ra" data-role="roughness" data-name="φ55R粗糙度" data-view="main" id="roughness342"/>
+<line x1="293.309" y1="59.7" x2="301.784" y2="59.7" class="ra" data-role="roughness" data-name="φ55R粗糙度" data-view="main" id="roughness343"/>
+<text x="294.009" y="62.25" font-size="2.5" text-anchor="start" class="txt" data-role="text" data-name="φ55R粗糙度" data-view="main" id="text344">Ra1.6</text>
+<line x1="183.7" y1="57.3" x2="172" y2="57.3" class="ra" data-role="leader" data-name="端面粗糙度" data-view="main" id="leader345"/>
+<polygon points="183.7,57.3 181.7,57.62 181.7,56.98" class="thin solid" fill="#000" data-role="arrow" data-name="端面粗糙度" data-view="main" id="arrow346"/>
+<polygon points="172,57.3 170.672,55 173.328,55 172,57.3" class="ra" fill="none" data-role="roughness" data-name="端面粗糙度" data-view="main" id="roughness347"/>
+<line x1="172" y1="57.3" x2="174.309" y2="53.3" class="ra" data-role="roughness" data-name="端面粗糙度" data-view="main" id="roughness348"/>
+<line x1="174.309" y1="53.3" x2="182.784" y2="53.3" class="ra" data-role="roughness" data-name="端面粗糙度" data-view="main" id="roughness349"/>
+<text x="175.009" y="55.85" font-size="2.5" text-anchor="start" class="txt" data-role="text" data-name="端面粗糙度" data-view="main" id="text350">Ra3.2</text>
+<polygon points="379.673,243 377.814,239.78 381.532,239.78 379.673,243" class="ra" fill="none" data-role="roughness" data-name="uniform" data-view="note" id="roughness351"/>
+<line x1="379.673" y1="243" x2="382.906" y2="237.4" class="ra" data-role="roughness" data-name="uniform" data-view="note" id="roughness352"/>
+<line x1="382.906" y1="237.4" x2="394.771" y2="237.4" class="ra" data-role="roughness" data-name="uniform" data-view="note" id="roughness353"/>
+<text x="383.886" y="240.65" font-size="3.5" text-anchor="start" class="txt" data-role="text" data-name="uniform" data-view="note" id="text354">Ra6.3</text>
+<text x="399.684" y="240.65" font-size="5.04" text-anchor="start" class="txt" data-role="text" data-name="uniform" data-view="note" id="text355">(√)</text>
+</svg>
