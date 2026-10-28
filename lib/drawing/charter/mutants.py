@@ -228,8 +228,12 @@ def sha(s: str) -> str:
     return hashlib.sha256(s.encode("utf-8")).hexdigest()[:12]
 
 
+# 规则因为「本机没装依赖」而判不了的情形：算跳过，不算漏抓（也不许算通过）
+ENV_SKIP = ("没有装 fontTools", "字形覆盖脚本没跑出结果")
+
+
 def run_case(c: Case, src: str, tmp: Path, base_dir: Path | None = None) -> tuple[str, str]:  # noqa: C901
-    """返回 (结果, 说明)。结果 ∈ 抓到 / 漏抓 / 注入未生效。"""
+    """返回 (结果, 说明)。结果 ∈ 抓到 / 漏抓 / 跳过 / 注入未生效。"""
     try:
         new = c.edit(src)
     except Exception as e:
@@ -260,6 +264,10 @@ def run_case(c: Case, src: str, tmp: Path, base_dir: Path | None = None) -> tupl
         return "漏抓", "检查器里没有 %s 这条规则" % c.expect
     if got[0] == "不通过":
         return "抓到", got[1][:110]
+    # 环境缺依赖导致规则判不了（G-13 要 fontTools 的解释器）：这不是检查器盲区，
+    # 但也不能算通过——单列「跳过」，并在汇总里报出来（CHK-08）。
+    if got[0] == "未检查" and any(k in got[1] for k in ENV_SKIP):
+        return "跳过", "%s 需要 %s" % (c.expect, got[1][:80])
     return "漏抓", "%s 判成 %s：%s" % (c.expect, got[0], got[1][:90])
 
 
@@ -310,7 +318,7 @@ def run_all(layer=None, quiet=False):
 
 def _run_cases(cases, verbose=True):
     src = SVG.read_text(encoding="utf-8")
-    ok, miss, bad, gap = [], [], [], []
+    ok, miss, bad, gap, skip = [], [], [], [], []
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
         for c in cases:
@@ -320,18 +328,22 @@ def _run_cases(cases, verbose=True):
             if res == "漏抓" and c.known_gap:
                 icon = "?"                      # 已登记盲区，不算失败但要看得见
             else:
-                icon = {"抓到": "✓", "漏抓": "✗", "注入未生效": "!"}[res]
+                icon = {"抓到": "✓", "漏抓": "✗", "注入未生效": "!", "跳过": "—"}[res]
             if verbose:
                 print("  %s %-16s %-3s %-10s %s" % (icon, c.name, c.layer, c.expect, why))
             if res == "抓到":
                 ok.append(c.name)
             elif res == "漏抓":
                 (gap if c.known_gap else miss).append(c.name)
+            elif res == "跳过":
+                skip.append(c.name)
             else:
                 bad.append(c.name)
 
-    print("\n  注入 %d 个：抓到 %d / 漏抓 %d / 已登记盲区 %d / 注入未生效 %d"
-          % (len(cases), len(ok), len(miss), len(gap), len(bad)))
+    print("\n  注入 %d 个：抓到 %d / 漏抓 %d / 跳过(环境) %d / 已登记盲区 %d / 注入未生效 %d"
+          % (len(cases), len(ok), len(miss), len(skip), len(gap), len(bad)))
+    if skip:
+        print("  跳过（本机缺依赖，规则判不了，未算通过）：%s" % "、".join(skip))
     if gap:
         print("  已登记盲区（检查器确实看不见，需要补规则）：%s" % "、".join(gap))
     if bad:

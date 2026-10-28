@@ -86,7 +86,7 @@ python3 $MK lib 10 --book handbook     # 打印某章的公开函数签名 + doc
 | 重出一章图并扫线 | `./draw/ch08/build.sh`（看 `RESULT: PASS`） |
 | 计算书 md → PDF | `mdkit.py book 计算书.md --pdf` |
 | 出图后过闸（四层 + 零件层） | `python3 lib/drawing/charter/check.py 图.svg --calc 计算书.json --fig-no CS2-01 --part shaft` |
-| 闸自己看不看得见错 | `python3 lib/drawing/charter/mutants.py`（24 个注入，底图在 `charter/fixtures/`；要本地 Chromium 量文字框，缺了会明确报错 exit 2） |
+| 闸自己看不看得见错 | `python3 lib/drawing/charter/mutants.py`（24 个注入，底图在 `charter/fixtures/`；要本地 Chromium 量文字框、G-13 要 fontTools，缺了会明确报出来） |
 | 章程正文与条款表是否一致 | `python3 lib/drawing/charter/check_charter.py`（145 条，A 47 条） |
 
 ## 版本

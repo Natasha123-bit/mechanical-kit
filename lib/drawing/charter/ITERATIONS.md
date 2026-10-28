@@ -349,6 +349,8 @@ d86103b  features 推广到齿轮项目：L2-10 由未检查转通过（51 条�
     有 `inkbox.json` 时改用实测墨迹；两者都还不是“字形轮廓本身”。
 14. **L4 要本地 Chromium** — 量文字包围盒走浏览器；缺了 `mutants.py` 现在明确 exit 2
     并提示设 `CHROME=…`（此前是 `FileNotFoundError` 抛栈，公开版陌生环境实测踩到）。
+    缺 fontTools（`~/.venvs/fonttools`）时 G-13 判不了，`glyph_missing` 记「跳过(环境)」
+    并在汇总里点名，不算漏抓、也不算通过。
 15. ~~坏 `--calc` / `--features` 不走 exit 2~~ — 2026-10-28 `check.py` 先验一遍两个输入
     （JSON 读不了 → 明确报「这是输入错，不是图错」+ exit 2）；`fontcov.py` 缺 fontTools
     也从「抛栈 exit 1」改成「提示安装方式 + exit 2」。
@@ -713,6 +715,8 @@ Chrome 打印时本来就按用字切子集，所以 PDF 侧零收益；只有�
 | 汇总行标签与计数不符 | 改成「L0 n + L1~L3 n + common/part n（合计 n）」 | `check.py` |
 | `check_rules.py` 单独跑不能判 L2-10 | 补 `--features`（不给则自动找图旁清单） | `check_rules.py` |
 | `api.md` 漂移 | `gen_api.py` 重生成 | `api.md` |
+| L4 缺 Chromium 抛栈 | `require_browser()`：缺浏览器 → 提示设 `CHROME=` + exit 2 | `mutants.py` |
+| L4 缺 fontTools 把 G-13 记成漏抓 | 新增「跳过(环境)」一类：规则因缺依赖判不了时单列，不算漏抓也不算通过 | `mutants.py` |
 
 **发版记录**：`0.1.0-alpha.2`（2026-10-28）——VERSION / README 标题与徽章 /
 `docs/architecture.svg` 两处副标题同步；tag `v0.1.0-alpha.2`；公开版由
