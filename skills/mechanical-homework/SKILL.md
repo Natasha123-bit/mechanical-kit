@@ -148,6 +148,7 @@ metadata:
 | `references/textbook-chart-reading.md` | 扫描教材曲线（K_v / K_Hβ / K_HN）标定读法 | 查图系数 |
 | `references/mech-frame.md` | 说明书插图四件套（轴草图/力学模型/弯矩图/转矩图）的 7 条画法口径 | 画说明书插图 |
 | `scripts/verify_drawing_conventions.py` | 口径闸：量生成物 SVG 八条硬判据，非零退出 | 交付前最后一道自动关口 |
+| `lib/drawing/charter/check.py` | 出图闸：L0~L3 + 零件层共 46 条规则，一次给通过/不通过/未检查 | 交图前必跑（`--part shaft/gear`、`--calc`、`--fig-no`） |
 
 **工具**（真身 `~/Documents/Hermes/Mechanical-Kit/mdkit/`，入口 `~/.hermes/lib/mdkit`，skill 外共享，私有 git 仓库，改动就 commit）：
 

@@ -97,7 +97,7 @@ devloop.sh build_shaft.py --svg 轴图.svg --calc calc.json --fig-no CS2-01 --pa
 |---|---|
 | 0 | 没有“不通过”（可能带若干“未检查”，范围见末尾） |
 | 1 | 有规则“不通过” |
-| 2 | 检查器自身异常，或 L4 自检漏抓/注入未生效 |
+| 2 | 检查器/输入异常，或 L4 没跑成（漏抓、注入未生效、缺 Chromium 或夹具；缺 fontTools 时 G-13 记「跳过(环境)」不在此列） |
 
 ## 完备性：features.json
 

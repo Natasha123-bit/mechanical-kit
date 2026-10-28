@@ -14,7 +14,8 @@
 （build + 检查 + 整页截图 + 各视图局部图）。
 
 代码位于 `lib/drawing/charter/`（`common/` 4 个模块、`part/` 2 个模块），
-检查器本体 `check_contract.py` 190 + `check_rules.py` 1938 + `mutants.py` 319 行。
+检查器本体 `check_contract.py` 190 + `check_rules.py` 1943 + `mutants.py` 358 行；
+闸门入口 `check.py` 196 行、章程校验 `check_charter.py` 149 行、量测 `measure.py` 152 行。
 
 L3 自 2026-10-28 起按几何采样（`capsules()`）判净距，不再只吃 `<line>`；
 文字框优先用实测墨迹（图旁 `inkbox.json`），没有则用浏览器 bbox 按 0.10×字号 内缩。
@@ -190,7 +191,7 @@ viewBox→viewport 缩放）。每条 bbox 带 `view` 字段（取自 `data-view
 ### `mutants.py` — 注错反测
 
 ```bash
-python3 lib/drawing/charter/mutants.py         # 全部 18 个
+python3 lib/drawing/charter/mutants.py         # 全部 24 个
 python3 lib/drawing/charter/mutants.py -k L2   # 只跑几何层（MUT-02）
 ```
 
@@ -415,8 +416,8 @@ lib/drawing/charter/
 | 参数表数值与参数一致（Z-05） | **只做了读数对集合**（P-13），逐格对账未做 |
 
 **反测**：新增 3 条注入（`datum_lift`→G-01、`gen_radius`→P-01、`shoulder_gap`→P-02），
-`mutants.py` 现在支持换底图与 `--part`，22 注入 22 抓到。part 层用例的底图是
-`绘图测试/多段轴测试1/中间轴零件图.svg`（`PART_SVG` / `PART_CALC`），换机器要改这两行。
+`mutants.py` 现在支持换底图与 `--part`，当前 24 注入 24 抓到。part 层用例的底图早已
+入库到 `lib/drawing/charter/fixtures/`（`PART_SVG` / `PART_CALC`），换机器不用改路径。
 
 **没做的两块，为什么**：
 
@@ -674,7 +675,7 @@ Chrome 打印时本来就按用字切子集，所以 PDF 侧零收益；只有�
 | 动作 | 命令 | 结果 |
 |---|---|---|
 | 代码自检 | `mdkit.py selftest` / `test all` | 60 目标 / 9302 断言 / 失败 0 / 1.48 秒 |
-| 章程一致性 | `check_charter.py` | 145 条正文与表一致；A 10 / M 23 / X 112（6.9%） |
+| 章程一致性 | `check_charter.py` | 145 条正文与表一致；A 10 / M 23 / X 112（6.9%）——**修前基线**，改挂条款后 A 47 |
 | 接口表漂移 | `gen_api.py` 重生成比对 | **漂移**：`api.md` 写 ROLES 21 项 / MULTI_OK 5 项，代码已 22 / 6 → 已重生成 |
 | 章程正文漂移 | `build_charter.py --stdout` 比对 | 仅 `--stdout` 模式多一个行尾空行；实际重生成 `CHARTER.md` 与仓库一致，无漂移 |
 | L4 注错反测 | `mutants.py` | 24 注入 / 24 抓到 / 7.27 秒 |
@@ -718,9 +719,13 @@ Chrome 打印时本来就按用字切子集，所以 PDF 侧零收益；只有�
 | L4 缺 Chromium 抛栈 | `require_browser()`：缺浏览器 → 提示设 `CHROME=` + exit 2 | `mutants.py` |
 | L4 缺 fontTools 把 G-13 记成漏抓 | 新增「跳过(环境)」一类：规则因缺依赖判不了时单列，不算漏抓也不算通过 | `mutants.py` |
 
-**发版记录**：`0.1.0-alpha.2`（2026-10-28）——VERSION / README 标题与徽章 /
-`docs/architecture.svg` 两处副标题同步；tag `v0.1.0-alpha.2`；公开版由
-`scripts/make-public.sh --go` 导出后更新。上一版 `alpha.1` 的 tag 不动。
+**发版记录**：`0.1.0-alpha.2`（2026-10-28）
+—— dev 仓库与公开版 `mechanical-kit` 的 `main` 与 tag `v0.1.0-alpha.2` 指向同一提交
+（具体哈希用 `git rev-list -n1 v0.1.0-alpha.2` / `gh api` 查，不写进文档免得过期）；
+公开树 370 个文件 / 8.6M，导出树与远端逐字一致。
+VERSION / README 标题与徽章 / `docs/architecture.svg` 两处副标题同步。
+`alpha.1` 的 tag 未动。**同轮例外**：alpha.2 首推后二十分钟内发现 L4 在无 Chromium
+环境会抛栈，修复后把 `v0.1.0-alpha.2` 重指到含修复的提交（跨轮不再移动已发 tag）。
 
 ---
 
