@@ -184,7 +184,7 @@ def main():
         print("\n结果已落盘：%s" % a.json)
 
     if mut_rc == 2:
-        print("\n退出码 2：L4 自检漏抓或注入未生效")
+        print("\n退出码 2：L4 自检没跑成（漏抓 / 注入未生效 / 缺 Chromium 或夹具，见上）")
         return 2
     if bad:
         print("\n退出码 1：有规则不通过")

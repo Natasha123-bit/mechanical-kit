@@ -347,7 +347,9 @@ d86103b  features 推广到齿轮项目：L2-10 由未检查转通过（51 条�
 12. **几何判定的前提是坐标正确** — bbox 来自浏览器；若 SVG 使用 `clipPath` 或滤镜，框可能偏移。
 13. **字体只核引用与字形存在，未核字形墨迹** — 碰撞判定用浏览器 bbox 内缩 0.10×字号，
     有 `inkbox.json` 时改用实测墨迹；两者都还不是“字形轮廓本身”。
-14. ~~坏 `--calc` / `--features` 不走 exit 2~~ — 2026-10-28 `check.py` 先验一遍两个输入
+14. **L4 要本地 Chromium** — 量文字包围盒走浏览器；缺了 `mutants.py` 现在明确 exit 2
+    并提示设 `CHROME=…`（此前是 `FileNotFoundError` 抛栈，公开版陌生环境实测踩到）。
+15. ~~坏 `--calc` / `--features` 不走 exit 2~~ — 2026-10-28 `check.py` 先验一遍两个输入
     （JSON 读不了 → 明确报「这是输入错，不是图错」+ exit 2）；`fontcov.py` 缺 fontTools
     也从「抛栈 exit 1」改成「提示安装方式 + exit 2」。
 

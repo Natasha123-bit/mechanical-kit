@@ -263,6 +263,17 @@ def run_case(c: Case, src: str, tmp: Path, base_dir: Path | None = None) -> tupl
     return "漏抓", "%s 判成 %s：%s" % (c.expect, got[0], got[1][:90])
 
 
+def require_browser():
+    """L4 要靠浏览器量文字包围盒（L3 那几条注入）。缺 Chromium 时明确报错退出 2，
+    不给一条 traceback ——没装浏览器的人应该看到「设 CHROME=…」而不是 FileNotFoundError。"""
+    from lib.drawing.charter.measure import CHROME
+    if not Path(CHROME).exists():
+        print("L4 需要本地 Chromium 量文字包围盒：%s 不存在" % CHROME, file=sys.stderr)
+        print("  装 Chrome for Testing，或 CHROME=/path/to/chrome 后再跑；"
+              "只想验 L0~L2 请直接跑 check.py（它是可降级的）", file=sys.stderr)
+        raise SystemExit(2)
+
+
 def require_fixtures():
     """夹具缺失时明确报错，不让 L4 静默失效（MUT-03 的前提是底图在）。"""
     need = [SVG, FEATURES, Path(CALC), PART_SVG, Path(PART_CALC),
@@ -276,6 +287,7 @@ def require_fixtures():
 
 def main():
     require_fixtures()
+    require_browser()
     ap = argparse.ArgumentParser()
     ap.add_argument("-k", help="只跑某一层（L1/L2/L3），MUT-02 要求别重复跑无关用例")
     ap.add_argument("--list", action="store_true")
