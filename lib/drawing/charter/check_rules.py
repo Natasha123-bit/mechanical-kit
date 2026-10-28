@@ -72,11 +72,13 @@ def rule(rid, name, chapter, severity="必"):
 class Ctx:
     """一次检查的全部输入。规则函数只读它，不碰全局。"""
 
-    def __init__(self, svg, calc=None, fig_no=None, title_fields=None, bounds=None):
+    def __init__(self, svg, calc=None, fig_no=None, title_fields=None, bounds=None,
+                 features=None):
         self.root = ET.parse(svg).getroot()
         self.bounds = bounds
         self.view_of = {}
         self.calc = calc or {}
+        self.features = features or []
         self.fig_no = fig_no
         self.title_fields = title_fields or {}
         self.els = []                      # [(tag, attrib, text)]
@@ -1154,6 +1156,131 @@ def _seg_hits_box(s, b, pad=0.0):
     return False
 
 
+# ============================================================ L2-10 完备性
+# 这一条和上面九条反过来：上面问"画出来的东西对不对"，它问"该画的东西画了没有"。
+# 实测两轮都栽在这上面（齿轮漏 8 条线、轴漏阶梯线中段），章程全绿而图是错的。
+
+_OUTLINE_ROLES = ("outline", "section-outline", "key-outline")
+
+
+def _outline_segs(ctx):
+    """图上所有可见轮廓直段（line 与 path 的 L 段），保持原坐标系。"""
+    out = []
+    for tag, a, _ in ctx.els:
+        if a.get("data-role") not in _OUTLINE_ROLES:
+            continue
+        if tag == "line":
+            out.append((float(a["x1"]), float(a["y1"]), float(a["x2"]), float(a["y2"])))
+        elif tag == "path":
+            for cmd, _n, p0, p1 in _path_cmds(a.get("d", "")):
+                if cmd == "L":
+                    out.append((p0[0], p0[1], p1[0], p1[1]))
+    return out
+
+
+def _cover(seg, cands, perp_tol=0.15, join_tol=0.3):
+    """清单段被图上共线段并集覆盖的比率，以及最大缺口（沿段方向的位置区间）。
+
+    只取两端都贴在这条直线上的候选：一端偏 0.15mm 以上就不属于这条线。
+    合并时允许 0.3mm 接缝——圆角切点处本来就会把一条边拆成几段画。
+    """
+    x1, y1, x2, y2 = seg
+    L = math.hypot(x2 - x1, y2 - y1)
+    if L < 1e-6:
+        return 1.0, None
+    ux, uy = (x2 - x1) / L, (y2 - y1) / L
+
+    def perp(px, py):
+        return abs(-uy * (px - x1) + ux * (py - y1))
+
+    spans = []
+    for a, b, c, d in cands:
+        if perp(a, b) > perp_tol or perp(c, d) > perp_tol:
+            continue
+        t0 = ux * (a - x1) + uy * (b - y1)
+        t1 = ux * (c - x1) + uy * (d - y1)
+        lo, hi = max(0.0, min(t0, t1)), min(L, max(t0, t1))
+        if hi > lo:
+            spans.append((lo, hi))
+    if not spans:
+        return 0.0, (0.0, L)
+    spans.sort()
+    merged = [list(spans[0])]
+    for lo, hi in spans[1:]:
+        if lo <= merged[-1][1] + join_tol:
+            merged[-1][1] = max(merged[-1][1], hi)
+        else:
+            merged.append([lo, hi])
+    cover = sum(h - l for l, h in merged)
+    gap, gap_sz, prev = None, 0.0, 0.0
+    for lo, hi in merged:
+        if lo - prev > gap_sz:
+            gap_sz, gap = lo - prev, (prev, lo)
+        prev = max(prev, hi)
+    if L - prev > gap_sz:
+        gap_sz, gap = L - prev, (prev, L)
+    if gap_sz <= 1e-6:
+        gap = None
+    return cover / L, gap
+
+
+@rule("L2-10", "要素清单里的轮廓都在图上", "CHK-02 / GEO-06")
+def r_features(ctx):
+    """对照生成器的要素清单查完备性：清单说有、图上没有 → 报。
+
+    其余规则都以"图上已有的图元"为前提，漏画的东西它们一起沉默。
+    齿轮漏 8 条线、轴漏阶梯线中段，两次都是章程全绿、用户看图才发现。
+    """
+    feats = getattr(ctx, "features", None) or []
+    if not feats:
+        return "未检查", "没有要素清单（features.json），查不了完备性"
+
+    segs = _outline_segs(ctx)
+    circles = [(float(a["cx"]), float(a["cy"]), float(a["r"]))
+               for tag, a, _ in ctx.els if tag == "circle"]
+
+    bad, done = [], 0
+    for f in feats:
+        kind, fid = f.get("类型") or "", f.get("id") or "?"
+        note = ("（%s）" % f["说明"]) if f.get("说明") else ""
+        tol = float(f.get("容差", 0.95))
+        if kind == "线段":
+            try:
+                seg = (float(f["x1"]), float(f["y1"]), float(f["x2"]), float(f["y2"]))
+            except (KeyError, ValueError):
+                bad.append("%s 坐标不全%s" % (fid, note))
+                continue
+            rate, gap = _cover(seg, segs)
+            if rate + 1e-9 >= tol:
+                done += 1
+                continue
+            if gap:
+                L = math.hypot(seg[2] - seg[0], seg[3] - seg[1]) or 1
+                bad.append("%s%s 覆盖 %.0f%%，缺口 %.1fmm，起自 (%.1f,%.1f)"
+                           % (fid, note, 100 * rate, gap[1] - gap[0],
+                              seg[0] + (seg[2] - seg[0]) * gap[0] / L,
+                              seg[1] + (seg[3] - seg[1]) * gap[0] / L))
+            else:
+                bad.append("%s%s 覆盖 %.0f%%" % (fid, note, 100 * rate))
+        elif kind == "圆":
+            try:
+                cx, cy, r = float(f["cx"]), float(f["cy"]), float(f["r"])
+            except (KeyError, ValueError):
+                bad.append("%s 圆参数不全%s" % (fid, note))
+                continue
+            if any(abs(cx - x) <= 0.15 and abs(cy - y) <= 0.15 and abs(r - rr) <= 0.15
+                   for x, y, rr in circles):
+                done += 1
+            else:
+                bad.append("%s%s 图上没有同心同径的圆（r=%g）" % (fid, note, r))
+        else:
+            bad.append("%s 类型不认识：%r" % (fid, kind))
+
+    if bad:
+        return "不通过", "%d/%d 条缺失：%s" % (len(bad), len(feats), "；".join(bad[:4]))
+    return "通过", "清单 %d 条轮廓图上都有（图上线段 %d、圆 %d）" % (len(feats), len(segs), len(circles))
+
+
 @rule("L3-01", "文字之间不重叠", "CHK-04")
 def r_text_text(ctx):
     if not ctx.bounds:
@@ -1312,7 +1439,7 @@ def r_view_overlap(ctx):
         return "不通过", "视图重叠：%s" % "、".join(sorted(set(bad))[:4])
     return "通过", "%d 个视图互不侵入" % len(names)
 
-def run(svg, calc_path=None, fig_no=None, bounds_path=None):
+def run(svg, calc_path=None, fig_no=None, bounds_path=None, features_path=None):
     calc = {}
     if calc_path:
         calc = json.loads(Path(calc_path).read_text(encoding="utf-8"))
@@ -1321,7 +1448,12 @@ def run(svg, calc_path=None, fig_no=None, bounds_path=None):
         # 也接受已经读好的 dict（check.py 一条龙跑时直接用 measure() 的返回值）
         bounds = (bounds_path if isinstance(bounds_path, dict)
                   else json.loads(Path(bounds_path).read_text(encoding="utf-8")))
-    ctx = Ctx(svg, calc=calc, fig_no=fig_no, bounds=bounds)
+    feats = []
+    if features_path:
+        _d = (features_path if isinstance(features_path, dict)
+              else json.loads(Path(features_path).read_text(encoding="utf-8")))
+        feats = _d.get("要素", []) if isinstance(_d, dict) else list(_d)
+    ctx = Ctx(svg, calc=calc, fig_no=fig_no, bounds=bounds, features=feats)
     out = []
     for rid, name, chapter, sev, fn in RULES:
         try:

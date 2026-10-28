@@ -43,6 +43,7 @@ from lib.drawing.charter.measure import measure               # noqa: E402
 SVG = ROOT / "draw/gear_pipeline/样例-输出轴零件图.svg"
 CALC = Path.home() / "Documents/Hermes/机械设计作业/设计测试/calc/s3_shaft.json"
 FIG_NO = "SJCS-1"
+FEATURES = ROOT / "draw/gear_pipeline/证据/features_shaft.json"
 
 
 def tag_with(text: str, needle: str) -> str:
@@ -121,6 +122,12 @@ CASES = [
          lambda s: s.replace('<line x1="125" y1="215.7" x2="125" y2="202.3"',
                              '<line x1="91" y1="215.7" x2="91" y2="202.3"', 1), known_gap=True),
 
+    Case("feat_missing", "L2", "L2-10", "其它",
+         "删掉清单里的一条轮廓线（完备性：该画的没画）",
+         lambda s: __import__("re").sub(
+             r'<line[^>]*x1="197"[^>]*y1="97"[^>]*x2="280"[^>]*y2="97"[^>]*/>\s*',
+             "", s, count=1)),
+
     # ---------------- L3 碰撞（要重新量测） ----------------
     Case("text_text", "L3", "L3-01", "穿字",
          "数字 41 挪到 68 的位置（两字重叠）",
@@ -162,7 +169,8 @@ def run_case(c: Case, src: str, tmp: Path) -> tuple[str, str]:
     if c.bounds:
         bp = tmp / ("mut_%s.json" % c.name)
         bp.write_text(json.dumps(measure(f), ensure_ascii=False), encoding="utf-8")
-    rows = check_run(f, str(CALC), FIG_NO, str(bp) if bp else None)
+    rows = check_run(f, str(CALC), FIG_NO, str(bp) if bp else None,
+                     str(FEATURES) if FEATURES.exists() else None)
     st = {r[0]: (r[4], r[5]) for r in rows}
     got = st.get(c.expect)
     if got is None:

@@ -41,6 +41,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("svg")
     ap.add_argument("--calc", help="计算书 JSON（期望值的独立来源）")
+    ap.add_argument("--features",
+                    help="要素清单 JSON（完备性 L2-10）；不给就找图同目录的 features.json")
     ap.add_argument("--fig-no", help="应出现的图号")
     ap.add_argument("--no-browser", action="store_true", help="不启动 Chromium 量测")
     ap.add_argument("--selftest", action="store_true", help="顺带跑 L4 变异自检")
@@ -83,7 +85,13 @@ def main():
         print("\n量测：跳过（--no-browser），L3 会全部判未检查")
 
     # ---------- L1~L3 ----------
-    rows = run_rules(path, a.calc, a.fig_no, bounds)
+    fp = a.features
+    if not fp:
+        guess = path.with_name("features.json")
+        if guess.exists():
+            fp = str(guess)
+            print("\n要素清单：自动找到 %s" % guess.name)
+    rows = run_rules(path, a.calc, a.fig_no, bounds, fp)
     print("\nL1 结构 / L2 几何 / L3 碰撞")
     for rid, name, ch, sev, st, ev in rows:
         print("  %s %-6s %-32s %s" % (ICON.get(st, " "), rid, name, ev))
