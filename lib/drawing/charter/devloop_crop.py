@@ -23,7 +23,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]   # mdkit/，不是 Mechanical-Kit/
+ROOT = Path(__file__).resolve().parents[3]   # charter→drawing→lib→mdkit
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 

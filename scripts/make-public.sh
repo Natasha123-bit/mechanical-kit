@@ -44,7 +44,7 @@ FORBIDDEN_NAMES=(handoff- "*.pdf" "*.ocr" "*.log")
 
 # ---- 1) 目标目录检查 ----
 if [ -e "$DEST" ]; then
-  echo "目标已存在：$DEST（先删掉或换一个）" >&2
+  echo "目标已存在：${DEST}（先删掉或换一个）" >&2
   exit 3
 fi
 
@@ -81,7 +81,7 @@ FAIL=0
 echo "== 闸 1：越界扫描 =="
 for d in "${FORBIDDEN_DIRS[@]}"; do
   HITS=$(find "$DEST" -type d -name "$d" | wc -l | tr -d ' ' || true)
-  if [ "$HITS" -gt 0 ]; then echo "   ✗ 出现目录 $d：$HITS 个"; FAIL=1; fi
+  if [ "$HITS" -gt 0 ]; then echo "   ✗ 出现目录 ${d}：$HITS 个"; FAIL=1; fi
 done
 for n in "${FORBIDDEN_NAMES[@]}"; do
   if [ "$n" = "*.pdf" ]; then
@@ -90,7 +90,7 @@ for n in "${FORBIDDEN_NAMES[@]}"; do
   else
     HITS=$(find "$DEST" -name "$n" | wc -l | tr -d ' ' || true)
   fi
-  if [ "$HITS" -gt 0 ]; then echo "   ✗ 出现文件 $n：$HITS 个"; FAIL=1; fi
+  if [ "$HITS" -gt 0 ]; then echo "   ✗ 出现文件 ${n}：$HITS 个"; FAIL=1; fi
 done
 PATHS=$(grep -rIlE '/Users/[A-Za-z0-9._-]+' "$DEST" 2>/dev/null | wc -l | tr -d ' ' || true)
 if [ "$PATHS" -gt 0 ]; then echo "   ✗ 内容里含 /Users/ 绝对路径：$PATHS 个文件"; FAIL=1; fi

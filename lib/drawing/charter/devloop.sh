@@ -6,20 +6,21 @@
 #   build.sh    交付时用，出 PDF、逐页转 PNG、扫像素复核
 #
 # 用法：
-#   ./devloop.sh                                   # 默认 gear_draw.py → 大齿轮零件图.svg
 #   ./devloop.sh build_gear.py --svg 齿轮零件图.svg --calc calc.json --fig-no CS1-01
 #   ./devloop.sh --no-build --svg 齿轮零件图.svg    # 已经 build 过，只检查+看图
+#
+# 生成器可以是任意项目的脚本（相对路径按你当前目录算），不要求放进本仓库。
 #
 # 为什么把四件事合成一条：拆成四次调用，agent 每步之间都要重读一遍上下文再决策，
 # 一轮就是四五次模型往返。合成一条后一轮只有一次调用 + 一次 vision。
 #
 # 退出码：0 无 ✗ / 1 有 ✗ / 2 build 或截图失败
 set -uo pipefail
-cd "$(dirname "$0")"
-ROOT="$(cd ../.. && pwd)"
+HERE="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(cd "$HERE/../../.." && pwd)"
 
-BUILD="gear_draw.py"
-SVG="大齿轮零件图.svg"
+BUILD=""
+SVG=""
 CALC=""
 FIGNO=""
 OUTDIR=""      # 空 = SVG 所在目录下的 预览/
@@ -42,6 +43,12 @@ done
 # 产物跟着图走：图在哪个项目目录，预览/ 就落在哪，不落到仓库里
 [ -z "$OUTDIR" ] && OUTDIR="$(dirname "$SVG")/预览"
 
+if [ -z "$SVG" ] || { [ "$DO_BUILD" = 1 ] && [ -z "$BUILD" ]; }; then
+  echo "用法：$0 <生成器.py> --svg <图.svg> [--calc 计算书.json] [--fig-no 图号]" >&2
+  echo "      $0 --no-build --svg <图.svg>" >&2
+  exit 2
+fi
+
 CHROME="${CHROME:-$HOME/.hermes/tools/chromium-1208/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing}"
 mkdir -p "$OUTDIR"
 
@@ -56,7 +63,7 @@ fi
 # ---------- 1) build ----------
 if [ "$DO_BUILD" = 1 ]; then
   echo "== 1) build：${BUILD}（${PY}）"
-  if ! $PY "$BUILD" --out "$SVG" --check; then
+  if ! $PY "$BUILD" --out "$SVG"; then
     echo "   ✗ build 失败，停在出图这一步" >&2
     exit 2
   fi
@@ -104,16 +111,14 @@ rm -f "$PAGE"
 "${CHROME}" --headless --disable-gpu --hide-scrollbars --allow-file-access-from-files \
           --force-device-scale-factor=1 --window-size="$W,$H" \
           --screenshot="$PAGE" "$SRC_URI" >/dev/null 2>&1
-[ -f "$PAGE" ] || { echo "   ✗ 截图失败（CHROME=$CHROME）" >&2; exit 2; }
+[ -f "$PAGE" ] || { echo "   ✗ 截图失败（CHROME=${CHROME}）" >&2; exit 2; }
 echo "   $SVG  ${SW}×${SH}mm → $PAGE  ${W}×${H}px"
 
 # ---------- 4) 按视图锚点裁局部 ----------
 echo "== 4) 裁局部（按 data-view）"
-python3 "$ROOT/draw/gear_pipeline/devloop_crop.py" "$SVG" "$PAGE" --outdir "$OUTDIR"
+python3 "$HERE/devloop_crop.py" "$SVG" "$PAGE" --outdir "$OUTDIR"
 
 echo
-case "$OUTDIR" in
-  /*) echo "== 全部产物在 $OUTDIR ==" ;;
-  *)  echo "== 全部产物在 $PWD/$OUTDIR ==" ;;
-esac
+OUTABS="$(cd "$OUTDIR" && pwd)"
+echo "== 全部产物在 $OUTABS =="
 exit $([ "$RC" = 1 ] && echo 1 || echo 0)

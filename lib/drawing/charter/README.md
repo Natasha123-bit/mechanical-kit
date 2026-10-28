@@ -43,13 +43,14 @@ python3 lib/drawing/charter/measure.py 图.svg -o 证据/bounds.json
 
 ## 改图循环：devloop.sh
 
-画图过程中别每改一处就跑一遍“检查 + 截图 + 裁剪 + 目视”。`draw/gear_pipeline/devloop.sh`
+画图过程中别每改一处就跑一遍“检查 + 截图 + 裁剪 + 目视”。`lib/drawing/charter/devloop.sh`
 把四件事合成一条：
 
 ```bash
-cd draw/gear_pipeline
-./devloop.sh build_gear.py --svg 齿轮零件图.svg --calc calc.json --fig-no CS1-01
-./devloop.sh --no-build --svg 齿轮零件图.svg      # 图已生成，只检查+看图
+# 在你自己的项目目录里跑，生成器和图都用相对路径
+python3 /path/to/mdkit/lib/drawing/charter/devloop.sh build_shaft.py \
+        --svg 中间轴零件图.svg --calc calc.json --fig-no CS2-01
+python3 /path/to/mdkit/lib/drawing/charter/devloop.sh --no-build --svg 图.svg
 ```
 
 它做：build → check（只留 ✗ 和汇总）→ 整页截图 → 按 `data-view` 裁出各视图。
