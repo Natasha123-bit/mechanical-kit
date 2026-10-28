@@ -188,7 +188,8 @@ class Ctx:
                 self.view_of[a["id"]] = a["data-view"]
         self._norm_roles()
         self.scale = self._read_scale()
-        # 实测墨迹表（可选）：scripts/inkbox.py 生成的 <svg 同目录>/inkbox.json
+        # 实测墨迹表（可选）：skills/mechanical-homework/scripts/inkbox.py 生成
+        #                         的 <svg 同目录>/inkbox.json
         self.ink = {}
         try:
             _ij = json.loads((Path(svg).parent / "inkbox.json").read_text(encoding="utf-8"))

@@ -55,9 +55,10 @@ python3 lib/drawing/charter/measure.py 图.svg -o 证据/bounds.json
 
 ```bash
 # 在你自己的项目目录里跑，生成器和图都用相对路径
-python3 /path/to/mdkit/lib/drawing/charter/devloop.sh build_shaft.py \
+# 它是 shell 脚本，用 bash 起（别写成 python3 ...devloop.sh）
+bash /path/to/mdkit/lib/drawing/charter/devloop.sh build_shaft.py \
         --svg 中间轴零件图.svg --calc calc.json --fig-no CS2-01
-python3 /path/to/mdkit/lib/drawing/charter/devloop.sh --no-build --svg 图.svg
+bash /path/to/mdkit/lib/drawing/charter/devloop.sh --no-build --svg 图.svg
 ```
 
 它做：build → check（只留 ✗ 和汇总）→ 整页截图 → 按 `data-view` 裁出各视图。
@@ -145,7 +146,8 @@ python3 lib/drawing/charter/check.py 齿轮图.svg --calc calc.json --part gear
 
 - 几何统一拆成胶囊 `(x1,y1,x2,y2,half)`：`<line>`、`<path>` 的 `L`/`M`/`A`（弧按 0.5mm 采样）、
   `<circle>`（72 边）、`<polygon>`；`half` 从 `class` 查（粗 0.25 / 细 0.125 / 尺寸 0.10 / 剖面 0.09）
-- 文字框优先用图旁 `inkbox.json`（`scripts/inkbox.py` 量的真实字形墨迹）；
+- 文字框优先用图旁 `inkbox.json`（`skills/mechanical-homework/scripts/inkbox.py` 量的真实字形墨迹：
+  `python3 …/inkbox.py 图.svg` 写出 `inkbox.json`，需要带 PIL 的解释器与图旁 `fonts/`）；
   没有就退回浏览器 bbox，并按 `0.10×字号` 内缩——bbox 含字身侧距与上下留白，
   比墨迹宽 0.2~0.4mm，不内缩会把「引线贴字边」这种正常排版判成压线
 - 判据是 `净距 < 0`，证据行报最小净距（毫米），不是只说“压了”
