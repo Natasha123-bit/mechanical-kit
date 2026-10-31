@@ -72,6 +72,8 @@
 <line x1="259" y1="61.5" x2="259" y2="55.5" class="thick" data-role="outline" data-name="主视图" data-feature="shoulder4.up" data-view="main" id="outline068"/>
 <line x1="40" y1="117.5" x2="40" y2="64.5" class="thick" data-role="outline" data-name="主视图" data-feature="endface" data-view="main" id="outline069"/>
 <line x1="307.5" y1="117.5" x2="307.5" y2="64.5" class="thick" data-role="outline" data-name="主视图" data-feature="endface" data-view="main" id="outline070"/>
+<line x1="41" y1="63.5" x2="41" y2="118.5" class="thick" data-role="outline" data-name="主视图" data-feature="chamfer-edge" data-view="main" id="ce-L"/>
+<line x1="306.5" y1="63.5" x2="306.5" y2="118.5" class="thick" data-role="outline" data-name="主视图" data-feature="chamfer-edge" data-view="main" id="ce-R"/>
 <line x1="40" y1="64.5" x2="41" y2="63.5" class="thick" data-role="outline" data-name="主视图" data-feature="chamfer" data-view="main" id="outline071"/>
 <line x1="40" y1="117.5" x2="41" y2="118.5" class="thick" data-role="outline" data-name="主视图" data-feature="chamfer" data-view="main" id="outline072"/>
 <line x1="307.5" y1="64.5" x2="306.5" y2="63.5" class="thick" data-role="outline" data-name="主视图" data-feature="chamfer" data-view="main" id="outline073"/>

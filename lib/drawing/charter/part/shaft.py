@@ -1,4 +1,4 @@
-"""part/shaft.py —— 轴类画法规则包（P-01、P-03~P-05）。
+"""part/shaft.py —— 轴类画法规则包（P-01、P-03~P-06）。
 
 P-02（轴肩线画满大直径）已并进 L2-14：那条判据不需要零件类型，只要有 calc 段表就能跑，
 放在 L2 里 `--part` 不传也生效；part 层只留轴类专属的画法。
@@ -223,9 +223,73 @@ def p05(ctx):
     return "通过", "%d 个断面：拟合半径 = d/2、槽底 = cx+r−t1（段 %s）" % (len(uniq), "、".join(names[:3]))
 
 
+def p06(ctx):
+    """轴端倒角四线：端面 ±(r−c)、倒角起点竖线 ±r、上下两条 45° 斜线。
+
+    倒角起点那条竖线是圆柱面与倒角锥面交线（圆 Ød）的正投影，画法上要画满 ±r；
+    缺它时母线末端与斜线之间只剩一个开口尖角，倒角带看不出来（GEO-03 补款）。
+    端面比 r−c 长同样报——那就是没倒角却标了 C。
+    """
+    segs = _derive(ctx.calc)
+    my, x0 = _axis_y(ctx), _x0(ctx)
+    ch = float((ctx.calc.get("派生") or {}).get("倒角") or 0)
+    if not segs:
+        return "未检查", "calc 没有 派生.段界/半径"
+    if my is None or x0 is None:
+        return "未检查", "图上找不到轴线或轮廓左端，定不了 X0"
+    if ch <= 0:
+        return "未检查", "calc 没有 派生.倒角（无倒角不判）"
+    out = U.segs(ctx, ("outline",))
+    ver = [(x1, min(y1, y2), max(y1, y2)) for x1, y1, x2, y2, a in out if abs(x1 - x2) < 1e-6]
+    oblq = [(x1, y1, x2, y2) for x1, y1, x2, y2, a in out
+            if abs(x1 - x2) > 1e-6 and abs(y1 - y2) > 1e-6]
+
+    def vhit(x, lo, hi, tol=0.15, over=0.35):
+        """x 处找一条覆盖 [lo,hi] 的竖线；两头冒出超过 over 也不算（端面画长了要报）。"""
+        return any(abs(vx - x) <= tol and vlo <= lo + tol and vhi >= hi - tol
+                   and vlo >= lo - over and vhi <= hi + over for vx, vlo, vhi in ver)
+
+    def half(x):
+        return [round((vhi - vlo) / 2, 2) for vx, vlo, vhi in ver if abs(vx - x) <= 0.15]
+
+    bad, ok = [], 0
+    for side, word in (("L", "左端"), ("R", "右端")):
+        s = segs[0] if side == "L" else segs[-1]
+        xe = x0 + (s["x0"] if side == "L" else s["x1"])
+        r = float(s["r"])
+        xc = xe + (ch if side == "L" else -ch)          # 倒角起点＝母线末端
+        r2 = r - ch
+        face_ok = vhit(xe, my - r2, my + r2)
+        edge_ok = vhit(xc, my - r, my + r)
+        if not face_ok:
+            bad.append("%s端面 x=%.1f 实测半高 %s，应 ±(r−c)=±%.1f"
+                       % (word, xe, half(xe) or "无此竖线", r2))
+        if not edge_ok:
+            bad.append("%s 缺倒角起点竖线 x=%.1f（应画满 ±r=±%.1f，实测 %s）"
+                       % (word, xc, r, half(xc) or "无此竖线"))
+        n45 = 0
+        for ax, ay, bx, by in ((xc, my - r, xe, my - r2), (xc, my + r, xe, my + r2)):
+            if any((abs(x1 - ax) <= 0.2 and abs(y1 - ay) <= 0.2
+                    and abs(x2 - bx) <= 0.2 and abs(y2 - by) <= 0.2)
+                   or (abs(x1 - bx) <= 0.2 and abs(y1 - by) <= 0.2
+                       and abs(x2 - ax) <= 0.2 and abs(y2 - ay) <= 0.2)
+                   for x1, y1, x2, y2 in oblq):
+                n45 += 1
+        if n45 < 2:
+            bad.append("%s 45° 斜线只找到 %d 条（应 2 条：母线端 ↔ 端面端）" % (word, n45))
+        if face_ok and edge_ok and n45 == 2:
+            ok += 1
+    if bad:
+        return "不通过", "；".join(bad[:3])
+    if not ok:
+        return "未检查", "两端都没凑齐可判的线组"
+    return "通过", "%d 个轴端倒角四线齐全：端面 ±(r−c)、起点竖线 ±r、两条 45° 斜线" % ok
+
+
 RULES = [
     ("P-01", "每段上下母线的半径 = d/2 且覆盖全段", "VIEW-13", "必", p01),
     ("P-03", "圆角半径与 calc 一致、圆心在台阶面上", "GEO-01", "必", p03),
     ("P-04", "键槽长圆：宽 = b、端弧 = b/2、全长 = 槽长", "VIEW-10", "必", p04),
     ("P-05", "断面弧半径 = d/2、槽底 = cx+r−t1", "VIEW-09", "必", p05),
+    ("P-06", "轴端倒角四线：端面 ±(r−c)、起点竖线 ±r、两条 45° 斜线", "GEO-03", "必", p06),
 ]

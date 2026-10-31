@@ -221,6 +221,21 @@ CASES = [
          "数字挪到箭头尖上（压住实心符号）",
          lambda s: swap(swap(s, ">41<", 'x="85.5"', 'x="147"'), ">41<", 'y="45.5"', 'y="90.5"'),
          bounds=True),
+    Case("chamfer_edge_missing", "PART", "P-06", "其它",
+         "删掉倒角起点那条可见轮廓线（轴端只剩母线→斜线→端面，开口尖角）",
+         lambda s: __import__("re").sub(
+             r'<line[^>]*data-feature="chamfer-edge"[^>]*/>\s*', "", s, count=1),
+         part="shaft", svg=PART_SVG, calc=PART_CALC),
+    Case("chamfer_edge_inset", "PART", "P-06", "其它",
+         "起点竖线往轴身挪 1.5mm（不在倒角起点平面，45° 斜线接不上）",
+         lambda s: s.replace('<line x1="41" y1="63.5" x2="41" y2="118.5"',
+                             '<line x1="42.5" y1="63.5" x2="42.5" y2="118.5"', 1),
+         part="shaft", svg=PART_SVG, calc=PART_CALC),
+    Case("chamfer_face_long", "PART", "P-06", "其它",
+         "端面画满 ±r（等于没倒角却标了 C1）",
+         lambda s: s.replace('<line x1="40" y1="117.5" x2="40" y2="64.5"',
+                             '<line x1="40" y1="118.5" x2="40" y2="63.5"', 1),
+         part="shaft", svg=PART_SVG, calc=PART_CALC),
 ]
 
 

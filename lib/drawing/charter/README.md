@@ -78,7 +78,7 @@ bash /path/to/mdkit/lib/drawing/charter/devloop.sh --no-build --svg 图.svg
 devloop.sh build_shaft.py --svg 轴图.svg --calc calc.json --fig-no CS2-01 --part shaft
 ```
 
-不传就只有 L0~L3 + `common`，零件层规则（P-01~P-05 / P-11~P-13）不会跑。
+不传就只有 L0~L3 + `common`，零件层规则（P-01、P-03~P-06 / P-11~P-13）不会跑。
 退出码：0 无 ✗ / 1 有 ✗ / 2 build、截图或检查器自身失败——截图仍会出，方便看错在哪。
 
 ## 四种状态
@@ -134,7 +134,7 @@ python3 lib/drawing/charter/check.py 齿轮图.svg --calc calc.json --part gear
 - `common/`（G-xx）不看零件类型，一律加载：基准三角底边贴线+顶点朝外、圆跳动单支箭头、
   公差框格、仿宋与回退、线宽四档与角色对号、表格文字与图形侵入
 - 轴肩线画满那条（`L2-14`）放在 L2 而不是 part 层：只要有 `calc` 段表就能跑，不加 `--part` 也生效。
-- `part/shaft.py`（P-01/P-03~P-05）从 `calc.json` 的 `派生.段界/半径/台阶/圆角/倒角` 与 `键` 读期望值，
+- `part/shaft.py`（P-01/P-03~P-06）从 `calc.json` 的 `派生.段界/半径/台阶/圆角/倒角` 与 `键` 读期望值，
   几何从图上看（轴线取最长水平中心线、X0 取轮廓最左点），**不靠 `data-name` 配对**
 - `part/gear.py`（P-11~P-13）靠 `data-feature`（tip/root/pitch/bore/hole）定位齿部，
   读数与计算书的直径集/线性集一一对应

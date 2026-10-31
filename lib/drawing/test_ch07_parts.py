@@ -21,6 +21,16 @@ def test_倒角_45度与C标注():
     assert abs(g.参数["t"] - 2) < 1e-9
 
 
+def test_倒角_轴端带起点可见轮廓线():
+    """端点线=True：倒角起点 x0+t 处画满 ±r 的竖线（圆柱面与锥面交线，GEO-03）。"""
+    g = parts.倒角(20, 2, 45, "外", 端点线=True)
+    assert 校验图元(g.elems)[0]
+    assert 有竖线(g, 2, y1=-10, y2=10, style="thick")
+    assert 有竖线(g, 0, y1=-8, y2=8, style="thick")      # 端面仍只到 r−c
+    g0 = parts.倒角(20, 2, 45, "外")                      # 默认不画，孔口倒角用
+    assert not 有竖线(g0, 2, y1=-10, y2=10, style="thick")
+
+
 def test_圆角_相切():
     g = parts.圆角(5, 40, 25)
     assert 校验图元(g.elems)[0]
