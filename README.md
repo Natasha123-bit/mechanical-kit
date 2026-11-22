@@ -1,10 +1,10 @@
-# mechanical-kit · v0.1.0-alpha.2
+# mechanical-kit · v0.1.0-alpha.3
 
 三本机械教材/手册 → **可调用的公式库、表字典、画法函数**。附带把它们拆出来的 OCR 工具链、
 验收器，以及教 Hermes 怎么用这套东西的两份 skill。
 
-![version](https://img.shields.io/badge/version-0.1.0--alpha.2-22d3ee)
-![assertions](https://img.shields.io/badge/%E6%96%AD%E8%A8%80-9%2C302%20%2F%20%E5%8F%8C%E8%A7%A3%E9%87%8A%E5%99%A8-34d399)
+![version](https://img.shields.io/badge/version-0.1.0--alpha.3-22d3ee)
+![assertions](https://img.shields.io/badge/%E6%96%AD%E8%A8%80-9%2C310%20%2F%20%E5%8F%8C%E8%A7%A3%E9%87%8A%E5%99%A8-34d399)
 ![subcommands](https://img.shields.io/badge/mdkit.py-25%20%E4%B8%AA%E5%AD%90%E5%91%BD%E4%BB%A4-a78bfa)
 
 > 一句话：**书在 PDF 里，能力在库里。** 想查「φ30 的平键多宽」「齿轮公差 7 级多少 μm」「轴怎么画」，
@@ -66,9 +66,9 @@
 ```bash
 MK=~/.hermes/lib/mdkit/mdkit.py        # 作者机；新机见下节
 
-python3 $MK --version                  # mechanical-kit 0.1.0-alpha.2
+python3 $MK --version                  # mechanical-kit 0.1.0-alpha.3
 python3 $MK selftest                   # 路径 + 二进制 + 三本书全部断言 + gbdraw，一把过
-python3 $MK test all                   # 三本书 × 双解释器：60 个测试目标 / 9,302 条断言
+python3 $MK test all                   # 三本书 × 双解释器：60 个测试目标 / 9,310 条断言
 python3 $MK list --book handbook       # 这本书有哪些章库
 python3 $MK lib 10 --book handbook     # 打印某章的公开函数签名 + docstring 首行
 ```
@@ -86,12 +86,12 @@ python3 $MK lib 10 --book handbook     # 打印某章的公开函数签名 + doc
 | 重出一章图并扫线 | `./draw/ch08/build.sh`（看 `RESULT: PASS`） |
 | 计算书 md → PDF | `mdkit.py book 计算书.md --pdf` |
 | 出图后过闸（四层 + 零件层） | `python3 lib/drawing/charter/check.py 图.svg --calc 计算书.json --fig-no CS2-01 --part shaft` |
-| 闸自己看不看得见错 | `python3 lib/drawing/charter/mutants.py`（24 个注入，底图在 `charter/fixtures/`；要本地 Chromium 量文字框、G-13 要 fontTools，缺了会明确报出来） |
-| 章程正文与条款表是否一致 | `python3 lib/drawing/charter/check_charter.py`（145 条，A 47 条） |
+| 闸自己看不看得见错 | `python3 lib/drawing/charter/mutants.py`（27 个注入，底图在 `charter/fixtures/`；要本地 Chromium 量文字框、G-13 要 fontTools，缺了会明确报出来） |
+| 章程正文与条款表是否一致 | `python3 lib/drawing/charter/check_charter.py`（145 条，A 48 条） |
 
 ## 版本
 
-- **唯一真源是 `VERSION`**（当前 `0.1.0-alpha.2`）：`mdkit.py --version`、本 README、架构图都跟它走。
+- **唯一真源是 `VERSION`**（当前 `0.1.0-alpha.3`）：`mdkit.py --version`、本 README、架构图都跟它走。
 - `0.x` 表示**还没到 1.0**：`alpha` = 主流程能跑通但接口未冻结，`lib/` 函数名与 `mdkit.py`
   子命令仍可能改（改了就升 `alpha.N`）。
 - `alpha.1`：三本书沉淀完成、工具链一把过。
@@ -99,6 +99,11 @@ python3 $MK lib 10 --book handbook     # 打印某章的公开函数签名 + doc
   轴/齿轮零件层 4/3 = 46 条规则）＋ 24 条注错反测；规则改挂 38 个真实章程条款（自动覆盖
   10 → 47 条 / 32.4%），`check_charter.py` 连「规则引用的条款存不存在、状态是不是 A」一起校验；
   底图与计算书进 `charter/fixtures/`，L4 不再依赖作者机目录。
+- `alpha.3`：**skill 瘦身 + 出图口径成文**——`mechanical-homework` 的「开工前」24 条拆成主文件 6 条
+  硬约束 ＋ `references/work-loop.md`（18 条执行细则；SKILL.md 25,712 → 18,476 字符，算题/答疑轮
+  少加载约 4.5k token，画图轮再按需读子文件）；新增 `drawing-gate.md`、`shaft-part-drawing.md`、
+  `design-review-audit.md` 三份支撑文件。轴类补 `P-06`（倒角起点竖线）→ 47 条规则 / 27 注入，
+  章程 A 48 条 / 覆盖率 33.1%。
 - 发版动作：改 `VERSION` → `git tag -a v<版本> -m "…"` → 提交。**推远端由用户决定，不擅自 push**。
 
 ## 文档地图（只看需要的那份）
@@ -146,7 +151,7 @@ cd ~/.hermes/lib/mdkit && ./install.sh          # 标准布局：真身就放这
 
 所以：**clone 下来就能查表、选型、校核、出图、排计算书**；要复现「逐格核页图」那一步，得自己备 PDF 与页图。
 
-副作用只有一处：没有 `books/` 时，`mdkit.py test all` 会跳过 5 个章库的「与 handoff 逐格等值」交叉核对（双解释器 **8,700 项**而不是 9,302，输出里标 `↷跳过 10`；机器上只有一个解释器时约为一半、四千多项），其余断言照跑，仍是全绿。
+副作用只有一处：没有 `books/` 时，`mdkit.py test all` 会跳过 5 个章库的「与 handoff 逐格等值」交叉核对（双解释器 **8,708 项**而不是 9,310，输出里标 `↷跳过 10`；机器上只有一个解释器时约为一半、四千多项），其余断言照跑，仍是全绿。
 
 `.gitignore` 只排**可重建**产物：`draw/**/*.{png,svg,pdf,html,log}`（单章 3 分钟重建）、`books/**/_split/`（秒级重建）、`__pycache__/`、`.DS_Store`。
 

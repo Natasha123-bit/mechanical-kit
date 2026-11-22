@@ -62,6 +62,7 @@ cd ~/.hermes/lib/mdkit
 - **作者本机别用 `install.sh` 装 skill**：它的方向是「仓库快照 → Hermes」，而作者本机的真身可能比快照新，装一次就回退一次。`install.sh` 已对此设护栏——检测到「克隆不在标准位置」就跳过 skill 安装并提示用 `sync-skills.sh`；确要覆盖得显式加 `--force-skills`（在作者本机等于自毁，别加）。
 - 为什么不用软链把 skill 目录指到仓库：技能发现走 `rglob("SKILL.md")`，`skills_tool` 明确守卫「SKILL.md 指向 root 之外」的情况，`credential_files` 见到 skills 树里的 symlink 会去造临时副本。软链结果是不确定与降级，不是「同一份文件」。**能搬的只有 mdkit，skill 目录永远留原位**——这也是「项目化」时唯一不能动的部分。
 - 为什么值得镜像：curator 会高频 patch skill（`skills/.curator_ledger.jsonl` 里 mechanical 两个已 200+ 条），此前没有任何文本历史。同步后 `git diff skills/` 就是「后台改了什么」的账。**curator 也会把当轮的操作写进 skill**（本轮它自己产出了这份文档的初版，并把未经用户确认的「原位 init」写成了规矩）——所以发现 skill 里出现自己刚做、但用户还没拍板的决定时，按用户口径改，别当既定事实沿用。
+- **`git status --porcelain skills/` 干净只说明「快照 == 上次提交」，不代表「快照 == 真身」。** `sync-skills.sh` 带 `--delete` 整目录覆盖，会把真身里积压的所有漂移（curator 后台改的、别的会话加的文件）一次性灌进快照。实测：同步前 status 干净，同步后冒出 13 个 M + 5 个 ??，其中只有 2 个是自己的改动。所以**同步但不提交**（`./sync-skills.sh`）→ 看清 `git status --porcelain skills/` → 只 `git add <自己的路径>` 提交，其余在报告里点名列出来等他决定；`./sync-skills.sh "<msg>"` 这种一步到位的写法会把这些漂移一起 commit，作者本机等于顺手把未经他确认的改动（含 curator 的）推到仓库，进公开版就是另一回事了。
 
 ## 4. symlink 入口的实测行为（真身在 Documents 时用）
 
@@ -133,10 +134,12 @@ cd ~/.hermes/lib/mdkit && ./install.sh
 
 **`LICENSE` 必须是标准 MIT 正文的最后一行。** 后面再附「本许可只覆盖代码、数据见 LICENSE-DATA」这类中文说明，GitHub 的 licensee 就匹配不上，侧栏显示 `Other`（`spdx_id=NOASSERTION`，实测一次）。范围说明写进 `NOTICE` 第一节，`LICENSE` 只留正文；发布后用 `gh api repos/<o>/<r> --jq .license.spdx_id` 复核。
 
-公开仓库建法：导出树里 `git init -b main` → `gh repo create <名> --public --source . --push` → 设描述 / topics / Issues 开、PR 开、Discussions 关（README 写「个人项目，不承诺响应」）。首版是一个 initial commit；之后每版把新导出树 rsync 进去、按普通提交推送，**不共享私有历史**。
+公开仓库建法：导出树里 `git init -b main` → `gh repo create <名> --public --source . --push` → 设描述 / topics / Issues 开、PR 开、Discussions 关（README 写「个人项目，不承诺响应」）。首版是一个 initial commit；之后每版把新导出树 rsync 进去、按普通提交推送，**不共享私有历史**。后续修复走普通提交，等有实质变化再开 `alpha.N+1`。
 
 **tag 规则**：tag 必须指向 `main` 上真实存在的提交（`git ls-remote` 同时查 `refs/heads/main` 与 `refs/tags/v…^{}`，两个哈希要一样）。已发 tag 不移动；只有一种例外——同一发版轮内（推送后十几分钟内、尚无外部拉取）发现该版本自身有缺陷，可以删了重指，并在 `ITERATIONS.md` 的发版记录里写明重指过。
 `0.1.0-alpha.1` / `v0.1.0-alpha.2` 两版都按此办。
+
+**日常增量更新公开版，别重建仓库**：`make-public.sh --go /tmp/mkpub-new` → `git clone <公开仓库> /tmp/mkpub-repo` → `rsync -a --delete --exclude .git /tmp/mkpub-new/ /tmp/mkpub-repo/` → `git add -A && git commit && git push`。两个参数都不能省：`--delete` 让上一版遗留下来的文件消失，`--exclude .git` 保住刚 clone 的历史。推完 `git ls-remote <url> HEAD` 对一次本地 `git rev-parse HEAD`，**再在 clone 里摸跑一次入口**（`check.py` / `mdkit.py selftest`）——公开树没有作者的私有路径与数据，能独立跑通才算真自包含。**每版发完再补一次逐字对比**：`make-public.sh --go /tmp/x` 后与远端克隆 `diff -r --exclude=.git`，0 行才算「线上就是导出的那棵树」。
 
 **要交代的边界**（不是 bug）：`lib/**` 的 docstring 里仍有「依据：books/…/handoff-ch08/…」这类内部引用，公开版没有那些文件，读者只能当"作者核过"的标记；`check/` 四个验收器都要**页图**当输入，访客得拿自己的图跑（`verify_table_cells.py --assets <根目录>` 可指定，默认指向作者的 Obsidian vault）。
 
@@ -176,8 +179,10 @@ GitHub 账号 `Natasha123-bit`（`gh auth status` 已登录，含 `repo` scope�
 - **`install.sh` 与 `sync-skills.sh` 方向相反，谁都不能替代谁。** 前者「仓库快照 → Hermes」（装新机/访客），后者「Hermes 真身 → 仓库」（作者回写）。在作者本机跑前者会把尚未同步的真身改动盖回去，所以脚本里有「克隆不在标准位置就跳过 skill 安装」的护栏，绕过它要显式 `--force-skills`。
 - **脚本里比路径一律比物理路径。** `ENTRY="$HOME/.hermes/lib/mdkit"` 是逻辑路径，`REPO=$(cd -P … && pwd)` 是物理路径；`$HOME` 带软链（macOS `/tmp → /private/tmp`、外置盘 home）时两者不等，标准布局会被误判成「已存在且不是链接」→ `exit 1`，skill 一个都装不上。写法：`ENTRY_REAL="$(cd -P "$ENTRY" 2>/dev/null && pwd -P || echo "")"`，落点判定与「跳过 skill 安装」那道闸都拿它与 `$REPO` 比。
 - **解释器别写死一个位置。** `PY312 = Path.home()/".local/bin/python3.12"` 只在作者机成立；访客把 3.12 装在 Homebrew 或 PATH 里就只跑单解释器，断字数掉一半（8,700 → 4,350）。查找顺序写成 `~/.local/bin` → `/opt/homebrew/bin` → `/usr/local/bin` → `/usr/bin` → `PATH`。README 里报断言数时注明「双解释器 N 条，单解释器约一半」。
-- **假 HOME 里别起 Chromium。** 无头 Chromium 会去 `$HOME/Library/Keychains` 找 login 钥匙串，假 HOME 下没有 → macOS 逐个弹「找不到用于储存 Chromium 的钥匙串」（每个进程一个，24 次注入就是 24 个）。假 HOME 只跑纯 Python（`install.sh`、`mdkit.py selftest`、`check_charter.py`）；要跑 `check.py` / `mutants.py` 就换回真 HOME，或显式 `CHROME=<路径>` 但 HOME 仍用真的。
 - **发布前在假 HOME 里把公开版当陌生人装一遍**（`git clone <公开地址> /tmp/sh/.hermes/lib/mdkit` → `HOME=/tmp/sh ./install.sh` → `HOME=/tmp/sh python3 mdkit.py selftest` → 看 `/tmp/sh/.hermes/skills` 里 skill 在不在）。上面两条都是这一步才现形的：作者机路径不带软链、3.12 恰好在 `~/.local/bin`，两个 bug 在自己的机器上永远看不见。
+  - **克隆必须落在 `$HOME/.hermes/lib/mdkit`**：`install.sh` 对「不在标准位置又没给 `--dev-link`」的克隆会直接拒绝并打印两条路，所以在 `/tmp/xxx/mdkit` 这种位置测「安装」永远测不到 skill 那一段；只在测 Python 部分时才随便放。
+  - **假 HOME 里别起 Chromium。** 无头 Chromium 会去 `$HOME/Library/Keychains` 找 login 钥匙串，假 HOME 下没有 → macOS 逐个弹「找不到用于储存 Chromium 的钥匙串」（每个进程一个，24 次注入就是 24 个）。假 HOME 只跑纯 Python（`install.sh`、`mdkit.py selftest`、`check_charter.py`）；要跑 `check.py` / `mutants.py` 就换回真 HOME，或显式 `CHROME=<路径>` 但 HOME 仍用真的。
+  - 这一步还会暴露两类**只在别人机器上才有**的缺陷，除非修掉否则公开版永远是红的：缺 Chromium 时脚本抛 `FileNotFoundError` 栈（要改成提示设 `CHROME=` + exit 2）；缺 fontTools 时字形规则只能出「未检查」，硬记成「漏抓」会把环境问题报成检查器盲区（要单列「跳过(环境)」，不算漏抓也不算通过）。
 
 ## 11. README 与版本号
 
@@ -192,8 +197,9 @@ README 是仓库的门面，只当**路由**：每一节回答一个读者问题
   4. **先推分支，再推 tag**：`git push origin HEAD:main`，然后 `git tag -a v<版本> -m "…"` + `git push origin v<版本>`。顺序反了会出现「tag 指向 main 上不存在的提交」——alpha.2 就犯过，远端 `main` 落后一个提交而 tag 已经往前指；
   5. 公开版：`make-public.sh --go /tmp/pub` → 克隆公开仓库 → `rsync -a --delete --exclude .git /tmp/pub/ 仓库/` → commit → push → **在同一提交上重打 tag**；
   6. 读回验证：`git ls-remote` 的 `main` 与 `tags/v…^{}` 相同、`gh api …/commits/main` 与本地 HEAD 相同、`gh repo view --json visibility`、`gh api … --jq .license.spdx_id` 为 `MIT`；
-  7. `gh release create v<版本> -R <owner>/<公开仓库> --title "…" --notes-file …`，然后 `gh api …/releases/latest --jq .tag_name` 读回。Release 正文按「相对上一版的变化 / 新增 / 接口与契约 / 文档 / 测试 / 已知限制 / 怎么开始 / 许可」写，已知限制不许省略。
+  7. `gh release create v<版本> -R <owner>/<公开仓库> --title "…" --notes-file …`，然后 `gh api …/releases/latest --jq .tag_name` 读回。Release 正文按「相对上一版的变化 / 新增 / 接口与契约 / 文档 / 测试 / 已知限制 / 怎么开始 / 许可」写，已知限制不许省略；体例照上一版——标题格式、是否 `--prerelease` 与上一版保持一致，别一版一个样。
   **推分支、推 tag、建 Release 都是对外动作**：本地可以打 tag，push 与 release 先等他说。
+- **Release 之后的纯文档修复走普通提交，不重指 tag**：报告里写明「main 比 tag 多 N 个文档提交」，下次 `alpha.N+1` 一并带上。
 - **改仓库可见性（private → public）必须等用户说出「公开仓库」这四个字**：任何「准备公开」的轮次都止步于「导出到临时目录 + 自检」，不建公开仓库、不改 visibility、不发 release、不建镜像仓库。用户只批准过一次私有推送，不等于批准公开。
 - **`0.x.y-alpha.N` 的语义要写进 README**：`0.x` = 还没到公开版，`alpha` = 主流程能跑通但接口未冻结（`lib/` 函数名、`mdkit.py` 子命令会改，改了升 `alpha.N`）。不要给它套 1.0 的承诺。
 - **架构图放 `docs/architecture.svg`，图源就是 SVG**，README 用相对路径 `![](docs/architecture.svg)` 嵌入（GitHub 会渲染；HTML 文件嵌不进去，`<img>` 里的 SVG 会被 sanitize 掉脚本与外链字体）。**不要同时提交 PNG 快照**——两份必然漂移；需要位图（聊天里预览）就渲染到临时目录，不入库。出图流程与中文文字宽度自检见 skill `architecture-diagram`。

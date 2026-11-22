@@ -44,7 +44,23 @@ print(落图(g, "out.svg", 420, 297))          # 单位 mm，A3 横放 420×297
 - **别拿 qlmanage 的 PNG 做 mm→px 标定**：`qlmanage -t` 一律出方形画布、内容居中留白，按图宽算比例会整体偏大（拿它当标定基准，边距、字宽全错）。要正确纵横比就用 `"$HOME/.hermes/tools/chromium-1208/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing" --headless=new --screenshot=a3.png --window-size=1680,1188 file://$PWD/装配图A3.svg`（1680:1188 = 420:297）。
 - **A3 PDF 不能直接对 SVG 打印**：`chrome --headless --print-to-pdf=out.pdf file://…/x.svg` 会退回 **Letter（612×792 pt）**，整张图的「mm」就全作废。包一层 HTML 再打：`<style>@page{size:420mm 297mm;margin:0}html,body{margin:0}img{display:block;width:420mm;height:297mm}</style><img src="x.svg">`，然后 `--headless --no-pdf-header-footer --print-to-pdf=out.pdf file://…/_print_x.html`；打完回读 `strings out.pdf | grep MediaBox` 核尺寸（A3 横放 = `[0 0 1191.12 841.92]`）。
 
-## 四、测试运行器（不是 pytest）
+## 四、标题栏 / 明细栏 / 图框的固定数字（教材《机械制图》第1章，已核）
+
+来源：`raw/sources/drawing/ch01-全章OCR.md` §1-2「二、标题栏（GB/T 10609.1—2008）及明细栏（GB/T 10609.2—2009）」，印刷页 9 = `raw/assets/drawing/ch01/p007.png`；图幅见同章表1-1（页 7 = `ch01/p005.png`）。
+
+| 项 | 数字 | 出处 |
+|---|---|---|
+| 标题栏 | **180 宽 × 56 高**；列宽链 10/10/16/16/12/16/26/12/12/50（合计 180）；左侧更改栏 8 行×7＝56、另有 4 行×6.5＝26 | 图1-15 |
+| 明细栏 | **180 宽**；列宽 **8 序号 / 40 代号 / 44 名称 / 8 数量 / 38 材料 / 10 单件 / 12 总计 / 20 备注**（合计 180）；表头行 14、数据行 7 | 图1-17 |
+| 图框 | A0–A1：a=25、c=10、e=20；A1 幅面 594×841 | 表1-1 |
+
+- **宽度与幅面无关**：A1/A0 装配图照样 180 宽，幅面只改图框与 a/c/e。教材正文没有「A1 加宽」条款；老师模板若更宽是校规，照他给的做，但回话里要把「教材/国标」与「校规」分开说。
+- **明细栏配置**：贴标题栏上沿与之相连，自下而上填写、格数按需；位置不够紧靠标题栏左边继续往上排，仍不够则按 A4 幅面单独作续页（第9章 §9-4，印刷页 265 同一口径）。标题栏字体除图样名称/单位名称/图样代号用 10 号外其余 5 号。
+- **量教材图上的毫米数，先找一条印着数字的边当标定**：同一页上不同图（图1-15 与图1-17）印刷比例不一样，拿一张图的 px/mm 去量另一张，整张尺寸差一截。做法：先用 `bin/ocrbox 页.png` 拿带坐标的词框定位图表区，再按整列/整行暗像素占比 >0.8 扫竖线/横线（`PIL`，要 `env -u PYTHONPATH`），用图上印的总长（这里 180）算出 px/mm，再量其余边；小号尺寸数字别交给 vision，`12 10 12 20` 会被糊成一串。抽查口径写成「哪条线到哪条线 = 多少 mm」。
+
+- **定位扫描页上的图别猜坐标**：`bin/ocrbox 页.png` 输出「x y w h 置信度 文字」，按关键词（如「标题栏格式」）取到 y 起点再裁图；靠它一次定位到标题栏/表7-1，比反复缩整页问 vision 快且可复现。
+
+## 五、测试运行器（不是 pytest）
 
 ```bash
 /usr/bin/python3 lib/drawing/_tests.py     # → 通过 134，失败 0；断言 632 条

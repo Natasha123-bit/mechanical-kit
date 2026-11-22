@@ -7,10 +7,10 @@
 
 ## 0. 现状
 
-章程 145 条条款中可自动判定的部分，已实现为 **46 条规则 + 24 条注错反测**
+章程 145 条条款中可自动判定的部分，已实现为 **47 条规则 + 27 条注错反测**
 （L0 8 + L1~L3 29 + common 10；`--part shaft` 再 +4、`--part gear` 再 +3），
 一条命令跑完，单次全量 **1.30 秒**（420×297mm 轴图，`--part shaft --calc --features` 全参）、
-`--no-browser` 0.07 秒；24 个注错反测 **7.27 秒**；改图循环一条命令约 2 秒
+`--no-browser` 0.07 秒；27 个注错反测 **17.9 秒**（含 Chromium 启动）；改图循环一条命令约 2 秒
 （build + 检查 + 整页截图 + 各视图局部图）。
 
 代码位于 `lib/drawing/charter/`（`common/` 4 个模块、`part/` 2 个模块），
@@ -20,8 +20,8 @@
 L3 自 2026-10-28 起按几何采样（`capsules()`）判净距，不再只吃 `<line>`；
 文字框优先用实测墨迹（图旁 `inkbox.json`），没有则用浏览器 bbox 按 0.10×字号 内缩。
 
-**规则↔条款已闭环**：46 条规则挂在 38 个真实条款上（原 14 条引用不存在的条款号），
-对应条款标 `A`，章程自动覆盖率 **10 → 47 条（6.9% → 32.4%）**；
+**规则↔条款已闭环**：47 条规则挂在 39 个真实条款上（原 14 条引用不存在的条款号），
+对应条款标 `A`，章程自动覆盖率 **10 → 48 条（6.9% → 33.1%）**；
 `check_charter.py` 现在会校验「每条规则引用的条款存在且为 A」，校验不过即 exit 1。
 
 ---
@@ -749,6 +749,33 @@ VERSION / README 标题与徽章 / `docs/architecture.svg` 两处副标题同步
 
 **验收**：`mutants.py` 27 注入 27 抓到；`lib/drawing` 135 条断言全过；
 输出轴 KC-02 52/52；中间轴夹具 P-06 ✓。
+
+### 8.11 alpha.3 发版记录（2026-11-22）
+
+**代码侧（相对 alpha.2）**：
+
+| 类别 | 变化 |
+|---|---|
+| 轴类规则 | `P-06` 倒角起点竖线（挂 GEO-03，状态 X → A）；`parts.倒角(端点线=True)` |
+| L4 反测 | 24 → 27 注入（删起点线 / 挪 1.5 mm / 端面画满 ±r），27 抓到 / 0 漏抓 / 17.9 秒 |
+| 章程 | 47 条规则挂 39 个条款；A 48 条 / 145 = 33.1%（alpha.2 为 47 / 32.4%） |
+| 夹具 | `fixtures/中间轴零件图.svg` 两端补 chamfer-edge，夹具恢复可判 |
+| 契约 | 轴类规则包抬头与 `calc.schema.md` 补 P-06 字段说明 |
+
+**文档与 skill 侧（同版一并发布）**：`mechanical-homework` 主文件 25,712 → 18,476 字符，「开工前」的
+18 条执行细则搬入 `references/work-loop.md`（开头 5 节目的目录），「流程」第 5、7 步各挂一条硬规则
+（画图/跑闸前先读该文件，不许自拟检查器）；新增 `references/drawing-gate.md`（闸的四态、调用与盲区）、
+`shaft-part-drawing.md`（轴图规则包）、`design-review-audit.md`（说明书复核）；`mechanical-book-deposit`
+补「只拆几章交付」通道（§8）与《机械设计》实测页码对照表，附三个 PDFKit/Swift 分页脚本
+（`dumptext` / `pagesplit` / `renderpages`）。
+
+**验收**：`mdkit.py selftest` / `test all` 60 目标 / 9,310 断言 / 失败 0；`check_charter.py` 145 条正文
+与表一致；`mutants.py` 27 注入 27 抓到；`make-public.sh --go` 三道闸全过，裸树自检 60 目标 /
+8,708 断言（跳过 10 项，缺 `books/`）；假 HOME 装一遍 → `install.sh` 两个 skill 装到位、selftest 全绿。
+
+**发版记录**：`0.1.0-alpha.3`（2026-11-22）—— dev 仓库与公开版 `mechanical-kit` 的 `main` 与 tag
+`v0.1.0-alpha.3` 指向同一提交（哈希用 `git rev-list -n1` 查，不写进文档免得过期）；公开树 379 个文件 /
+8.9M；VERSION / README 标题与徽章 / `docs/architecture.svg` 两处副标题同步。`alpha.1`、`alpha.2` 的 tag 未动。
 
 ---
 

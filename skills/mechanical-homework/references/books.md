@@ -4,6 +4,7 @@
 |---|---|---|---|---|---|
 | 《机械设计》（濮良贵 第十一版，第一至四篇） | `~/.hermes/lib/mdkit/books/design/` | 15 | `design/book.md` | `references/design/` | `mdkit/lib/design/` |
 | 《机械原理》（西工大 孙桓 版）—— **本机尚无教材 PDF** | `~/.hermes/lib/mdkit/books/mechanisms/` | — | `mechanisms/book.md`（待建） | `references/mechanisms/` | `mdkit/lib/mechanisms/` |
+| 《机械制图》—— 全书 PDF `~/Documents/机械制图.pdf`，331 页、**纯扫描无文本层** | `~/.hermes/lib/mdkit/books/drawing/` | 10 | `drawing/页眉扫描.jsonl`（逐页 `pdf`/`printed`；**印刷页 + 8 = PDF 页**） | 无 `chNN.md`：制图知识在 `references/drawing-book-ast.md` | 无（`mdkit/lib/drawing/` 是图面 AST，不是公式库） |
 
 ## 标准件数据源（不是教材，不做沉淀）
 
@@ -13,7 +14,7 @@
 
 1. 先渲前 16 页 OCR 目录页（实测 PDF 索引 7 是目录）：条目分左右两栏，页码是 x>400 的独立列，
    与条目同一 y 才是它自己的页码——不按 y 对齐会把表6-1 的页码读成隔壁行的。
-2. 页码换算：**PDF 索引 = 印刷页 + 11**（实测 印刷42→p053、印刷68→p079、印刷70→p081）。
+2. 页码换算：第6章实测 **PDF 页 = 印刷页 + 11**（42→053、68→079、70→081），但**偏移会漂**：第17章实测印刷 221 = PDF **233**（+12）。不要硬算——把候选页按 72 dpi 渲成缩略图、与 `raw/assets/handbook/chNN/pNNN.png` 算归一化相关，取唯一高峰定页（实测正确页 0.997，邻页 ≤0.26）。读图上 5–8 px 的小标注再从原 PDF 按 **600 dpi** 重渲裁图，不要放大 238 dpi 页图。
 3. **表6-1 深沟球轴承（GB/T 276—2013）横跨印刷 68–70**：6000 系列在 68 起，6200/6300 系列在 70（p081）；
    列 = 代号 | d | D | B | 安装尺寸 | C/kN | C₀/kN | 极限转速。
 4. **各表页码（印刷页 / PDF 索引，均 +11）**：表6-1 深沟球 68–70（68/79、70/81）；表6-2 圆柱滚子 71 起（82）；
@@ -27,6 +28,15 @@
 7. 密排数字表别指望 OCR 逐格还原（会串行、漏行）：150 dpi 渲一页、`vision_analyze` 只问一行的几个数，
    比整表批量读可靠；`region` 裁切要按已定位的行 y 去裁，别拿估算坐标连试（一次裁偏就白花一次读图）。
    问到后在本章 `chNN.md` 里落一行实测值，下次不用再翻。
+
+## 把教材某几页发给用户（截图 / 核页）
+
+用户说「把那几页书截图发我」「直接去找 PDF 原件」时要的是**整页原图**，不是自己读图用的裁切图——裁切只用于自己读数，发出去会被退回来重做。以《机械制图》为例（331 页扫描件）：
+
+1. **定位 PDF 页**：印刷页 + 8 = PDF 页（`books/drawing/页眉扫描.jsonl` 已逐页记 `pdf`/`printed`；实测 印刷7→pdf15、印刷9→pdf17、印刷276→pdf284）。
+2. **渲整页**：`bin/pdfsplit 全书.pdf map.json 出目录` → `bin/renderall 出目录/<一页>.pdf 该页目录 4`（scale 4 = 2381×3393，与 `raw/assets` 页图同规格）。两个坑：`renderall` 输出名固定 `p001.png`，多页塞同一个目录会互相覆盖——**一页一个目录**；`pdfsplit` 会在文件名前加 `chNN-`，按 map 里的 name 取文件会报 `No such file`。只要几页也可用 `scripts/render_pdf_pages.swift`（PDFKit，按页范围渲）。
+3. **发前核页**：`bin/ocrbox 页.png | head -3` 读页眉印的页码与章名，别只信 PDF 序号。
+4. **同源就说清**：`md5 -q` 对比 `raw/assets/<book>/chNN/pNNN.png`；同一页就是同一张 PDF 渲染，照实说「同一张」，别当成另找到一份原件。
 
 ## 加一本书的完整动作
 1. 本表加一行。

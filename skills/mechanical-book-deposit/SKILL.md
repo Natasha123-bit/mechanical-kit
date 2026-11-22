@@ -23,6 +23,7 @@ metadata:
 
 - 「把《XX》整本沉淀」「整本教材沉淀成公式库」「走上次那套流程」「接上次的沉淀进度」
 - 某一章的核读要外包给 ZCode，需要任务书与验收标准
+- 「把第X、Y章拆成单独 PDF 放桌面」→ 只拆章快速通道：不重跑 chmap、不渲页图，见 `references/book-splitting.md` §8
 - 新书第一次进场：判要不要 OCR、建章节地图
 - **不适用**：单题计算、画零件图、查一个表值 → `mechanical-homework`
 
@@ -111,6 +112,9 @@ metadata:
 | `scripts/check_lookup_ranges.py` | 区间行标签能否按数值查（探针 + µs） | 每章验收 |
 | `scripts/verify_book_state.py` | 文档 ↔ 磁盘对账（快照/断言/状态/契约/raw） | 用户问「做到哪了」 |
 | `scripts/handbook_scan.py` | 无页眉手册：页脚造伪 chmap + 表号归集 | 手册类阶段 1 |
+| `scripts/dumptext.swift` | 逐页打印文本层前 300 字（乱码层也能读出页眉印刷页码 → 定边界/偏移） | 复核章边界、只拆章 |
+| `scripts/pagesplit.swift` | 按显式页表拆章，支持非连续（`"255-286,290"`） | 错位块补页、跳页拆章 |
+| `scripts/renderpages.swift` | 只渲指定几页 PNG（可选 scale） | 抽页校样，代替 renderall |
 | `scripts/check_paths.py` | 路径迁移自检 | 改路径后 |
 | `scripts/verify_install.sh` | 落点与可达性一次验完 | 搬家 / 换机 |
 | `scripts/watch_batch_run.py` | 跑批监视器（信号 / 额度 / 两线 / 卡死 / 推送） | 盯批 |
