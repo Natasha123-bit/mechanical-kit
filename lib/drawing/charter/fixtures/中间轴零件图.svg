@@ -24,13 +24,13 @@
 <text x="389" y="252.778" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid020">图号</text>
 <text x="389" y="263.316" font-size="3.4" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid021">CS2-01</text>
 <text x="265" y="272.778" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid022">制图</text>
-<text x="284" y="272.85" font-size="2.5" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid023">雷小康</text>
+<text x="284" y="272.85" font-size="2.5" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid023">示例</text>
 <text x="311" y="272.802" font-size="2.3" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid024">2026.10.28</text>
 <text x="336" y="272.778" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid025">数量</text>
 <text x="357" y="272.874" font-size="2.6" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid026">1</text>
 <text x="389" y="272.778" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid027">共 1 页  第 1 页</text>
 <text x="265" y="282.528" font-size="2.2" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid028">审核</text>
-<text x="368" y="282.72" font-size="3" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid029">中南林业科技大学</text>
+<text x="368" y="282.72" font-size="3" text-anchor="middle" class="txt" data-role="title-grid" data-name="标题栏" data-view="title" id="title-grid029">示例单位</text>
 <text x="232" y="177" font-size="3.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text030">技术要求</text>
 <text x="232" y="183.5" font-size="2.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text031">1. 45 钢调质，硬度 217~255 HBW。</text>
 <text x="232" y="188.2" font-size="2.6" text-anchor="start" class="txt" data-role="text" data-view="tech" id="text032">2. 未注线性、角度尺寸公差按 GB/T 1804—m；未注几何公差按 GB/T 1184—K。</text>

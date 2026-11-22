@@ -72,6 +72,52 @@ while IFS= read -r -d '' f; do
   cp -p "$f" "$DEST/$f"
 done < "$TMPLIST"
 
+# ---- 2b) 剥掉 dev-only 块（作者本机实例：路径、项目名、目录账本），安装者不该看到 ----
+STRIPPED=$(python3 - "$DEST" <<'PY'
+import os,re,sys
+root=sys.argv[1]; n=0
+pat=re.compile(r'<!-- dev-only:start -->\n.*?<!-- dev-only:end -->\n?', re.S)
+for dp,dn,fn in os.walk(root):
+    for f in fn:
+        if not f.endswith(('.md','.sh','.py')) or f=='make-public.sh': continue
+        p=os.path.join(dp,f)
+        t=open(p,encoding='utf-8',errors='surrogateescape').read()
+        if 'dev-only:start' in t:
+            open(p,'w',encoding='utf-8',errors='surrogateescape').write(pat.sub('',t)); n+=1
+print(n)
+PY
+)
+echo "== 已剥离 dev-only 块：$STRIPPED 个文件 =="
+
+# ---- 2c) 本机路径映射：代码/数据里的默认路径与注释不留作者家目录，安装者不该继承 ----
+REWRITTEN=$(python3 - "$DEST" <<'PY'
+import os,sys
+root=sys.argv[1]; n=0
+MAP=[("~/Documents/Obsidian/机械知识库/","知识库根/"),
+     ("~/Documents/Obsidian/机械知识库","知识库根"),
+     ("~/Documents/Hermes/Mechanical-Kit/mdkit","<项目目录>"),
+     ("Documents/Hermes/Mechanical-Kit/mdkit","<项目目录>"),
+     ("Documents/Obsidian/机械知识库","知识库根"),
+     ("~/Desktop/机械设计作业/","作业根/"),
+     ("绘图测试/多段轴测试1/","示例绘图/"),
+     ("设计测试/图纸/","样例图纸/"),
+     ("设计测试/calc/","样例计算/"),
+     ("设计测试/","样例项目/"),
+     ("机械设计作业/","作业根/"),
+     ("_目录账本","目录账本")]
+for dp,dn,fn in os.walk(root):
+    for f in fn:
+        if not f.endswith(('.md','.py','.json','.sh','.js')) or f=='make-public.sh': continue
+        p=os.path.join(dp,f)
+        t=open(p,encoding='utf-8',errors='surrogateescape').read(); o=t
+        for a,b in MAP: t=t.replace(a,b)
+        if t!=o:
+            open(p,'w',encoding='utf-8',errors='surrogateescape').write(t); n+=1
+print(n)
+PY
+)
+echo "== 已映射本机路径：$REWRITTEN 个文件 =="
+
 # 版本与自检
 cp -p VERSION "$DEST/VERSION" 2>/dev/null || true
 echo "== 已写 $DEST =="
@@ -94,6 +140,68 @@ for n in "${FORBIDDEN_NAMES[@]}"; do
 done
 PATHS=$(grep -rIlE '/Users/[A-Za-z0-9._-]+' "$DEST" 2>/dev/null | wc -l | tr -d ' ' || true)
 if [ "$PATHS" -gt 0 ]; then echo "   ✗ 内容里含 /Users/ 绝对路径：$PATHS 个文件"; FAIL=1; fi
+# 作者本机实例：~/Documents 下的项目路径与他的作业目录/项目名，安装者看了会以为自己该有这些东西
+PRIVATE=$(grep -rIlE 'Documents/Hermes|Documents/Obsidian|机械设计作业|设计测试/|绘图测试/|_目录账本|课设/' "$DEST" --exclude=make-public.sh 2>/dev/null | wc -l | tr -d ' ' || true)
+if [ "$PRIVATE" -gt 0 ]; then echo "   ✗ 内容里含作者本机实例（~/Documents 项目路径/作业目录名）：$PRIVATE 个文件"; FAIL=1; fi
+MARKERS=$(grep -rlE '^<!-- dev-only:(start|end) -->$' "$DEST" 2>/dev/null | wc -l | tr -d ' ' || true)
+if [ "$MARKERS" -gt 0 ]; then echo "   ✗ dev-only 标记没剥干净：$MARKERS 个文件"; FAIL=1; fi
+# 隐私词表（库外）：姓名、学校、账号、推送通道 id 这类 grep 规则拦不到的语义内容。
+# 词表放 ~/.hermes/private/sanitize-deny.txt，不进仓库、不进导出树；ALLOW 段按相对路径豁免。
+DENY_FILE="${MDKIT_SANITIZE_DENY:-$HOME/.hermes/private/sanitize-deny.txt}"
+if [ -f "$DENY_FILE" ]; then
+  DENY_REPORT=$(python3 - "$DEST" "$DENY_FILE" <<'PY'
+import os, sys
+dest, deny = sys.argv[1], sys.argv[2]
+block, allow, sect = [], [], None
+for raw in open(deny, encoding="utf-8"):
+    s = raw.strip()
+    if not s or s.startswith("#"):
+        continue
+    if s.startswith("[") and s.endswith("]"):
+        sect = s.lower()
+        continue
+    (allow if sect == "[allow]" else block).append(s)
+
+
+def allowed(rel):
+    return any(rel == a or rel.startswith(a.rstrip("/") + "/") for a in allow)
+
+
+hits = []
+for root, dirs, files in os.walk(dest):
+    dirs[:] = [d for d in dirs if d not in (".git", "__pycache__", "node_modules")]
+    for f in files:
+        p = os.path.join(root, f)
+        rel = os.path.relpath(p, dest)
+        if allowed(rel):
+            continue
+        try:
+            with open(p, encoding="utf-8", errors="ignore") as fh:
+                t = fh.read()
+        except Exception:
+            continue
+        for w in block:
+            i = t.find(w)
+            if i >= 0:
+                hits.append("%s:%d: %s" % (rel, t[:i].count("\n") + 1, w))
+print(len(hits))
+for h in hits[:15]:
+    print("   ✗ " + h)
+if len(hits) > 15:
+    print("   …另有 %d 处" % (len(hits) - 15))
+PY
+  )
+  DENY_HITS=$(printf '%s\n' "$DENY_REPORT" | head -1 | tr -d ' ')
+  if [ "${DENY_HITS:-0}" -gt 0 ]; then
+    printf '%s\n' "$DENY_REPORT" | sed -n '2,$p'
+    echo "   ✗ 隐私词表命中 ${DENY_HITS} 处（词表 $DENY_FILE；确要放行就加进 [ALLOW]）"
+    FAIL=1
+  else
+    echo "   ✓ 隐私词表：0 命中"
+  fi
+else
+  echo "   ! 没找到隐私词表 $DENY_FILE —— 姓名/学校/账号无人把关（建议建一份）"
+fi
 BIG=$(find "$DEST" -type f -size +5M | wc -l | tr -d ' ' || true)
 if [ "$BIG" -gt 0 ]; then echo "   ✗ 有 >5MB 文件：$BIG 个"; FAIL=1; fi
 if [ "$FAIL" -eq 0 ]; then echo "   ✓ 0 处越界（无 books//raw/_split/handoff/pdf/绝对路径/大文件）"; fi

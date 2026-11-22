@@ -6,7 +6,7 @@ const path = require('path');
 const HOME = process.env.HOME || '';
 const katex = require(HOME + '/.hermes/hermes-agent/node_modules/katex');
 
-const OUT = HOME + '/Desktop/机械设计作业/<题号>解答';
+const OUT = HOME + '/Desktop/作业根/<题号>解答';
 fs.mkdirSync(OUT, { recursive: true });
 
 const m = t => katex.renderToString(t, { throwOnError: false, displayMode: false });

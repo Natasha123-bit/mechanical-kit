@@ -1,9 +1,9 @@
-# mechanical-kit · v0.1.0-alpha.3
+# mechanical-kit · v0.1.0-alpha.4
 
 三本机械教材/手册 → **可调用的公式库、表字典、画法函数**。附带把它们拆出来的 OCR 工具链、
 验收器，以及教 Hermes 怎么用这套东西的两份 skill。
 
-![version](https://img.shields.io/badge/version-0.1.0--alpha.3-22d3ee)
+![version](https://img.shields.io/badge/version-0.1.0--alpha.4-22d3ee)
 ![assertions](https://img.shields.io/badge/%E6%96%AD%E8%A8%80-9%2C310%20%2F%20%E5%8F%8C%E8%A7%A3%E9%87%8A%E5%99%A8-34d399)
 ![subcommands](https://img.shields.io/badge/mdkit.py-25%20%E4%B8%AA%E5%AD%90%E5%91%BD%E4%BB%A4-a78bfa)
 
@@ -19,7 +19,6 @@
 四个分区：**① 书源与证据链**（PDF → Swift 工具 → 页图/OCR → 拆章记录，全程零模型）→
 **② 沉淀资产**（三本书三种形态，人工核读出来的，不可重建）→ **③ 验收与入口**（一个 `mdkit.py`、
 一套测量脚本、两份 skill）→ **④ 版本与镜像**（git 仓库 + skill 单向镜像）。
-图源就是 `docs/architecture.svg`，改图直接改它，不要另存位图（版本号也写在图里，跟着 `VERSION` 走）。
 
 ## 这是什么 / 不是什么
 
@@ -66,7 +65,7 @@
 ```bash
 MK=~/.hermes/lib/mdkit/mdkit.py        # 作者机；新机见下节
 
-python3 $MK --version                  # mechanical-kit 0.1.0-alpha.3
+python3 $MK --version                  # mechanical-kit 0.1.0-alpha.4
 python3 $MK selftest                   # 路径 + 二进制 + 三本书全部断言 + gbdraw，一把过
 python3 $MK test all                   # 三本书 × 双解释器：60 个测试目标 / 9,310 条断言
 python3 $MK list --book handbook       # 这本书有哪些章库
@@ -91,7 +90,7 @@ python3 $MK lib 10 --book handbook     # 打印某章的公开函数签名 + doc
 
 ## 版本
 
-- **唯一真源是 `VERSION`**（当前 `0.1.0-alpha.3`）：`mdkit.py --version`、本 README、架构图都跟它走。
+- **唯一真源是 `VERSION`**（当前 `0.1.0-alpha.4`）：`mdkit.py --version`、本 README、架构图都跟它走。
 - `0.x` 表示**还没到 1.0**：`alpha` = 主流程能跑通但接口未冻结，`lib/` 函数名与 `mdkit.py`
   子命令仍可能改（改了就升 `alpha.N`）。
 - `alpha.1`：三本书沉淀完成、工具链一把过。
@@ -104,6 +103,15 @@ python3 $MK lib 10 --book handbook     # 打印某章的公开函数签名 + doc
   少加载约 4.5k token，画图轮再按需读子文件）；新增 `drawing-gate.md`、`shaft-part-drawing.md`、
   `design-review-audit.md` 三份支撑文件。轴类补 `P-06`（倒角起点竖线）→ 47 条规则 / 27 注入，
   章程 A 48 条 / 覆盖率 33.1%。
+- `alpha.4`：**触发口径 + 公开版边界**——`mechanical-homework` 的描述把「审阅课程设计说明书」收紧成
+  「审阅课设说明书」（与 `docx` 的 `review` 撞词时靠对象限定词区分，动作词不删）；`mechanical-book-deposit`
+  撤掉 alpha.3 误收进来的三份分页脚本与 `book-splitting.md` §8，拆章手法改走 `pdf` skill（`pdfkit_pages.swift`
+  的 `split` 补了非连续页表 `255-286,290`）；`hermes-agent-skill-authoring` 把「60 字上限」纠正为软预算
+  （硬上限 1024）。同一版把「公开版不带作者本机实例」做成机器拦：导出期路径映射（`作业根/`、`知识库根/`、
+  样例项目、`<项目目录>`）＋ 库外隐私词表闸（`~/.hermes/private/sanitize-deny.txt`，不进任何仓库）；
+  标题栏姓名与校名走 `identity()` 三段落值（环境变量 → 本机配置 → 占位），夹具图上的实名换成「示例 / 示例单位」；
+  两份 skill 里指用户的「他」52 处统一改「用户」。公开树 376 个文件（-3，撤掉的脚本），断言数不变；
+  `draw/build.sh` 修掉两处路径假设（不再假设 `./renderall.swift` 与 `png/p1.png`）。
 - 发版动作：改 `VERSION` → `git tag -a v<版本> -m "…"` → 提交。**推远端由用户决定，不擅自 push**。
 
 ## 文档地图（只看需要的那份）
@@ -128,8 +136,9 @@ git clone git@github.com:Natasha123-bit/mechanical-kit.git ~/.hermes/lib/mdkit
 cd ~/.hermes/lib/mdkit && ./install.sh          # 标准布局：真身就放这里，没有软链
 ```
 
-作者本机是另一种布局（真身在 `~/Documents/Hermes/Mechanical-Kit/mdkit`，`~/.hermes/lib/mdkit`
-只是 symlink 入口，方便当开发者）→ 用 `./install.sh --dev-link`。脚本自己判定该走哪条路。
+
+开发者在自己的项目目录里开发时（真身在项目目录，`~/.hermes/lib/mdkit` 只是 symlink 入口），
+用 `./install.sh --dev-link`。脚本自己判定该走哪条路。
 
 装完还要备三样（都不在 git 里）：
 

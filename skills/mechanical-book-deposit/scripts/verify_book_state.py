@@ -12,7 +12,7 @@
 用法：
   python3 verify_book_state.py <book> <lib_dir> [--raw <raw_root>] [--since YYYY-MM-DD]
   例：python3 verify_book_state.py handbook ~/.hermes/lib/mdkit/lib/handbook \\
-        --raw ~/Documents/Obsidian/机械知识库/raw --since 2026-10-22
+        --raw 知识库根/raw --since 2026-10-22
 
 判据：快照「已变 / 缺」必须为 0；断言实测 == 进度表；进度表状态只能是四态之一；
       契约文件若与快照不一致，说明有人在你验收后又动过它，先把差异查清再签。

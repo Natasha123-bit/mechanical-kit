@@ -64,6 +64,26 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import svgwrite
 
+# 标题栏身份字段：这里不写死作者信息（公开版会被陌生人安装，写死等于把作者的名字/学校
+# 印到别人的零件图上）。取值顺序：环境变量 MDKIT_DESIGNER / MDKIT_ORG（临时覆盖）> 本机私有配置 > 占位符。
+_IDENTITY_PLACEHOLDER = {"designer": "（你的名字）", "org": "（你的学校）"}
+_IDENTITY_FILE = "~/.hermes/private/drawing-identity.json"
+
+
+def identity(key: str) -> str:
+    import os
+    env = os.environ.get("MDKIT_" + key.upper())
+    if env:
+        return env
+    try:
+        with open(os.path.expanduser(_IDENTITY_FILE), encoding="utf-8") as fh:
+            v = json.load(fh).get(key)
+        if v:
+            return v
+    except Exception:
+        pass
+    return _IDENTITY_PLACEHOLDER[key]
+
 # --------------------------------------------------------------------------- #
 # 0. 常量
 # --------------------------------------------------------------------------- #
@@ -224,9 +244,9 @@ def default_params() -> Dict[str, Any]:
                 "name": "大齿轮",
                 "material": "45 钢，调质",
                 "drawing_no": "10-06-02",
-                "designer": "雷小康",
+                "designer": identity("designer"),
                 "date": "2026.10",
-                "org": "中南林业科技大学",
+                "org": identity("org"),
                 "sheet": "共 1 张",
                 "sheet_no": "第 1 张",
             },

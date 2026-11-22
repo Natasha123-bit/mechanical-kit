@@ -34,7 +34,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 MDKIT = os.path.dirname(os.path.dirname(HERE))                  # …/mdkit
 BOOKS = os.path.join(MDKIT, "books", "handbook")
-RAW_SRC = os.path.expanduser("~/Documents/Obsidian/机械知识库/raw/sources/handbook")
+RAW_SRC = os.path.expanduser("知识库根/raw/sources/handbook")
 SNAPSHOT = os.path.join(BOOKS, "索引.json")
 DATA = os.path.join(HERE, "_data")                     # 随库分发的快照（公开版没有 books/）
 SNAPSHOT_BUNDLED = os.path.join(DATA, "索引.json")

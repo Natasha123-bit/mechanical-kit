@@ -128,6 +128,6 @@
 
 判形只能倚 OCR 原文与页码；例15-1 表格里的 F_NH1/F_NV1 在 OCR 里会印成 `FNHI`、`FxH2` 这类乱码，别据此说“书上没有这个符号”——以正文那句“求出各支承处的水平反力 F_NH 和竖直反力 F_NV”为准。
 
-**判形别在 238 dpi 页图上放大。** 页图上的小标注（下标 5–6 px、`2~3 mm` / `Δ3=8~12` 这类）放大 8 倍只会糊；正确顺序是：从原 PDF 按 **600 dpi** 重渲那一页 → 按整页比例裁出图区 → 带坐标 OCR（`mdkit/bin/ocrbox`，或 Vision + `VNRecognizeTextRequest` 输出 bbox）读标注文字与落点。本次靠这条路一次读出图17-12b 的四个标注；仍判不出才一行写「这一项扫描件分辨率不够，请翻 pXXX 确认」。**不确定项必须单独标“未核”**：把推测当差异报，他按它去改文件，比不报更糟。提结构改法同理——图号/页码/表号给不出来就说「这是我推的」，不许包装成「手册的做法」。
+**判形别在 238 dpi 页图上放大。** 页图上的小标注（下标 5–6 px、`2~3 mm` / `Δ3=8~12` 这类）放大 8 倍只会糊；正确顺序是：从原 PDF 按 **600 dpi** 重渲那一页 → 按整页比例裁出图区 → 带坐标 OCR（`mdkit/bin/ocrbox`，或 Vision + `VNRecognizeTextRequest` 输出 bbox）读标注文字与落点。本次靠这条路一次读出图17-12b 的四个标注；仍判不出才一行写「这一项扫描件分辨率不够，请翻 pXXX 确认」。**不确定项必须单独标“未核”**：把推测当差异报，用户按它去改文件，比不报更糟。提结构改法同理——图号/页码/表号给不出来就说「这是我推的」，不许包装成「手册的做法」。
 
 **改完要推送**：这类修正落在 `mdkit/skills/mechanical-homework/references/design/chNN.md`（表的「处理」列 + 「易错点」各一条），一条 `docs:` 提交，push 后 `git ls-remote origin refs/heads/main` 与本地 `git rev-parse HEAD` 对齐再报完成；同时 `cp` 同步 `~/.hermes/skills/engineering/mechanical-homework/` 那份独立拷贝并 `diff -q`。

@@ -7,8 +7,8 @@
 | 项 | 值 |
 |---|---|
 | PDF | `~/Documents/机械制图.pdf`，331 页，23 MB，**无文本层**（整本 OCR） |
-| 页图 | `~/Documents/Obsidian/机械知识库/raw/assets/drawing/chNN/pNNN.png`，scale 4，238 MB |
-| 全章 OCR | `~/Documents/Obsidian/机械知识库/raw/sources/drawing/chNN-全章OCR.md`（11 个） |
+| 页图 | `知识库根/raw/assets/drawing/chNN/pNNN.png`，scale 4，238 MB |
+| 全章 OCR | `知识库根/raw/sources/drawing/chNN-全章OCR.md`（11 个） |
 | 章节地图 | `~/.hermes/lib/mdkit/books/drawing/章节地图.{json,md}` |
 | 图表清单 | `books/drawing/图表清单.json`：440 图 / 31 表 / 49 附表 |
 | 页码 | 页眉 `12  第一章 制图的基本知识` → **印刷页 = PDF 页 − 8**，136 页锚点零例外 |

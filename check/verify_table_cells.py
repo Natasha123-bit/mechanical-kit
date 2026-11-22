@@ -29,7 +29,7 @@ SCRIPTS = Path(__file__).resolve().parent
 OCRBOX = SCRIPTS / "ocrbox"
 if not OCRBOX.exists():                    # check/ 里不再放软链，直接用 bin/
     OCRBOX = SCRIPTS.parent / "bin" / "ocrbox"
-ASSETS = Path(os.path.expanduser("~/Documents/Obsidian/机械知识库/raw/assets"))
+ASSETS = Path(os.path.expanduser("知识库根/raw/assets"))
 NUM = re.compile(r"\d+(?:\.\d+)?")
 
 
@@ -90,7 +90,7 @@ def main():
     ap.add_argument("--label-idx", type=int, default=1)
     ap.add_argument("--min-nums", type=int, default=6)
     ap.add_argument("--assets", default=str(ASSETS),
-                    help="页图根目录（默认 ~/Documents/Obsidian/机械知识库/raw/assets）")
+                    help="页图根目录（默认 知识库根/raw/assets）")
     a = ap.parse_args()
 
     lib = getattr(load(a.mod), a.table)["data"]

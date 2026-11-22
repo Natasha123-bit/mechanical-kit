@@ -3,7 +3,7 @@
 #
 # 两种布局：
 #   标准（访客 / 新机）  仓库本体就在 ~/.hermes/lib/mdkit，脚本只把 skill 装进 Hermes
-#   开发（作者本机）     真身在 ~/Documents/Hermes/Mechanical-Kit/mdkit，靠 --dev-link 建入口
+#   开发（作者本机）     真身在项目目录里，靠 --dev-link 建入口
 #
 # 用法：
 #   ./install.sh              标准安装（仓库已在 ~/.hermes/lib/mdkit）

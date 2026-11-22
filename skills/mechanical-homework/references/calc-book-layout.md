@@ -81,7 +81,7 @@ fm(tex(r"m^{2}d_{1}\ge«K»\times«T»\left(\frac{480}{«z2»\times«sH»}\right
 
 - **零安装路线（默认，已落地）**：`mdkit.py book 计算书.md [--pdf]`。实现在 `~/.hermes/lib/mdkit/templates/book/`：`md2html.py`（md 子集解析 + KaTeX 批渲染 + 套 CSS + 拷 katex 目录 + Chrome 打印）、`book.css`（版式唯一真源）、`katex_render.js`；KaTeX 的 node 构建放到 `templates/katex/katex.min.js`（自包含，**不再依赖 `~/.hermes/hermes-agent/node_modules`**，否则 `hermes update`/`npm ci` 会把它清掉）。实测收益不在行数——11-3：389→343 行，因为正文本身就有 250 行；收益在于 md 可读可改、`计算书.html` 降为可删的中间产物、版式只由 `book.css` 决定、公式不再经 f-string 拼接（`\,`、`\qquadF` 这类漏字在 md 结构里根本不会出现）。
 - **md 子集与铁律**：`#/##/###`、段落、`$$…$$`、`$…$`、`**粗体**`、`|表|`（第二行必须 `|---|`、列数必须与表头一致）、以「表 n」开头的一段紧贴表格上方即成表题、`<sub>` 等 HTML 直通。违反任一条带行号报错退出，**不静默降级**；`mdkit.py book --selftest` 是 4 个坏样例 + 2 个好样例。写完 md 先跑一次自检，再盯 PDF。
-- **TeX 路线**：pandoc + XeLaTeX/ctex（或 tectonic）才有真正的 TeX 排版与分页，公式基线最好；属安装，先征得同意再动。判断标准：作业交付用零安装路线，他说「论文级 / 学院模板」才上 TeX。
+- **TeX 路线**：pandoc + XeLaTeX/ctex（或 tectonic）才有真正的 TeX 排版与分页，公式基线最好；属安装，先征得同意再动。判断标准：作业交付用零安装路线，用户说「论文级 / 学院模板」才上 TeX。
 - 无论哪条路，**数值永远由 Python 注入**（`«K»` 占位符替换），Markdown 里不出现手打结果——否则改了参数，md 与公式库就此分家，后面的互校全部失效。
 - 源文件落盘用 UTF-8 的 `.md`，与 PDF/HTML 同目录；交付时给 PDF，md 作为可改源附带提一句即可。
 

@@ -23,10 +23,12 @@ EOF
           --print-to-pdf="$NAME.pdf" "_wrap.html" 2>&1 | tail -1
 
 echo "== 3) PDF 逐页转 PNG =="
-[ -x ./renderall ] || swiftc -O renderall.swift -o renderall
-rm -rf png && ./renderall "$NAME.pdf" png 3.5
+# renderall 在仓库 bin/ 下（曾经写 ./renderall.swift，文件不在本目录，PNG 这步会直接失败）
+RENDERALL="$(cd "$(dirname "$0")/../.." && pwd)/bin/renderall"
+[ -x "$RENDERALL" ] || swiftc -O "$RENDERALL.swift" -o "$RENDERALL"
+rm -rf png && "$RENDERALL" "$NAME.pdf" png 3.5
 
 echo "== 4) 扫像素复核 =="
-python3 verify_raster.py png/p1.png
+python3 verify_raster.py "$(ls png/*.png | head -1)"
 
 echo "== 完成：$NAME.svg / $NAME.pdf / png/p1.png =="

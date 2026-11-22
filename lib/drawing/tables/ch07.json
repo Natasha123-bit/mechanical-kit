@@ -5,7 +5,7 @@
   "章名": "零件图",
   "页": "174–220",
   "角色": "B（表值逐格核）",
-  "页图": "~/Documents/Obsidian/机械知识库/raw/assets/drawing/ch07/pNNN.png（p001 = 印刷页 174，即 印刷页 = 173 + 章内页号）",
+  "页图": "知识库根/raw/assets/drawing/ch07/pNNN.png（p001 = 印刷页 174，即 印刷页 = 173 + 章内页号）",
   "OCR": "_full_ocr/pNNN.txt 按 PDF 页码编号，PDF 页 = 印刷页 + 8（如 p020.png＝印刷 193＝_full_ocr/p201.txt）；OCR 仅用于定位，表值以页图为准",
   "来源": "页图逐格核（vision）",
   "merges约定": "三元组 [首行,末行,列号] 为纵向合并；四元组 [首行,末行,首列,末列] 为横向合并；被合并格一律 null，值取合并区首格",

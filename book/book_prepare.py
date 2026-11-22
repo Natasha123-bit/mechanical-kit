@@ -177,8 +177,8 @@ def main():
                     help="目录页码 json；缺省用 books/<slug>/book_toc.json（工具目录不放某本书的数据）")
     ap.add_argument("--workdir", default="",
                     help="默认 ~/.hermes/lib/mdkit/books/<slug>；换书时只传 --slug 即可")
-    ap.add_argument("--assets", default=os.path.expanduser("~/Documents/Obsidian/机械知识库/raw/assets"))
-    ap.add_argument("--sources", default=os.path.expanduser("~/Documents/Obsidian/机械知识库/raw/sources"))
+    ap.add_argument("--assets", default=os.path.expanduser("知识库根/raw/assets"))
+    ap.add_argument("--sources", default=os.path.expanduser("知识库根/raw/sources"))
     ap.add_argument("--slug", default="",
                     help="书短代号，决定 assets/<slug>/chNN/ 与 sources/<slug>/ 落点")
     ap.add_argument("--book-title", default="", help="章节地图标题里的书名")

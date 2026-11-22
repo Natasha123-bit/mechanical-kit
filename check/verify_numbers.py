@@ -9,8 +9,8 @@
     python3 verify_numbers.py <答案文件或目录> --corpus <OCR 源目录> [--corpus 另一目录]
 
 例：
-    python3 verify_numbers.py ~/Desktop/机械设计作业/<题号>解答/ \
-        --corpus ~/Documents/Obsidian/机械知识库/raw/sources
+    python3 verify_numbers.py 作业根/<题号>解答/ \
+        --corpus 知识库根/raw/sources
 
 注意：缺口 ≠ 错。下列都是已知误报，逐条看：
   - 页码（p.260 / 表11-2）；课本 PDF 该页若未 OCR，页码自然核不到

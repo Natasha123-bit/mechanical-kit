@@ -10,7 +10,7 @@
 用法：
   python3 check_paths.py
   python3 check_paths.py --book design
-  python3 check_paths.py --vault ~/Documents/Obsidian/机械知识库 --skills ... --mdkit ...
+  python3 check_paths.py --vault 知识库根 --skills ... --mdkit ...
 
 退出码 0 = 全过，1 = 有问题（非 0 就不要说「搬完了」）。
 """
@@ -27,7 +27,7 @@ REF = re.compile(r'assets/([a-z][a-z0-9_-]*)/ch(\d\d)/p(\d{3})\.png')
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--vault', default=str(HOME / 'Documents/Obsidian/机械知识库'))
+    ap.add_argument('--vault', default=str(HOME / '知识库根'))
     ap.add_argument('--skills', default=str(HOME / '.hermes/skills/engineering'))
     ap.add_argument('--mdkit', default=str(HOME / '.hermes/lib/mdkit'))
     ap.add_argument('--book', default='', help='只看某本书；留空查全部')

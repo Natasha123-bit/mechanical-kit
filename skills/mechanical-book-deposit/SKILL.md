@@ -23,9 +23,8 @@ metadata:
 
 - 「把《XX》整本沉淀」「整本教材沉淀成公式库」「走上次那套流程」「接上次的沉淀进度」
 - 某一章的核读要外包给 ZCode，需要任务书与验收标准
-- 「把第X、Y章拆成单独 PDF 放桌面」→ 只拆章快速通道：不重跑 chmap、不渲页图，见 `references/book-splitting.md` §8
 - 新书第一次进场：判要不要 OCR、建章节地图
-- **不适用**：单题计算、画零件图、查一个表值 → `mechanical-homework`
+- **不适用**：单题计算、画零件图、查一个表值 → `mechanical-homework`；**拆几章 / 合并 / 渲页成 PDF 属通用任务 → `pdf` skill**（`references/pdfkit-macos.md` 有整节「Splitting a book into chapters」）。本 skill 只提供这本书的页码事实（偏移、错位块、章边界，见 `references/<book>/book.md`），不提供拆页手法，也不为拆页另建「快速通道」。
 
 开工前只问三件：书 PDF 路径、有没有现成目录 / 章页对照、书短代号（`design` / `handbook` / `drawing`，不给就按书名起）。PDF 已递过来且说「按上次那套流程」时，前两件不用再问。
 
@@ -49,6 +48,8 @@ metadata:
 
 ## 二、布局：四层，加一本书只动第 1、2、4 层
 
+表里的**「知识库根」= 用户自己放知识库的那一层目录**（页图与 OCR 源都在它下面；目录由用户自定）。
+
 | 层 | 位置 | 放什么 | 重建成本 |
 |---|---|---|---|
 | 原始 | `~/Documents/<书名>.pdf` | 整本书 PDF，唯一原始件 | 不能重建 |
@@ -58,12 +59,12 @@ metadata:
 
 四条现场规矩：
 
-- **书根不进 `~/Documents/` 根下**：Hermes 项目一律进 `~/Documents/Hermes/`；`raw/` 也要按书加层，否则第二本书的第 8 章会撞进第一本的 `ch08/`。
+- **书根别放在家目录 / 桌面这类大目录的根下**：给项目单开一层目录；`raw/` 也要按书加层，否则第二本书的第 8 章会撞进第一本的 `ch08/`。
 - **cwd 别用空壳目录**：指 `books/<book>/` 或家目录。空壳被挪走会 `workspace_unavailable`（三种修法见 skill `hermes-agent` 的 `references/turn-forensics.md`，不在本 skill 里）。
 - **可重建的派生物用完就删**，判据是**重建成本**不是「派生」：单章 PDF（`prepare --split-only` 秒级）删；页图与 OCR 源（半小时以上）留。
 - **解释资产关系给一张图，不要堆数字**：skill = 说明书、mdkit = 工具箱 + 成品、仓库 = 给后者加的历史。三句说完配一张示意图（HTML + `::preview{file=…}`）。
 
-仓库化 / symlink 入口 / 落点先问 / `sync-skills.sh` 单向镜像 / `install.sh` 方向 / 换书根要改四处 —— 全在 `references/version-control.md`，改路径前必读。本机落点已是 `~/Documents/Hermes/Mechanical-Kit/mdkit`（`~/.hermes/lib/mdkit` 只是入口 symlink）；访客机直放 `~/.hermes/lib/mdkit`。改完跑 `scripts/check_paths.py`。
+仓库化 / symlink 入口 / 落点先问 / `sync-skills.sh` 单向镜像 / `install.sh` 方向 / 换书根要改四处 —— 全在 `references/version-control.md`，改路径前必读。落点默认 `~/.hermes/lib/mdkit`（作者本机是一个指向项目目录的 symlink 入口，见 `references/version-control.md`）。改完跑 `scripts/check_paths.py`。
 
 ## 三、阶段 0–6（细节在 playbook，这里只给过关判据）
 
@@ -101,7 +102,7 @@ metadata:
 | `references/formula-library-acceptance.md` | 四类证据、偏差归因、表值 OCR 伪影、图上系数落库约定 | 公式型/曲线类验收 |
 | `references/table-index-layer.md` | 查询层坍陷四类、索引 A/B 两层、三方对账、跨页判读 | 收官与「查得到吗」类问题 |
 | `references/batch-operations.md` | 跑批监控、额度两线、并发波次、ZCode CLI/provider、批次授权、报进度、签字、单价工期 | 派活与盯批 |
-| `references/version-control.md` | 仓库落点与两种形态、入库判据、镜像契约、新机恢复、公开版 | 动路径/仓库/安装 |
+| `references/version-control.md` | 仓库落点与两种形态、入库判据、镜像契约、新机恢复、公开版（含导出期剥离本机实例、推后 tarball 读回） | 动路径/仓库/安装/发公开版 |
 | `references/books.md` | 已进场书的索引（形态 / 状态 / 详情） | 加书、开场定位 |
 | `references/<book>/book.md` | 单本书的书源与例外（偏移、缺页、错位块） | 进某本书前 |
 | `references/<book>/chNN.md` | 章知识，一章一文件 | 做题侧也会读它 |
@@ -112,9 +113,6 @@ metadata:
 | `scripts/check_lookup_ranges.py` | 区间行标签能否按数值查（探针 + µs） | 每章验收 |
 | `scripts/verify_book_state.py` | 文档 ↔ 磁盘对账（快照/断言/状态/契约/raw） | 用户问「做到哪了」 |
 | `scripts/handbook_scan.py` | 无页眉手册：页脚造伪 chmap + 表号归集 | 手册类阶段 1 |
-| `scripts/dumptext.swift` | 逐页打印文本层前 300 字（乱码层也能读出页眉印刷页码 → 定边界/偏移） | 复核章边界、只拆章 |
-| `scripts/pagesplit.swift` | 按显式页表拆章，支持非连续（`"255-286,290"`） | 错位块补页、跳页拆章 |
-| `scripts/renderpages.swift` | 只渲指定几页 PNG（可选 scale） | 抽页校样，代替 renderall |
 | `scripts/check_paths.py` | 路径迁移自检 | 改路径后 |
 | `scripts/verify_install.sh` | 落点与可达性一次验完 | 搬家 / 换机 |
 | `scripts/watch_batch_run.py` | 跑批监视器（信号 / 额度 / 两线 / 卡死 / 推送） | 盯批 |

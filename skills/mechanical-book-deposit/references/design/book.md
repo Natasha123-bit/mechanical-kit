@@ -7,7 +7,7 @@
 | 东西 | 位置 |
 |---|---|
 | 全书 PDF | `~/Documents/<书名>.pdf`（一题一本，原始件，不拆不删） |
-| 页图 | `~/Documents/Obsidian/机械知识库/raw/assets/design/chNN/pNNN.png`（三位零填充 = 章内第 k 页） |
+| 页图 | `知识库根/raw/assets/design/chNN/pNNN.png`（三位零填充 = 章内第 k 页） |
 | OCR 源 | `raw/sources/design/chNN-全章OCR.md`（每页 `## p.印刷页` 标记） |
 | 章节地图 | `mdkit/books/design/章节地图.{json,md}`；页眉扫描 `页眉扫描.jsonl` |
 | 进度 / 授权 | `mdkit/books/design/沉淀进度.md`、`_批队列.md` |
@@ -28,6 +28,8 @@
 - 未核项：0（图10-18 曲线 1/2 重合经用户判定为书原样）。
 
 ## 实测页码对照（2026-11 复核，只拆章时照这张表）
+
+拆章手法属通用任务，走 `productivity/pdf` 的 `references/pdfkit-macos.md`；下表只是**本书**的页码事实。
 
 | 章 | 地图区间 | 实测 | 依据 |
 |---|---|---|---|

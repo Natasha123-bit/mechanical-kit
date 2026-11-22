@@ -686,7 +686,7 @@ Chrome 打印时本来就按用字切子集，所以 PDF 侧零收益；只有�
 | `identify.py --views` | 样例-输出轴 | main×235 / sectionA×33 / sectionB×11，区域外 132；写回保留 `.orig` |
 | `measure.py` | 样例-输出轴 | 103 文字 / 211 线段 / 308 盒 |
 
-**从零重画验收**（input 是 `绘图测试/多段轴测试1/table_20261028(1).csv`，5 段 267.5mm）：
+**从零重画验收**（input 是 `示例绘图/table_20261028(1).csv`，5 段 267.5mm）：
 
 | 步骤 | 产物 | 用时 |
 |---|---|---|
@@ -769,6 +769,10 @@ VERSION / README 标题与徽章 / `docs/architecture.svg` 两处副标题同步
 补「只拆几章交付」通道（§8）与《机械设计》实测页码对照表，附三个 PDFKit/Swift 分页脚本
 （`dumptext` / `pagesplit` / `renderpages`）。
 
+> **勘误（2026-11-22，同日晚）：** 这三个脚本与 `pdf` skill 的 `pdfkit_pages.swift` 重复，
+> `book-splitting.md` §8 的「只拆章快速通道」也属放错家（拆章是通用任务，不该长在本书 skill 里）。
+> 已从 skill 撤回，`design/book.md` 的本书页码对照表保留。见 release `alpha.3` 已知问题。
+
 **验收**：`mdkit.py selftest` / `test all` 60 目标 / 9,310 断言 / 失败 0；`check_charter.py` 145 条正文
 与表一致；`mutants.py` 27 注入 27 抓到；`make-public.sh --go` 三道闸全过，裸树自检 60 目标 /
 8,708 断言（跳过 10 项，缺 `books/`）；假 HOME 装一遍 → `install.sh` 两个 skill 装到位、selftest 全绿。
@@ -776,6 +780,31 @@ VERSION / README 标题与徽章 / `docs/architecture.svg` 两处副标题同步
 **发版记录**：`0.1.0-alpha.3`（2026-11-22）—— dev 仓库与公开版 `mechanical-kit` 的 `main` 与 tag
 `v0.1.0-alpha.3` 指向同一提交（哈希用 `git rev-list -n1` 查，不写进文档免得过期）；公开树 379 个文件 /
 8.9M；VERSION / README 标题与徽章 / `docs/architecture.svg` 两处副标题同步。`alpha.1`、`alpha.2` 的 tag 未动。
+
+---
+
+### 8.12 alpha.4 发版记录（2026-11-22）
+
+**两类改动：skill 口径，以及「公开版对外发布这条路」**。`lib/` 的函数名、`mdkit.py` 的子命令、章程规则与断言数都跟 alpha.3 一致（9,310）——动的是导出期的路径与身份处理，外加绘图入口 `draw/build.sh` 的两处路径假设。
+
+| 类别 | 变化 |
+|---|---|
+| 触发口径 | `mechanical-homework` 的 `description`：「审阅课程设计说明书」→「审阅课设说明书」。与 `docx` 的 `review` 撞词时加对象限定词，动作词不删；「原理」保留（四杆/凸轮这类请求不写「机械设计」也能命中） |
+| 领域边界 | `mechanical-book-deposit` 的不适用清单补：拆几章 / 合并 / 渲页属通用任务 → `pdf`；本 skill 只提供页码事实 |
+| 发布流程 | `references/version-control.md` 补「发布后发现放错家：本地撤，对外只在 release 的已知限制里补口径」，不重指 tag、不改已推送历史 |
+| 授权文件 | `hermes-agent-skill-authoring` 把「60 字上限」改为软预算（硬上限 1024，`~/.hermes/hermes-agent/tools/skill_manager_tool.py:109`）；验收判据改成「触发词在不在、对象限定词齐不齐」，长度只作参考 |
+| 导出边界 | `scripts/make-public.sh` 两步：导出期剥掉 `<!-- dev-only:start/end -->` 块；把本机路径按长度降序映射成通用名（`作业根/`、`知识库根/`、`<项目目录>`、`示例绘图/`、`样例图纸/`、`样例计算/`、`样例项目/`、`目录账本`）。闸 1 只认路径串，语义层靠新增的**闸 1c**：库外词表 `~/.hermes/private/sanitize-deny.txt`（`[BLOCK]` 全树字面扫描，`[ALLOW]` 按相对 DEST 前缀豁免），命中即 FAIL 并打印 `相对路径:行号: 词` |
+| 身份字段 | `draw/gear_pipeline/gear_draw.py` 新增 `identity(key)`：`MDKIT_DESIGNER`/`MDKIT_ORG` → `~/.hermes/private/drawing-identity.json` → 占位「（你的名字）/（你的学校）」；`default_params()` 的 `designer`/`org` 与 `draw/gbdraw.py` 标题栏校名都走它。库外配置缺失时不留空、不报错，出图照旧 |
+| 夹具 | `charter/fixtures/齿轮零件图.svg`、`中间轴零件图.svg` 的 `title-grid` 文本节点原本印着真名与校名（闸 1c 第一次跑就抓到），改占位「/ 示例单位」；`mutants.py` 仍 27 注入 27 抓到、`check_charter.py` 145 条与表一致 |
+| 口径统一 | 两份 skill 里指用户的「他」52 处 / 14 文件改「用户」（`其他`/`他人` 不动）；面向陌生人不该出现作者视角 |
+| 构建入口 | `draw/build.sh` 不再假设 `./renderall.swift` 在 CWD、不再写死 `png/p1.png`：按脚本位置推仓库根，像素校验按实际页名取首图 |
+| 文档 | README 与 `docs/architecture.svg` 去掉「图源就是 …」的维护者说明；架构图改暖纸面编辑版式 |
+
+**alpha.3 已知问题的修复**：撤掉 `mechanical-book-deposit` 里的三份重复脚本（`scripts/dumptext.swift` / `pagesplit.swift` / `renderpages.swift`）与 `references/book-splitting.md` §8，手法改指 `pdf` skill；唯一真缺口（非连续页表）补在厂商脚本 `productivity/pdf/scripts/pdfkit_pages.swift` 的 `split` 上——现支持 `255-286,290`，老的两整数用法保留。本书页码对照表留在 `references/design/book.md`。
+
+**验收**：selftest 60 目标 / 9,310 断言 / 失败 0；mutants 27 注入 27 抓到 / 0 漏抓 / 8.7 秒；`check_charter.py` 145 条正文与表一致（A 48 / M 20 / X 77 = 33.1%）；`make-public.sh --go` 四道闸全过（闸 1c 词表 0 命中），裸树自检 60 目标 / 8,708 断言（跳过 10，缺 `books/`）；公开树 **376 个文件 / 8.9M**（alpha.3 为 379，少的 3 个正是撤掉的脚本）；`split "255-286,290"` 实测 33 页，页 1/16/32 与源页渲染哈希一致、页 33 = 源 p290（印刷 285 的 11-23、11-24 习题）；`draw/build.sh _smoke` 四步全绿（六项校验 0 问题、PDF 75.8 KB、PNG 2946×2082、像素校验：图框左 25.00 / 右 292.16、剖面线 8.93%、图框外墨点 0）；`identity()` 两条分支实测（真 HOME → 真名，`HOME=/tmp/nohome` → 占位）；公开 tarball 读回四个敏感词（姓名 / 拼音 / 校名 / bot id）各 0 命中。
+
+**发版记录**：`0.1.0-alpha.4`（2026-11-22）—— 公开仓 `main` 是 alpha.3 之后的**单个提交**，tag `v0.1.0-alpha.4` 与它同一哈希（`git ls-remote` 查 `refs/heads/main` 与 `refs/tags/v0.1.0-alpha.4^{}` 两值相同）；导出树与克隆 `diff -r --exclude=.git` 为 0，克隆里裸跑 `mdkit.py selftest` 全绿；dev `main` 与公开树同批导出（先 `sync-skills.sh`，再 `make-public.sh --go`）。
 
 ---
 

@@ -3,7 +3,7 @@
 > 教材：《机械设计》（濮良贵 第十一版，第一至四篇，15 章）。
 > **全书 PDF**：`~/Documents/机械设计 第十一版 濮良贵(第一至四篇) ….pdf`（406 页，文本层乱码）——唯一原始件，不拆不删。
 > **加工层**：`~/.hermes/lib/mdkit/books/design/`（章节地图、页眉扫描、handoff、进度、验收）。
-> **页图与 OCR 源**：`~/Documents/Obsidian/机械知识库/raw/assets/design/chNN/`、`raw/sources/design/`。
+> **页图与 OCR 源**：`知识库根/raw/assets/design/chNN/`、`raw/sources/design/`。
 > **单章 PDF 不常驻**：需要时 `mdkit.py prepare --split-only --only N` 重建到 `_split/`，用完可删。
 > 通用命名规则见主 SKILL.md「书在哪」；本文件只记**这本书的例外**。
 

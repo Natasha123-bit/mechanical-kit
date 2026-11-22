@@ -48,7 +48,7 @@ check 六项照用户的验收单：① 第一角画法（视图方位、高平�
 macOS 的华文仿宋是 **AssetsV2 里的按需字体**：`family:'STFangsong'` 和 `family:'华文仿宋'` 在 Chrome 里都解析不到，静默 fallback 到 `serif`→ STSongti，图上就是宋体（缩略图里几乎看不出区别）。可靠做法：
 1. `cp "/System/Library/AssetsV2/.../STFANGSO.ttf" <项目>/fonts/`，字体跟图走，不动系统。
 2. SVG 的 `<style>` 里族名按**系统真名优先**排：`.txt{font-family:'FangSong','STFangsong','GBFang',serif}`。`~/Library/Fonts/Fangsong.ttf` 的 family 名就是 `FangSong`（full name「仿宋」），Chrome 认它；`@font-face{font-family:'GBFang';src:url('fonts/STFANGSO.ttf')}` 照写当可移植兜底，但**别指望它**——实测这份 15 MB TTF 在 headless 里没被采纳（PDF 仍是 STSongti），把 `FangSong` 排到第一位才立刻生效。
-   **但 `@font-face` 这一行不能省**：闸的两条字体规则看的就是它——没有它 G-11 只出警示（「没有 @font-face 兜底」）、G-13 判「未检查」（字形覆盖无从查），加上就两条都绿。字体文件不必每个项目复制 15 MB：在图纸目录 `ln -sfn ../../绘图测试/多段轴测试1/fonts fonts` 即可，Chrome 认符号链接。
+   **但 `@font-face` 这一行不能省**：闸的两条字体规则看的就是它——没有它 G-11 只出警示（「没有 @font-face 兜底」）、G-13 判「未检查」（字形覆盖无从查），加上就两条都绿。字体文件不必每个项目复制 15 MB：在图纸目录 `ln -sfn <已备好字体的目录>/fonts fonts` 即可，Chrome 认符号链接。
 3. 打印页**必须把 SVG 内联进 HTML**（读文本、切掉 `<?xml?>`、从 `<svg` 开始插入），再在文档级写一次 `svg text{font-family:'GBFang','STFangsong',serif}`。`<img src=x.svg>` 加载的 SVG 不允许取外部资源，字体照样 fallback。
 4. 验收要读 **PDF 里每个文字 run 的真实字体名**，不能只看截图（宋体与仿宋在缩略图上几乎同形）：`scripts/pdf_fonts.swift <pdf>` 逐 run 打印 `字体名: 文本`，全篇只应出现 FangSong；出现 STSongti 就是有字形回退——**缺一个字符就会让整段掉进宋体子集**（如 `z₂` 的 U+2082 仿宋没有，整行参数表变宋体），把生僻下标换成 ASCII（`z2`）即可，不要换字体。手上没有 `pdf_fonts.swift` 时先跑一行筛：`re.findall(rb'/BaseFont\s*/([A-Za-z0-9+#-]+)', open(pdf,'rb').read())`——只该看到 `FangSong`（Chrome 会给几个 `XXXXXX+FangSong` 子集），出现 `STSongti` 就说明字体栈第一位没落地（把 `FangSong` 提到最前，`STFangsong` 打头会静默落到宋体）。
 
@@ -131,6 +131,6 @@ macOS 的华文仿宋是 **AssetsV2 里的按需字体**：`family:'STFangsong'`
 build 脚本 import 的包系统 `python3` 里没有时（`gear_draw.py` 依赖 `svgwrite`），用 `uv run --with svgwrite --quiet python3` 现装现跑，不往系统环境装东西；`devloop.sh` 已按「grep 到 `^import svgwrite` 且 `python3 -c 'import svgwrite'` 失败」自动切换。
 
 ## 七、预览版本绑定与“改了但还看旧图”
-- **同一轮出四件套**：SVG → 预览 PNG → PDF → 自检日志，一次跑完；交付时给**字节数 + sha256 前 16 位 + mtime**。他常常同时开着旧 PDF，没有这串号说不清他看的是哪一版。
-- **他说“还是没改”时，先判他看的是不是当前版本，再决定改不改图**：从他截图里认两个锚点（如“轮缘左端面”“轮缘底边”），反算 `px = x0_px + (x_mm − x0_mm)·kx`、`py = y0_px + (y0_mm − y_mm)·ky`（截图可能非等比拉伸，两向分别标定），把当前渲染按同一模型区域裁出作 A/B 并排；再在他截图里**本该有线的那一列**扫暗像素——只有标注色、没有黑像素，就是旧版，图不用动。
-- **不要用“我确认已经画上了”代替这套核对**：同一个图元在 SVG 源码、PDF、他屏幕上三处都可能不同步；答“已经改了”而没核版本，就是又一轮返工。
+- **同一轮出四件套**：SVG → 预览 PNG → PDF → 自检日志，一次跑完；交付时给**字节数 + sha256 前 16 位 + mtime**。用户常常同时开着旧 PDF，没有这串号说不清用户看的是哪一版。
+- **用户说“还是没改”时，先判用户看的是不是当前版本，再决定改不改图**：从用户截图里认两个锚点（如“轮缘左端面”“轮缘底边”），反算 `px = x0_px + (x_mm − x0_mm)·kx`、`py = y0_px + (y0_mm − y_mm)·ky`（截图可能非等比拉伸，两向分别标定），把当前渲染按同一模型区域裁出作 A/B 并排；再在用户截图里**本该有线的那一列**扫暗像素——只有标注色、没有黑像素，就是旧版，图不用动。
+- **不要用“我确认已经画上了”代替这套核对**：同一个图元在 SVG 源码、PDF、用户屏幕上三处都可能不同步；答“已经改了”而没核版本，就是又一轮返工。

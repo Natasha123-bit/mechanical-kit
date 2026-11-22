@@ -5,7 +5,7 @@
   "章名": "制图的基本知识",
   "页": "3–30",
   "角色": "B（表值逐格核）",
-  "页图": "~/Documents/Obsidian/机械知识库/raw/assets/drawing/ch01/pNNN.png（p001 = 印刷页 3）",
+  "页图": "知识库根/raw/assets/drawing/ch01/pNNN.png（p001 = 印刷页 3）",
   "来源": "页图逐格核（vision）；_full_ocr/pNNN.txt 仅用于定位",
   "merges约定": "三元组 [首行,末行,列号] 为纵向合并；四元组 [首行,末行,首列,末列] 为横向合并；被合并格一律 null，值取合并区首格"
  },
